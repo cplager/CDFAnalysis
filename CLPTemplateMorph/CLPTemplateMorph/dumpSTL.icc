@@ -1,0 +1,17 @@
+// -*- C++ -*-
+
+#if !defined(dumpSTL_ICC)
+#define dumpSTL_ICC
+
+
+#include <iostream>
+#include <iterator>
+
+template <class T, template <class> class CONTAINER>
+void dumpSTL (const CONTAINER<T> &cont, std::ostream& stream = std::cout)
+{
+   std::ostream_iterator<T> output(stream, " ");
+   std::copy(cont.begin(), cont.end(), output);
+}
+
+#endif // dumpSTL_ICC

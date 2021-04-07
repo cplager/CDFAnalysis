@@ -1,0 +1,24 @@
+# -*- sh -*- # for font lock mode
+
+numMeasurements 2
+numErrors       1
+
+# All Hadronic
+name 0      All_Hadronic
+mean 0      7.73209
+# stat errors
+upperErrorVec   0    0   2.09458e+00  3.06428e-02  -2.12245e-04  1.85818e-06
+lowerErrorVec   0    0   2.01046e+00  3.06453e-02  -2.12431e-04  1.86289e-06
+
+# Dilepton
+name 1      Dilep
+mean 1      6.45 
+upperErrorVec   1    0   1.54181e+00  1.56260e-01  -4.48210e-03  8.94081e-05   
+lowerErrorVec   1    0   1.21899e+00  1.56196e-01  -4.48973e-03  8.99398e-05   
+
+
+# allhad/dilep
+correlation   0   1    0   0.0  # stats
+
+ 
+

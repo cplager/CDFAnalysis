@@ -1,0 +1,32 @@
+# -*- sh -*- # for font lock mode
+
+numMeasurements 2
+numErrors       2
+
+# Secondary Vertex Tag
+name 0      SecVtx
+mean 0      7.8 
+# statistical uncertainties
+upperErrorVec  0  0  6.93057e-01  1.09400e-01  -4.05543e-03  9.66621e-05
+lowerErrorVec  0  0  5.83116e-01  1.09340e-01  -4.04645e-03  9.63020e-05
+# acceptance uncertainties
+upperErrorVec  0  1  0     0.08696
+lowerErrorVec  0  1  0     0.07408
+
+# Neural Net
+name 1      fake_NN
+mean 1      7.0 
+# statistical uncertainties
+upperErrorVec  1  0  1.58071e+00  2.41323e-02  -1.78019e-04  1.78388e-06
+lowerErrorVec  1  0  1.53058e+00  2.41328e-02  -1.78076e-04  1.78560e-06
+# acceptance uncertainties
+upperErrorVec  1  1  0     0.08696
+lowerErrorVec  1  1  0     0.07408
+
+# allhad/dilep
+correlation   0   1    0   0.331158  # stats
+correlation   0   1    1   1.0       # acceptance
+
+ 
+
+

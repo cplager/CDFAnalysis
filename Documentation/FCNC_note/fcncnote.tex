@@ -1,0 +1,143 @@
+\documentclass[12pt,letterpaper]{article}
+%\topmargin 0in
+%\textwidth 6in
+%\textheight 9.0in
+%\oddsidemargin 0.25in
+%\evensidemargin 0.25in
+% adjustment of page size
+\addtolength{\textwidth}{30mm} %11pt: 20
+\addtolength{\textheight}{30mm}
+\addtolength{\voffset}{-15mm}
+\addtolength{\oddsidemargin}{-15mm} %11pt: 7
+
+\usepackage{epsfig}
+%\usepackage{rotating}
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dcolumn}
+\usepackage{ccaption}
+\usepackage{booktabs}
+\usepackage{psfrag}
+\usepackage{xspace}
+\usepackage{html}
+\usepackage{lineno}
+\usepackage{setspace}
+\usepackage{color}
+
+\input{macros}
+\sloppy
+% Comment the next two lines for official drafts.
+\pagewiselinenumbers
+\doublespacing
+
+\captionnamefont{\small\bfseries}
+\captiontitlefont{\small\mdseries}
+\captiondelim{:\,\,}%{\hskip 2ex}}
+\hangcaption
+
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\vspace*{-0.5in}
+\begin{flushright}
+
+CDF/PHYS/TOP/CDFR/$8833$ \\
+\today\\
+\end{flushright}
+\vspace{0.5in}
+\begin{center}
+\begin{huge}
+{\bf Search for the Flavor Changing\\[1mm] Neutral Current Decay \boldmath\tZq\unboldmath}
+\end{huge}
+\end{center}
+% Authors and institutions
+\vspace{0.5in}
+\begin{center}
+\begin{large}
+
+{Charles Plager, David Saltzberg, Michael Sutherland}\\
+{\em University of California, Los Angeles}\\[5mm]
+
+{Melissa Franklin, Ingyin Zaw}\\
+{\em Harvard University}\\[5mm]
+
+{Jennifer Lindsay Gimmell}\\
+{\em University of Rochester}\\[5mm]
+
+{Ulrich Husemann, Paul Tipton}\\
+{\em Yale University}\\[5mm]
+
+\end{large}
+\end{center}
+
+%\renewcommand{\baselinestretch}{1}
+\normalsize
+
+% Abstract
+\vspace{5mm}
+
+% Jennifer's recent change: abstract text moved to abstract.tex
+\begin{abstract}
+\input{abstract}
+\end{abstract}
+
+%\include{abstract}
+
+\clearemptydoublepage
+
+\tableofcontents
+
+\clearemptydoublepage
+
+% Introduction
+\input{introduction}
+
+% Description of analysis method
+\input{method}
+
+% Data Sample and Event Selection
+\input{eventselection}
+
+% Signal Monte Carlo
+\input{signalmc}
+
+% Backgrounds
+\input{backgrounds}
+
+% Systematics
+\input{systematics}
+
+% Limit Calculations and Optimization
+\input{limitsandoptimization}
+
+% Results and Conclusions
+\input{results}
+
+\clearemptydoublepage
+
+% Cross-checks
+%\input{crosschecks}
+
+% Conclusions
+%\input{conclusions}
+
+% Appendicies
+\begin{appendix}
+\input{LeptonAppendix}
+
+\clearemptydoublepage
+
+\input{ZjetsAppendix}
+\end{appendix}
+
+\clearemptydoublepage
+
+%\bibliographystyle{myamsalpha}
+\bibliographystyle{myamsplain}
+\bibliography{top_theory,top_exp,top_mc,top_cdf}
+
+
+\end{document}

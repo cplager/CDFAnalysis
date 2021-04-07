@@ -1,0 +1,382 @@
+\section{Limits and Optimization}
+\label{section:limitsandoptimization}
+
+%%%%%%%%%%%%%%%%%%%%%%% Expected Limits %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Expected Upper Limits}
+\label{section:expectedlimits}
+
+When optimizing an analysis, one tries to minimize or maximize a
+figure of merit that one believes will lead to the smallest limit or
+uncertainty.  Instead of choosing the standard
+$\frac{\textrm{signal}}{\sqrt{\textrm{background}}}$, we have decided
+to optimize directly on the expected upper limit for two reasons.
+First, in order to use
+$\frac{\textrm{signal}}{\sqrt{\textrm{background}}}$, one must pick a
+value for the signal (we expect none).  One can use the current best
+limit or the limit one hopes to achieve, but the choice can strongly
+affect the optimization. Second when optimizing using expected upper
+limits, the systematic uncertainties are automatically accounted for
+correctly.
+
+The idea of expected upper limits is straightforward.  It is the
+weighted average of limits where we weight assuming there is no
+signal.  The limit calculation itself allows, of course, for signal to
+be present.  With a single signal region,
+
+\begin{equation}
+  \text{Expected Limit} =\sum\limits_{n_\text{obs}} \underbrace{P(n_\text{obs}|n_\text{back})}_\textrm{weight}\cdot Lim(n_\text{obs}|A,n_\text{back}),
+\end{equation}
+
+where $n_\text{obs}$ represents the number of events observed,
+$n_\text{back}$ is expected background, $A$ is the signal acceptance
+convolved with efficiency, $P(n_\text{obs}|n_\text{back})$ is the
+Poisson probability that $n_\text{back}$ background events fluctuated
+to $n_\text{obs}$, and $Lim$ is any upper limit calculation.
+Generalizing this to $j$ signal regions, we get:
+
+\begin{equation}
+  \label {eqn:expectedlimit}
+  \text{Expected Limit} =\sum\limits_{\xobs} P(\xobs|\vec{n}_\text{back})\cdot Lim(\xobs|\vec{A},\vec{n}_\text{back}),
+\end{equation}
+
+where the vectors in $\vec{n}_\text{obs}$, $\vec{n}_\text{back}$, and
+$\vec{A}$ signify the numbers of interest in each of the $j$ signal
+regions, {\em e.g.,}
+
+\begin{equation}
+  \vec{n}_\text{obs} = \left(
+  \begin{array}{c}
+    {n_\text{obs}}_1\\
+    {n_\text{obs}}_2\\
+    \vdots\\
+    {n_\text{obs}}_j\\
+  \end{array}
+  \right)
+\end{equation}
+
+In this case the weight is defined as
+
+\begin{equation}
+\label{eqn:backest}
+P(\xobs|\vec{n}_\text{back}) = \prod^j_{i=1} P({n_\text{obs}}_i| {n_\text{back}}_i)
+\end{equation}
+
+if we are not considering systematic uncertainties on the background
+estimate.  If we are considering systematic uncertainties, we
+calculate this probability by using the generation of random numbers
+({\em i.e.,} Gaussian smearing followed by Poisson fluctuations).
+
+%% for $j$ different signal regions.  $\vec{n}_\text{obs}$,
+%% $\vec{n}_\text{back}$, and $\vec{A}$ all have the same meaning and the
+%% vector signifies that $\vec{n}_\text{obs}$ represents the numbers of
+%% observed events in all of the signal regions.
+
+
+
+In practice, it is not possible to sum over all possible numbers of
+observed events as it includes all positive integers.  The practical
+question is how do we know we have summed over enough possibilities?
+To solve this problem, we do the following.  
+
+\begin{itemize}
+
+\item Using the background estimate (Equation \ref{eqn:backest}, we
+  calculate the distribution of observed events.  Each set of values
+  of $n_\text{obs}$ ($\vec{n}_\text{obs}$), and its weight
+  ($P(\xobs|\vec{n}_\text{back})$) are called a ``bin.''
+
+\item Sort the bins of $\vec{n}_\text{obs}$ by decreasing probability.
+
+\item Starting with the most probable numbers of events ({\em i.e.,}
+  the first bin after sorting), calculate:
+ 
+  \begin{itemize}
+
+    \item the limit, 
+    \item the maximum limit yet calculated, $lim_\text{max}$,
+    \item the total weight used, \[\text{weight}_\text{sum} = \sum^{n_\text{used}}_{i=1} P(\vec{n}_\text{obs}|\vec{n}_\text{back})\]
+    \item the under-estimate of the expected upper limit (Equation
+      \ref{eqn:underestimate} below), and
+    \item the over-estimate of the estimate of the expected upper limit (Equation
+      \ref{eqn:overestimate} below).
+
+  \end{itemize}
+
+\item Continue adding in subsequent bins into the calculations.  Stop
+  when the under-estimate and the over-estimate are equal within a
+  small number $\delta$ (currently $0.01\%$).
+
+\end{itemize}
+
+For a finite sum, the best value of the expected upper limit is the partial sum divided by the total weight seen:
+
+\begin{equation}
+ \text{Expected Limit}_\text{best-estimate} = \frac{\sum\limits^{n_\text{used}}
+P(\xobs|\vec{n}_\text{back})\cdot Lim(\xobs|\vec{A},\vec{n}_\text{back})}{ \text{weight}_\text{sum}}
+\end{equation}
+
+
+As the total weight seen goes to 1, this becomes the same formula
+shown above in Equation \ref{eqn:expectedlimit}.  The under-estimate
+of the expected upper limit is the same as the best estimate without
+correcting for the weight we have not yet used:
+
+\begin{equation}
+\label{eqn:underestimate}
+\text{Expected Limit}_\text{under-estimate} = \sum\limits^{n_\text{used}} P(\xobs|\vec{n}_\text{back})\cdot Lim(\xobs|\vec{A},\vec{n}_\text{back}).
+\end{equation}
+
+The over-estimate assumes that the remaining summands will result in
+the maximum limit obtained so far.
+
+\begin{eqnarray}
+ \text{Expected Limit}_\text{over-estimate} &=& \frac{\sum\limits^{n_\text{used}}
+P(\xobs|\vec{n}_\text{back})\cdot Lim(\xobs|\vec{A},\vec{n}_\text{back}) + (1 - \text{weight}_\text{sum}) \cdot lim_\text{max}}{  \text{weight}_\text{sum}} \nonumber\\
+\label{eqn:overestimate}
+& = & \text{Expected Limit}_\text{best-estimate} + \frac{ (1 - \text{weight}_\text{sum})}{  \text{weight}_\text{sum}} \cdot lim_\text{max}
+\end{eqnarray}
+
+An interesting aside: Even if one uses a limit calculation that does
+not depend on the choice of metric, there is an inherent metric
+dependence in expected limits.  This is not a problem, but implies
+that we can not optimize on one variable ({\em e.g.,} $\sqrt{
+  {\mathcal B}(t \rightarrow Zc)}$) and then expect an optimal limit
+with another ({\em e.g.,} $ {\mathcal B}(t \rightarrow Zc)$).  This is
+true whenever two variables that are chosen are not related to each
+other with a strictly linear relationship.
+
+%%%%%%%%%%%%%%%%%%%%%%% Scanning Expected Limits %%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Scanning Expected Upper Limits}
+\label{section:scanexpected}
+
+Optimizing by scanning expected upper limits is very similar to any
+other optimization technique.  The main steps are:
+
+\begin{itemize}
+
+  \item Tighten the event selection gradually by moving the cut value
+    for the variable in question.
+
+  \item Recalculate all background and acceptance numbers with new
+    event selection.
+
+  \item Calculate new expected limit based on new event selection.
+
+\end{itemize}
+
+As with most analyses, we want to optimize using more than one
+variable.  To accomplish this, we do sequential optimizations.  For
+example, we first scanned the expected upper limits using the \chisq.
+We then changed the base cuts to include the optimal value of \chisq
+and then optimized using the transverse mass.  We then dropped the
+\chisq selection, added the optimal transverse mass cut, and rescanned
+\chisq.  This was repeated for all variables we used to optimize the
+selection.
+
+Note that there are two contradictory principles that should be
+followed here.
+
+\begin{itemize}
+
+  \item As with any fit, the optimization will converge the fastest if
+    we start with an optimal event selection.
+
+  \item As with any fit, we want to make sure we find the global
+    minimum in expected limits and not a local minimum.  To ensure
+    this, we need to optimize several times starting with different
+    variables.
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%% Feldman-Cousins %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Feldman-Cousins Limits}
+\label{section:fclimits}
+
+The standard Feldman-Cousins \cite{FeldmanCousins:1998fc} limit
+calculation has been very often used by the high energy physics
+community because of its properties:
+
+\begin{itemize}
+
+  \item It guarantees a physical answer.
+
+  \item It guarantees coverage.
+
+  \item It decides if the result is a (single-sided) limit, or a
+    measurement (two-sided limit).
+
+  \item It has no metric dependence.
+
+\end{itemize}
+
+A complete summary of the Feldman-Cousins method, including the
+inclusion of systematic uncertainties can be found in CDF Note 7400
+\cite{CDF7400}.  The general idea can be summed up in two stages:
+
+\begin{itemize}
+
+  \item For each true value, $\mu$, a range of expected observed
+    events (confidence belt) is generated.  This is done by
+    considering both 
+
+    \begin{itemize}
+    \item the probability for observing a given number of events given
+      the true value  $\mu$, $P(n_\text{obs}|\mu)$, and
+
+    \item the maximum probability to observe this number of events for
+      all values of $\mu$, $P(n_\text{obs}|\mu_\text{best})$
+    \end{itemize}
+
+    In the discrete case, the ratio of these two values (likelihood
+    ratio) is used to order the bins of observed values. The
+    confidence belt is described as the bins are added, ordered from
+    high to low in likelihood ratio, until the sum of
+    $P(n_\text{obs}|\mu)$ reaches the desired confidence level (95\%
+    in this case).
+
+  \item The upper limit is found by locating the true value, $\mu$,
+    whose lower range almost contains the number of observed events.
+    Likewise, a lower limit is found the locating the true value,
+    $\mu$, whose upper range almost contains the number of observed
+    events.
+
+\end{itemize}
+
+There are two significant changes to the Feldman-Cousins
+implementation as compared to the original Feldman-Cousins paper:
+discrete case with multiple signal regions and systematic
+uncertainties.
+
+Extending the discrete implementation of Feldman-Cousins with $j$
+signal regions is straightforward.  In this case, each {\em bin} of
+$\vec{n}_\text{obs}$ is now the set of $j$ counts (the same as with
+multiple signal regions and expected limits).
+$P(\vec{n}_\text{obs}|\mu)$ is the total probability of observing
+$n_i$ in each bin given the true value $\mu$:
+  \[P(\xobs|\mu) = \prod_\text{signal regions}^j
+  P({n_\text{obs}}_i| \mu) \] The value of
+  $P(\vec{n}_\text{obs}|\mu_\text{best})$ can no longer be calculated
+  using an analytically.  Instead we perform a minimization using {\em
+    Minuit}.
+
+
+When incorporating systematic uncertainties into the Feldman-Cousins
+method, we follow the prescription laid out by an earlier work of
+Cousins and Highland \cite{CousinsHighland:1992ch} as well as the
+published CDF {\em Measurement of $\frac{B(t\rightarrow Wb)}{B(t
+    \rightarrow Wq)}$ at the Collider Detector at Fermilab}
+\cite{CDF7400,Acosta:2005Branch}.  Simply put, the only
+change is that $P(\vec{n}_\text{obs}|\mu)$ is now calculated by
+generating pseudo-experiments: Gaussian smearing of the acceptances,
+efficiencies, and backgrounds before Poisson fluctuating the numbers
+of observed events.
+
+Unfortunately, this implementation of the Feldman-Cousins method is
+computationally expensive.  While not a problem for calculating a
+single limit, it is very slow for calculation expected upper limits
+when two signal regions are used and even worse for scanning expected
+upper limits.  For this reason, we have also implemented a objective
+Bayesian limit calculation that profiles the systematic uncertainties.
+
+%%%%%%%%%%%%%%%%%%%%%%% Baysian Limits %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Bayesian Limits}
+\label{section:baysianlimits}
+
+To calculate the Bayesian limit, we start with the standard Poisson
+likelihood:
+
+\begin{eqnarray}
+{\mathcal L}  &=& \prod^\textrm{Signal Regions } P({n_\textrm{obs}}_i | {n_\textrm{sig}}_i + {n_\textrm{back}}_i) \cdot \nonumber\\
+&& ~~ \prod^\textrm{Systematics} ~ {{\mathcal G} (\textrm{syst}}_k| {\mu_\textrm{syst}}_k, {\sigma_\textrm{syst}}_k)
+\end{eqnarray}
+
+where $ P({n_\textrm{obs}}_i | {n_\textrm{sig}}_i +
+{n_\textrm{back}}_i)$ is the Poisson probability and $ {\mathcal G}
+(\textrm{syst}_k| {\mu_\textrm{syst}}_k, {\sigma_\textrm{syst}}_k)$ is
+a Gaussian penalty term to allow for systematic shifts in acceptances,
+backgrounds, etc.
+
+First, we profile the likelihood.  This is done by stepping through
+the likelihood on a grid of branching fraction values and maximizing
+the likelihood at each value while letting the nuisance parameters
+float.  To calculate a limit, we multiply the profiled likelihood
+function by a prior (1 between the branching fraction values of 0 and
+1) and find where we need to set the limits to have 95\% of the area
+under posterior probability curve ({\em i.e.,} the likelihood curve
+multiplied by the prior) included.
+
+
+%%%%%%%%%%%%%%%%%%%%%%% Compare FC and Bayes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Comparison of Feldman-Cousins and Bayesian  Expected Limits}
+\label{section:compBayesFC}
+
+As mentioned above in Section \ref{section:scanexpected}, it is too
+computationally expensive to scan expected limits using
+Feldman-Cousins with two (or more) signal regions.  We therefore use
+the Bayesian limit calculation for scanning expected limits.  Luckily,
+we have found that these two expected limit calculations track each
+other very well.  While they do not have the exact same answers, they
+do consistently peak at the same cut values.
+
+Note that even if they did not track perfectly, this solution would
+still be completely reasonable.  The worst case outcome is that we did
+not pick the absolutely best optimized point in the event selection
+space.  Once the cuts have been chosen, it is not relevant how we
+chose them.  This is also true for optimizing without systematic
+uncertainties.
+
+%%%%%%%%%%%%%%%%%%%%%%% Large Systematic Shifts %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Stability of The Optimization}
+\label{section:compBayesFC}
+
+Because some the the systematic uncertainties are large, we performed
+final cross checks to verify that we do have the optimal event
+selection.  The result of this check can be seen in Figure
+I-didn't-make-it-yet.  In this case, the background estimations that
+went into the four cases were identical.  We changed the background
+distributions to see the effects on the expected limits.
+
+There are two important conclusions.  First, the expected limit does
+depend strongly on the actual background estimation.  This is exactly
+as expected.  Second, although there is a strong dependence on the
+expected limit from the background estimation, the optimization point
+is largely unaffected.  This gives us confidence that we have found
+the optimal event selection.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% Optimization Results %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Final Optimization}
+\label{section:optvariables}
+We optimized using additional cuts on the transverse momenta of the
+jets, the transverse mass \mt, and the mass $\chi^2$ on top of the
+base selection. After the optimization and relative to the base cuts,
+71\% (56\%) of the tagged (anti-tagged) signal remain as as compared
+to 16\% (7\%) of the background. The optimized event selection
+criteria are given in Table~\ref{table:finalcuts}.  The best expected
+limit using the Bayesian method is 7.4\% $\pm$ 2.2\% and from the
+Feldman-Cousins method is 7.1\% $\pm$ 3.0\%.
+
+\begin{table}[t]
+\begin{center}
+\caption{\label{table:finalcuts} The optimized event selection criteria.}
+\vspace{2mm}
+
+\small\begin{tabular}{ll} 
+  \toprule
+  {\bf Kinematic Variable}    & {\bf Optimized Cut}  \\ 
+  \midrule
+  Z Mass                      & $\in$ [76 GeV, 106 GeV]\\
+  Leading Jet \Et             & 40 \gev \\
+  Second Jet \Et              & 30 \gev \\
+  Third Jet \Et               & 20 \gev \\
+  Fourth Jet \Et              & 15 \gev \\
+  Transverse Mass, \mt        & $> 200\gev$ \\
+  $\sqrt{\chi^2}$             & $< 1.6$ in $b$-tagged sample, \\ 
+                              &  $< 1.35$ in the anti-tagged sample \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{table}
+
+	

@@ -1,0 +1,323 @@
+\section{Systematic Uncertainties}
+\label{section:systematics}
+
+We have checked a variety of systematic uncertainties both for the
+FCNC signal and for the most important source of background events,
+the \Zj production. We have also studies the systematics associated 
+with the normalization to the lepton+jets \xsect.  The results of our 
+studies are summarized in Table~\ref{table:signal_systematics_summary} for the signal
+systematics and Table~\ref{table:zjets_systematics_summary} for the
+\Zj background systematics.
+
+\subsection{Signal Systematics}
+
+\subsubsection{Luminosity}
+As we are normalizing the FCNC acceptance to the acceptance calculated for
+the top cross section analysis, the common factor of the luminosity uncertainty
+drops out in the ratio.
+
+\subsubsection{Monte Carlo Statistics}
+All the MC samples used for this analysis contain a sufficiently large
+number of events, so that the uncertainty coming from MC statistics is
+reflected by the small statistical uncertainties of the acceptances, and
+are therefore negligible.
+
+\subsubsection{\tZq Helicity Reweighing}
+\label{section:helicitysystematics}
+
+In order to study the effect of the $Z$ helicity on the FCNC signal
+acceptance we have weighted our original MC sample to obtain different
+admixtures of longitudinal, left-handed, and right-handed components,
+and measured the acceptances for the re-weighted
+samples. As generated, the Monte Carlo does not produce a perfectly flat
+\costh distribution, as shown in Fig.~\ref{fig:costheta}. Before re-weighting
+to the appropriate 65\% longitudinal and 35\% left-handed helicity, we correct
+for the approximate flatness by fitting a straight line to the distribution and 
+applying a correction factor. Shown  in Fig.~\ref{fig:costheta}b, the original 
+distribution is corrected and appropriately re-weighted to the SM expectation. 
+Table~\ref{table:reweighting} gives the acceptances for a
+collection of re-weighted samples.  Here acceptance is defined as the
+ratio of the number of reconstructed signal MC events with a $Z$ candidate 
+and four or more jets to the number of generated signal MC
+events. Here, we define events with a $Z$ candidates as events with two tight leptons, 
+or one tight lepton and one tight track, with scale factors and trigger efficiencies
+included, which form a $Z$ in the 76\gevcsq--106\gevcsq mass window. In general, 
+the effect of the unknown helicity on the
+acceptance is small. The biggest difference occurs between the extreme
+cases of a 100\% longitudinal sample and a 100\% left-handed sample,
+with a relative acceptance change of 5\%. Since these two values are absolute extremes, 
+we consider half the difference, 2.5\%, as the $2\sigma$ systematic uncertainty on the $Z$ helicity.
+
+\begin{table}
+  \caption{Change of raw acceptance in the FCNC signal MC for different assumed $Z$ helicities.}
+  \label{table:reweighting}
+  \begin{center}
+    \small
+    \begin{tabular}{lD{;}{\pm}{-1}} 
+      \toprule
+      {\bf Helicity}      & \multicolumn{1}{c}{\bf Acceptance (\%)}  \\ 
+      \midrule
+      Flat & 17.43;0.05\\
+      100\% Longitudinal & 16.93;0.06\\
+      100\% Right-Handed & 17.61;0.07\\
+      100\% Left-Handed & 17.77;0.07\\
+      35\% Left-Handed, 65\% Longitudinal & 17.22;0.06\\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+%Another concern for the flat \costh sample is that the \pt shapes of
+%the leptons and other distributions will be different than for the
+%sample with the correct helicity\footnote{%
+%  Strictly speaking, it is the same concern as above, because
+%  reweighting the underlying variable \costh corrects the lepton \pt
+%%%%%  spectra as well.}.
+%We have studied this effect by generating \ttbar events in which one
+%top quark decays to a $W$ and a $b$ quark and the other decays to a
+%charged Higgs boson $H^+$ and a $b$ quark where the $H^+$ has the same
+%mass as $W$ and a vanishing width. Since $t \rightarrow H^+ b$ is not
+%a weak decay vertex, \pyth decays the top isotropically instead of
+%with a $V\!-\!A$ vertex. We forced the $H^+$ to decay to an electron
+%(muon) and a neutrino, and the $W$ to decay to two quarks. We compared
+%these events to SM $\ttbar \rightarrow W^+ b\, W^- \bbar$ events in
+%which one $W$ decays leptonically and the other decays
+%hadronically. Fig.~\ref{fig:higgscheck}a shows the \costh
+%distribution of the $t \rightarrow H^+ b$ decay, which is
+%flat. Fig.~\ref{fig:higgscheck}b shows the \pt of the lepton from
+%the $H^+$ decay compared to the \pt of the lepton from the W decay in
+%the SM sample. Fig.~\ref{fig:higgscheck}c shows the \pt of the
+%lepton from the $H^+$ decay after the sample has been reweighted to
+%have a 70\% longitudinal and 30\% left-handed components compared to
+%the \pt of the lepton from the $W$ decay in the Standard Model
+%sample. After reweighting the \pt distributions are the same,
+%indicating that reweighting the FCNC signal sample will give us the
+%correct distributions for \pt of the leptons and other variables.
+
+%\begin{figure}[t]
+%\subfigure{}
+%\subfigure{}
+%\caption{Comparison of kinematic distributions for $t\to H^+ b$ and
+%  $t\to W b$: a) \costh for $t\to H^+ b$, b) unweighted lepton \pt, c)
+%  weighted lepton \pt.}
+%\label{fig:higgscheck}
+%\end{figure}
+
+%To estimate the systematic effect of the model-dependent admixture of
+%left-handed and right-handed components, we calculate the signal
+%acceptance with a fixed longitudinal component of 65\% for left-handed
+%to right-handed ratios of 35\%:0\%, 0\%:35\%, and 17.5\%:17.5\%. In
+%addition we check the extreme cases of a 100\% left-handed and a 100\%
+%right-handed decay. 
+
+
+\subsubsection{Initial and Final State Radiation}
+The modeling of initial state radiation (ISR) and final state
+radiation (FSR) in the MC simulation is expected to have an effect on
+the number of reconstructed jets. As the signal acceptance requires
+four or more reconstructed jets, it is influenced by the amount of ISR
+and FSR.  We have generated MC events to study the effect of the
+modeling of ISR and FSR on the FCNC signal acceptance. The generated sample
+includes 50,000 signal events ( $Z(ll)W(q\overline{q}')$)
+each for the scenarios of more ISR, less ISR, more FSR, and less
+FSR. The \pyth settings for these samples are those used for similar
+studies of the systematics of \ttbar production in Gen5.  The
+settings are summarized in Table~\ref{table:isrfsr}. The relevant
+\pyth parameters are~\cite{Sjostrand:2003wg}:
+
+\begin{itemize}
+\item \texttt{PARP(1)}: nominal value of \LambdaQCD for the running of
+\alphas (default: 0.25, units: GeV).
+\item \texttt{PARP(61)}: value of \LambdaQCD for the running of
+\alphas in space-like shower evolution (default: 0.25, units: GeV).
+\item \texttt{PARP(72)}: value of \LambdaQCD for the running of
+\alphas in time-like shower evolution (default: 0.25, units: GeV).
+\item \texttt{PARP(64)}: $Q^2$ scale times this factor is maximum
+parton virtuality in space-like showers (default: 1).
+\item \texttt{PARP(71)}: $Q^2$ scale times this factor is maximum
+parton virtuality in time-like showers (default: 4).
+\end{itemize}
+
+
+\begin{table}[t]
+\small
+  \begin{center}
+    \caption{\pyth settings for the MC samples to study systematic
+      effects due to the amount of initial and final state
+      radiation. The \pyth parameters are described in the text.}
+    \label{table:isrfsr}
+    \vspace{2mm}
+
+  \begin{tabular}{lccccc}
+    \toprule
+    {\bf Setting} & 
+    {\bf PARP(1)}& 
+    {\bf PARP(61)}& 
+    {\bf PARP(72)}& 
+    {\bf PARP(64)} & 
+    {\bf PARP(71)} \\
+    \midrule
+    More ISR & 0.146 & 0.292 & 0.146 & 0.5 & 4.0 \\
+    Less ISR & 0.146 & 0.072 & 0.146 & 2.0 & 4.0 \\
+    More FSR & 0.146 & 0.146 & 0.292 & 1.0 & 8.0 \\
+    Less FSR & 0.146 & 0.146 & 0.076 & 1.0 & 2.0 \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+\end{table}
+
+%NEED ACCEPTANCE NUMBERS, ANY CHANGE IN CHI2 PERFORMANCE?
+We have studied the systematic uncertainties due to more or less
+ISR/FSR by computing the relative change in acceptance for the
+more/less ISR/FSR samples, as compared to 50,000 events from the FCNC
+signal MC sample after helicity re-weighting, covering the same run
+range. We did not observe a significant change in any kinematic
+variable other than the jet multiplicity. The results are summarized
+in Table~\ref{table:systematics_isrfsr}. We assign half of the
+difference between the largest and the smallest acceptance as the
+systematic uncertainty, 0.013.
+
+
+\begin{table}[t]
+  \begin{center}
+    \caption{\pyth settings for the MC samples to study systematic
+      effects due to the amount of initial and final state
+      radiation. The \pyth parameters are described in the text.}
+    \label{table:systematics_isrfsr}
+    \vspace{2mm}
+
+  \begin{tabular}{lD{;}{\pm}{-1}D{.}{.}{-1}}
+    \toprule
+    {\bf Setting} & 
+%    \multicolumn{1}{c}{\bf Acceptance} &
+    \multicolumn{1}{c}{\bf Relative Change} \\
+    \midrule
+    Default   & 0.0 \\
+    \midrule
+    More ISR  & +0.001 \\
+    Less ISR  & -0.016 \\
+    More FSR  & +0.009 \\
+    Less FSR  & +0.005 \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection[$B$-Tagging Scale Factor]{\boldmath $B$-Tagging Scale Factor\unboldmath}
+
+
+%\subsubsection{Parton Distribution Functions}
+
+%\subsubsection{Jet Energy Scale}
+%We calculate systematic uncertainties due to the jet energy scale as
+%described on the Jet Energy Corrections Web Page~\cite{JES}. We vary
+%the parameters of the level-5 jet energy corrections by $\pm 1 \sigma$
+%and study the effect on the signal acceptance.
+
+%\subsubsection{Lepton ID}
+%We take the systematic uncertainties recommended by the Joint Physics group\dots
+
+\subsection{Background Systematics}
+
+\subsubsection{\alp and MLM Matching}
+
+The \alp MC generator allows to vary several parameters which
+influence the MLM matching algorithm and the factorization and
+renormalization scale $Q^2$. The central value for the parameters have
+been determined partly based on advice by the authors of \alp, partly
+by validating \alp against CDF data outside the FCNC signal region. We
+have generated test samples for which we varied the \alp settings,
+containing 50,000 events each for $Z+0,1,2,3,4$\,partons,
+$Z+\ccbar+0,1,2$\,partons, and $Z+\bbbar+0,1,2$\,partons, where the
+$Z$ decays into \mm pairs only.
+
+
+\begin{itemize}
+\item{\bf Matching of parton \pt and cluster \et}: \alp is a MC
+  generator that handles the production of jets both from hard matrix
+  elements and \pyth parton showers. \alp allows to set the
+  energy/momentum scale above which jets are generated via matrix
+  elements and below which parton showers take over. There are
+  separate scales for the parton \pt and the cluster \et, but they are
+  commonly taken to be the same, with a default value of
+  $(\et,\pt)=(15\gev,15\gevc)$. We have studied samples with
+  $(10\gev,10\gevc)$ and $(20\gev,20\gevc)$. Changing the matching cut
+  changes the relative \xsects of the $n$-parton subsamples by as much
+  as a factor of 20; however, when the samples are combined according
+  to their relative cross sections, the effect on the total cross
+  section is small, from $-0.012$ for $(10\gev,10\gevc)$ to $+0.015$
+  for$(20\gev,20\gevc)$. 
+\item {\bf \boldmath $Q^{2}$ \unboldmath scale for parton distribution
+    functions}: In \alp, the renormalization and factorization scale
+  can be picked.
+\item {\bf \boldmath $Q^{2}$ \unboldmath scale for each vertex}: In
+  \alp, the value of the QCD coupling $\alphas(Q^2)$ is evaluated at
+  every strong vertex individually. There are two options for the
+  choice of the energy scale $Q^2=\pt^{~2}$, and $Q^2=m_T^{~2}$, where
+  \pt and $m_T$ are the transverse momentum and the transverse mass of
+  the vertex. There is an additional parameter to vary the scale of
+  $\alphas(Q^2)$ around its central value. We have generated samples
+  for both $\pt$ and $m_T$ with scale factors of $0.5$, $1.0$, and
+  $2.0$. 
+\end{itemize}
+To be finalized\dots
+
+%\subsubsection{Heavy Flavor Fractions}
+
+
+%\subsubsection{Jet Energy Scale}
+
+%\subsubsection{Initial and Final State Radiation}
+
+\subsubsection[$B$-Tagging Scale Factor]{\boldmath $B$-Tagging Scale Factor\unboldmath}
+	
+%\subsubsection{Lepton ID}
+
+%\subsubsection{Monte Carlo Statistics}
+
+\subsubsection{Luminosity}
+Only the diboson background receives its absolute normalization from the integrated luminosity, 
+for which we assign a systematic uncertainty of 6\%.
+
+ 
+\subsection{Systematics Summary}
+
+\begin{table}
+  \begin{center}
+    \caption{\label{table:signal_systematics_summary} Summary of all systematic
+      uncertainties on the signal.}
+    \vspace{2mm}
+
+    \small
+    \begin{tabular}{cD{;}{\pm}{-1}} 
+      \toprule
+      \multicolumn{1}{c}{\bf Source} & 
+      \multicolumn{1}{c}{\bf Uncertainty} \\
+      \midrule
+      \\
+      \midrule
+      Total\\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}
+  \begin{center}
+    \caption{\label{table:zjets_systematics_summary} Summary of all systematic
+      uncertainties on the background.}
+    \vspace{2mm}
+
+    \small
+    \begin{tabular}{cD{;}{\pm}{-1}} 
+      \toprule
+      \multicolumn{1}{c}{\bf Source} & 
+      \multicolumn{1}{c}{\bf Uncertainty} \\
+      \midrule
+      \\
+      \midrule
+      Total\\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}

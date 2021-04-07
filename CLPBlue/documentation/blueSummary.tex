@@ -1,0 +1,289 @@
+\documentclass[12pt,twoside,letterpaper]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% include packages necessary for both 
+% LaTex and PDFLaTex 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\topmargin -0.25cm
+\textwidth 15.5cm
+\textheight 22cm
+\oddsidemargin 0.5cm
+\evensidemargin 0.5cm
+
+\usepackage{journals}
+
+\usepackage{color}
+\usepackage{eso-pic} 
+%%  \AddToShipoutPicture{\resizebox{0.9\paperwidth}{0.9\paperheight}%
+%%  {\rotatebox{60}{\color[gray]{0.9}\hspace*{5mm}\textsc{Draft \today}}}}
+
+\pagestyle{headings}
+
+% create a new 'if' command: ifpdf
+\newif\ifpdf
+ \ifx\pdfoutput\undefined
+ \pdffalse                  % we are not running PDFLaTeX 
+\else 
+ \pdfoutput=1               % we are running PDFLaTeX
+ \pdftrue
+\fi
+
+\ifpdf
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  include packages necessary for
+%  PDFLaTex ONLY 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \pdfcompresslevel=0
+ \usepackage{url,boxedminipage}
+ \usepackage{graphicx,thumbpdf}
+ \definecolor{rltred}{rgb}{0.75,0,0}
+ \definecolor{rltgreen}{rgb}{0,0.5,0}
+ \definecolor{rltblue}{rgb}{0,0,0.75}
+ \usepackage[colorlinks% 
+  ,bookmarks%
+  ,urlcolor=rltblue%
+  ,filecolor=rltgreen% 
+  ,linkcolor=rltred%
+  ,pdftitle={pdftitLe}%
+  ,pdfsubject={pdfsubject}%
+  ,pdfkeywords={pdfkeywords}%
+  ,pdfauthor={Charles Plager <cplager+tdl@fnal.gov>, 
+     David Saltzberg <saltzbrg@physics.ucla.edu>}%
+  ,pdfpagemode={UseOutlines}%
+  ,bookmarksopen=true%
+  ,bookmarksnumbered=true%
+  ,pdfstartview={Fit}%
+  ]{hyperref}
+ \pdfimageresolution=300                                
+ \DeclareGraphicsExtensions{.pdf,.jpg,.jpeg}            
+%
+\else
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  include packages necessary for
+%  latex ONLY (PS output file)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \usepackage{graphicx}                                  
+ \DeclareGraphicsExtensions{.eps,.ps,.eps.gz,.ps.gz}    
+ \newcommand{\href}[2]{#2}                   % suppress URL's in PS files
+ \usepackage[dvips,pagebackref]{hyperref}    % also create Page-back-refrences
+                                             % in PS files
+
+\fi % end ifpdf
+
+\DeclareGraphicsRule{*}{mps}{*}{} 
+
+\setcounter{topnumber}{9}
+\setcounter{bottomnumber}{9}
+\setcounter{totalnumber}{9}
+ 
+\renewcommand{\topfraction}{0.99}
+\renewcommand{\bottomfraction}{0.99}
+\renewcommand{\textfraction}{0.0}
+\renewcommand{\floatpagefraction}{0.99}
+
+% ======================================================================
+% ======================================================================
+\begin{document}
+
+\thispagestyle{empty}
+\vspace*{-3.5cm}
+\begin{flushright}
+Draft \input{version_number}\\
+\today
+\end{flushright}
+
+\vspace{0.5in}
+
+\begin{center}
+  \begin{Large}
+  {\bf A {\em Quick-n-Dirty} BLUE Summary}
+  \end{Large}
+\end{center}
+
+\vspace{0.5in}
+
+\begin{center}
+
+\href{mailto:cplager+tdl@fnal.gov}{Charles
+Plager}\footnote{cplager+blue@fnal.gov},
+\vspace{1.0ex} 
+\emph{UCLA}
+\end{center}
+
+\begin{abstract}
+I give a quick summary of BLUE (Best Linear Unbiased Estimator) that
+should be sufficient both as a knowledge base to write a note for an
+analysis that uses BLUE as well as sufficient to write your own BLUE
+implementation.  I finish with a quick discution about the need to
+iterate BLUE to avoid bias.
+\end{abstract}
+
+%\tableofcontents
+
+
+% ======================================================================
+\section{Introduction}
+
+
+\hspace*{12pt} First, you can find out about how to get and use my
+implementation of blue ({\em CLPBlue})
+at\\
+\href{http://cdfkits.fnal.gov/SamCode/source/cplager/CLPBlue/README.txt?v=Plager}{http://cdfkits.fnal.gov/SamCode/source/cplager/CLPBlue/README.txt?v=Plager}. \\
+BLUE has been described many times in the literature \cite{blue1,
+  blue2}.
+
+
+Before summarizing how BLUE works, let's consider the simple case of
+combining $N$ measurements of the same parameter $\mu$ that are
+completely uncorrelated with each other.  If we want to find the
+average of these measurements, we find the value of $\mu$ that is the
+minimum of the $\chi^2$ expression.  The error can also be {\em
+  extracted} from the $\chi^2$.  The $\chi^2$ that most of us are
+familiar with is
+
+\begin{equation}
+\label{eqn:chi2_1}
+\chi^2(\mu) = \sum_i^N \left( \frac{ m_i - \mu } {\sigma_i} \right)^2
+\end{equation}
+
+where $m_i$ and $\sigma_i$ are the measured value and error of the
+{\em i}th analysis, and $\mu$ is the average we are trying to find.
+
+
+We can also write equation \ref{eqn:chi2_1} as
+
+\begin{equation}
+\label{eqn:chi2_2}
+\chi^2(\mu) = {\bf \delta}^T(\mu) \cdot {\bf S}^{-1} \cdot {\bf \delta} (\mu)
+\end{equation}
+
+where $\delta(\mu)$ is the column vector where $\delta_i = m_i - \mu$
+and ${\bf S}$ is the covariance matrix.  In this case, ${\bf S}$ is
+diagonal with ${\bf S}_{(i,i)} = \sigma_i^2$.
+
+\section {BLUE}
+
+BLUE is based upon the same formula as equation \ref{eqn:chi2_2} and
+takes into account different types of errors and different
+correlations between these errors.  If we want to combine $N$
+measurements which each have $E$ different types of errors, we have
+${\bf S}$ defined as
+
+\begin{equation}
+{\bf S} = \sum_{e}^E {\bf S}_e
+\end{equation}
+
+and 
+\begin{equation}
+{{\bf S}_e}_{(i,j)} = {\sigma_e}_i \cdot {\sigma_e}_j 
+\cdot {\rho_e}_{(i,j)}
+\end{equation}
+
+where ${\sigma_e}_i$ is the $e$th type of error on the $i$th
+  measurement and ${\rho_e}_{(i,j)}$ is the correlation of the $e$th
+  error between the $i$th and $j$th measurement.
+
+The beauty of BLUE is that you don't have to run a minimization
+routine on this $\chi^2$ to get the mean.  Defining ${\bf H}$ to be
+the inverse of the covariance matrix and $sum_H$ as below.
+
+\begin{equation}
+{\bf H} \equiv {\bf S}^{-1}
+\end{equation}
+
+and 
+
+\begin{equation}
+sum_H \equiv \sum_{i=1}^N \sum_{j=1}^N {\bf H}_{i,j}
+\end{equation}
+
+We then calculate a weight for each measurement $w_i$.
+
+\begin{equation}
+w_i \equiv \sum_{j=1}^N \frac {{\bf H}_{i,j}}{sum_H}\\
+\end{equation}
+
+Note that weights can be negative, but
+
+\begin{equation}
+\sum_{i=1}^N w_i = 1
+\end{equation}
+
+BLUE tells us that 
+
+\begin{equation}
+\mu_\textrm{best} = \sum_{i=1}^N w_i \cdot m_i
+\end{equation}
+
+is the minimum of the $\chi^2$.  The total error $\sigma$ is
+calculated as below.
+
+\begin{equation}
+\sigma = \frac{1}{\sqrt{sum_H}}
+\end{equation}
+
+There are two other useful quantities that BLUE can tell you.  The
+first is the total correlations between two measurements given all
+error categories
+
+\begin{equation}
+\rho_{ij} = \frac {{\bf S}_{(i,j)}} 
+    { \sqrt {{\bf S}_{(i,i)} \cdot {\bf S}_{(j,j)}} }
+\end{equation}
+
+The second is the breakdown of the error due to the $e$th error
+category on the final answer
+
+\begin{equation}
+\textrm{Error Breakdown}_e = 
+\sqrt{
+\sum_{i=1}^N \sum_{j=1}^N w_i \cdot {\sigma_e}_i
+\cdot w_j \cdot {\sigma_e}_j \cdot {\rho_e}_{(i,j)}
+}
+\end{equation}
+
+These last two quantities are now available from {\em CLPBlue}.
+
+\section {Iterative BLUE}
+
+\hspace*{12pt} BLUE is basically a weighted average that takes
+correlations into account.  If the errors on each measurement do {\bf
+  not} depend on the value that is measured, then the above summary
+should be sufficient.  If, however, you do find that smaller
+measurements tend to have smaller errors, you will find that simply
+running BLUE will produce a bias towards smaller measurements.
+
+To avoid this problem, we need to two steps.  First, we need to get a
+functional form of each error in terms of the variable we are
+measuring.  Second, we need to make sure that we evaluate the errors
+at the value of the final estimation.  To do this, we iterate.
+
+\begin {enumerate}
+
+  \item Take a weighted average assuming no correlations between
+    measurements and using all errors as they are.
+
+  \item \label{item:blue} Use BLUE to calculate the mean.
+
+  \item Using the mean value obtained at step \ref{item:blue},
+    recalculate all errors.
+
+  \item Repeat until the mean used to calculate the errors and the
+    calculation are the same (within what ever small value you desire)
+
+\end {enumerate}
+
+{\bf Note:} My version of blue, {\em CLPBlue} is designed with this
+iteration in mind and can do it for you.
+
+
+\begin{thebibliography}{}
+
+\bibitem{blue1} L.Lyons, D. Gibaut, and P. Clifford, NIM {\bf A270}, 110-117 (1988)
+\bibitem{blue2} L.Lyons, A. Martin, and D. Saxon, Phys. Rev. D {\bf 41}, 3 (1990)
+
+\end{thebibliography}
+
+\end{document}
+

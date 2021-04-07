@@ -1,0 +1,24 @@
+# -*- sh -*- # for font lock mode
+
+numMeasurements 3
+numErrors       1
+
+# LF
+name 0      LF
+mean 0      1.0 
+errorVec   0    0      0.3422
+
+# ME
+name 1      ME
+mean 1      1.0 
+errorVec   1    0      0.3085
+
+# NN
+name 2      NN
+mean 2      1.0 
+errorVec   2    0      0.3016
+
+
+correlation   0   1    0   0.675  # LF - ME stat
+correlation   0   2    0   0.722  # LF - NN stat
+correlation   1   2    0   0.655  # ME - NN stat

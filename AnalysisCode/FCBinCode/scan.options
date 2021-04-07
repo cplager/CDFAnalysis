@@ -1,0 +1,46 @@
+# -*- sh -*- # for font lock mode
+
+# Options file for scanning expected limits
+
+
+  ######################
+  ## Standard Numbers ##
+  ######################
+  - numdim          =  1    # how many dimensions 
+  - bayesupper      =  0.90 # upper limit of Bayes integration
+  - acclum1         =  60   # = 2 * 30
+  - acclummu1       = -30   # = (-2 + K (1) ) * 30
+  - back1           =  23   # expected background events
+  - acclum2         =  80   # same thing for 2nd dimension
+  - acclummu2       = -40
+  - back2           = 155
+  ############
+  ## Errors ##
+  ############
+  # Acceptance errors (_0)
+  - acclumerr1_0    =   3
+  - acclumerrmu1_0  =  -1.5
+  - acclumerr2_0    =   4
+  - acclumerrmu2_0  =  -2
+  # Background errors (_1) 
+  - backerr1_1      =  3.45
+  - backerr2_1      = 23.25
+  # B tagging acceptance sloshing (_2)
+  - acclumerr1_2    =   3
+  - acclumerrmu1_2  =  -1.5
+  - acclumerr2_2    =  -3   # -1 * acclumerr1_2
+  - acclumerrmu2_2  =   1.5 # -1 * acclumerrm1_2
+  ########################################
+  ## Expected Limit Scanning Parameters ##
+  ########################################
+  - rootfile        = chi2.root
+  - acclumhistname1 = signalchi2
+  - backhistname1   = backchi2
+  - acclumnorm1     = 80930
+  - backnorm1       = 80962.3
+  - mode            = 2 # bayes limit (2) or FC (0)
+  - hi2lo           = 1 # scan from high to low (0 for low to high)
+
+
+## Errors
+## acclumN_Z means the Nth bin and the Zth error

@@ -1,0 +1,157 @@
+\section{Data Sample and Base Event Selection}
+For this analysis, we use data collected with the CDF II detector
+between March 2002 and September 2006, which corresponds to an
+integrated luminosity of $1.12\invfb$. We exclude runs 179057--186598
+(``compromised COT'' period) and runs prior to 150145 for muons in the
+CMX detector (no triggering on CMX possible).  The data we analyzed
+for this analysis was collected with inclusive lepton triggers that
+require $\et > 18\gev$ for electrons (datasets \texttt{bhel0d},
+\texttt{bhel0h}, and \texttt{bhel0i}) and $\pt > 18\gevc$ for muons
+(datasets \texttt{bhmu0d}, \texttt{bhmu0h}, and \texttt{bhmu0i}). We
+apply CDF's Good Run List version~16~\cite{GoodRun16},
+and require that the data from the silicon detector, electromagnetic
+calorimetry, and muon chambers to be marked ``good''. In addition to
+data marked good from the muon chambers, we also remove the runs in
+which the CMX detector is ignored.
+%We also remove the runs without the CMX detector ourselves.
+
+We begin by selecting events with two leptons which form a $Z$, and
+four or more jets. We then separate the sample into events with a
+loose SECVTX \btag and anti-tagged events. We then further optimize the
+selection criteria to obtain the best expected limit and place further
+requirements upon the jets \et, transverse mass \mt, and a mass
+$\chi^2$.
+
+\subsection{Selection Criteria}
+For the base event selection we require exactly one lepton pair of the
+same flavor and opposite charge. For \Zee, one of the leptons is a tight 
+central electron and the other is a tight central electron, a tight phoenix
+electron, or a tight track lepton.  For \Zmm, one of the leptons is a
+tight central muon, and the other is a tight central muon or a track
+lepton.  The difference in the $z$-coordinate of the point of closest
+approach to the beam line, $\Delta z_0$, of the two legs is required to be
+less than $5\unit{cm}$, and the dilepton invariant mass is required
+to be between 76\gevcsq and 106\gevcsq.
+
+\subsection{Lepton Selection}
+This analysis will use tight central electrons, tight
+phoenix electrons, and tight central (CMUP or CMX) muons which follow the 
+standard CDF Joint Physics criteria for electrons~\cite{JPElectron} and 
+muons~\cite{JPMuon}. The selection criteria are listed in 
+Tables~\ref{table:TCE}, \ref{table:PHX}, and \ref{table:muons}.
+For the selection of tight track leptons, we use the requirements determined for
+the lepton+track top \xsect measurement~\cite{CDF8696}, as shown in
+Table~\ref{table:tracks}. In addition, we impose a correction for 
+electron+track $Z$ candidates to account for possible energy loss due to 
+bremsstrahlung. In this case, a collinear photon will deposit energy into a 
+nearby calorimetry tower. We can use the energy from the photon to recover 
+the energy loss of the track. For these tracks, we use \et if it is larger than \pt.
+
+
+\subsection{Jet Selection}
+In addition to the $Z$ candidate, we require 4 or more jets with
+$\et> 15\gev$ corrected to jet energy correction level 5 and $|\eta|
+\leq 2.4$. In events with five or more jets, only the four leading
+jets are considered. Events with $Z+\geq 4$ jets fall into our signal region and
+are therefore blinded. We use the events with a $Z$ and three or fewer
+jets as our control region to perform cross-checks for our background
+prediction methods. For some studies, we will shrink the blind signal
+region by applying a cut on a mass $\chi^2$ variable.
+ 
+\subsection{Additional Selection Criteria}
+After the base selection, we apply further cuts to improve the
+background rejection. These cuts are optimized for the best expected
+limit. We found that a ``sliding'' cut on the transverse energy of the
+four leading jets, a cut on the transverse mass of the system, \mt, and a
+mass $\chi^2$ are the most sensitive. The definitions of these variables, 
+calculation of the expected limit, and the subsequent optimization of 
+the additional selection criteria are described in 
+Section~\ref{section:limitsandoptimization}.
+
+\subsubsection{``Sliding'' Jet Transverse Energy}
+The FCNC signal comes from the decay of massive top quarks and
+contains four hard jets. Therefore a ``sliding'' cut on the transverse
+energies of the four leading jets in an event suppresses background
+from \Zj events that originates from a lower energy process and from
+SM \ttbar, where two of the four jets have to come from initial or
+final state radiation. 
+%We found a cut of $\et>40\gev$ for the leading
+%jet, $\et>30\gev$ for the second leading jet, $\et>20\gev$ for the
+%third leading jet, and $\et>15\gev$ for the fourth leading jet to be
+%optimal for both the anti-$b$-tagged and the $b$-tagged analysis.
+
+\subsubsection{Transverse Mass}
+A second variable with good discriminating power is the
+transverse mass of the full event, defined as
+\begin{equation}
+  \mt = \sqrt{ \left(\sum\et \right)^2 - \left(\sum\vec{p}_{T}\right)^2 },
+\end{equation}
+where the sums include the four leading jets and the reconstructed $Z$. 
+
+\subsubsection[Mass $\chi^2$]{Mass \boldmath $\chi^2$\unboldmath}
+\label{section:masschi2}
+We make use of the ability to fully reconstruct the event kinematics to
+separate signal from background by constructing a mass $\chi^2$
+variable. In a signal event, there is one decay of the type \tWb.
+Two jets in the event form a $W$, which in turn form a top quark together with
+a third jet. There is also one decay of the type \tZq, in which the
+$Z$ has to be paired with the fourth jet to form the second top. The mass
+$\chi^2$ is defined as
+
+\begin{equation}
+\chi^2 = 
+\left(\frac{m_{W,\mathrm{rec}} - m_{W,\mathrm{PDG}}}{\sigma_{W, rec}} \right)^2 +
+\left(\frac{m_{\tWb,\mathrm{rec}} - m_{t,\mathrm{PDG}}}{\sigma_{\tWb}} \right)^2 +
+\left(\frac{m_{\tZq,\mathrm{rec}} - m_{t,\mathrm{PDG}}}{\sigma_{\tZq}} \right)^2,
+\end{equation}
+
+where, for each permutation, the masses are obtained by the following prescription:
+
+\begin{enumerate}
+\item Correct the four leading jets four-vectors with level-5 jet energy scale
+  corrections and top-specific corrections taken from the Top Mass
+  Template (TMT) analysis~\cite{CDF7532}.
+\item Calculate the invariant mass of the first two jets to form the mass
+  of the reconstructed $W$, $m_{W,\mathrm{rec}}$.
+\item Vary the momentum four-vectors of both $W$ daughters within their respective
+  resolutions such that the $W$ mass is fixed to its PDG value. The
+  resolutions are taken from the TMT analysis.
+\item Calculate the invariant mass of the $W$ and the third jet to form the reconstructed
+  top mass, $m_{\tWb,\mathrm{rec}}$.
+\item Reconstruct a $Z$ from two leptons.
+\item Fix the $Z$ mass to its PDG value by varying the two lepton four-vectors. We 
+  assume the lepton's resolutions are a constant percentage of their total momenta.
+\item Calculate the invariant mass of the $Z$ and the fourth jet, 
+  $m_{\tZq,\mathrm{rec}}$.
+\end{enumerate}
+
+In the above calculation for the mass $\chi^{2}$ distribution, we assume a top mass
+of 175\gevcsq. The widths shown are the RMS values of the HEPG-matched reconstructed
+signal Monte Carlo, where $\sigma_{W, rec}$, $\sigma_{\tWb}$, and $\sigma_{\tZq}$
+are 15\unit{GeV}, 24\unit{GeV}, and 21\unit{GeV}, respectively. The above prescription 
+is repeated for all possible permutations of the four leading jets in the event, and 
+the permutation with the lowest $\chi^2$ is selected. We do not make use of $b$-tagging 
+information in resolving the combinatorics.
+
+%: $\sqrt{\chi^2} < 1.35$ for anti-tagged
+%events, and $\sqrt{\chi^2} < 1.6$ for loose SECVTX tagged events. 
+
+\subsubsection{Lepton+Jets Selection}
+Our expected number of signal events are normalized to the lepton+jets SECVTX
+\xsect. The lepton+jets analysis searches in \ttbar pairs for the standard model 
+top decay \tWb, where one top decays hadronically and the other leptonically 
+yielding the lepton + three or more jets + missing \Et event signature. They require one 
+tight lepton (TCE, CMUP, CMX), three jets with $\Et>20\gev$ corrected to jet 
+energy correction level 5, and at least two loose SECVTX $b$-tags. Details of their acceptance 
+selection criteria are given in Table~\ref{table:LepJets}.
+
+%After optimizing our event selection for the best expected limit, we
+%make further requirements for our events. We require higher transverse
+%energy for the highest four jets to be greater than 50\gev, 40\gev,
+%30\gev, and 20\gev, respectively. We also require the scalar sum of
+%the \et s (\pt s) of the leptons and the \et s of the jets to be above
+%260\gev. We also require the mass $\chi^2$, which measures the
+%deviations of the masses of the reconstructed FCNC top, W, and SM top
+%from the average in matched Monte Carlo events, to be less than
+%5x.x.
+

@@ -1,0 +1,16 @@
+# -*- sh -*- # for font lock mode
+
+numMeasurements 2
+numErrors       2
+
+name  0  0  
+mean  0  0.722
+errorVec  0 0 0.040	
+errorVec  0 1 0.023
+
+name  1  1  
+mean  1  0.726
+errorVec  1 0 0.056	
+errorVec  1 1 0.023
+
+correlation  0  1  1  1.0
