@@ -1,5 +1,0 @@
-File       = Table
-Product    = ANY
-Flavor     = ANY
-Qualifiers = ""
-Action     = setup
