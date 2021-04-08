@@ -1,0 +1,8 @@
+Description of KinematicFitter/KinematicFitter directory 
+---------------------------------------------
+
+This area should contain only include-path files such as:
+    *.h
+    *.hh
+    *.inc
+    link_KinematicFitter.mk for PackageList

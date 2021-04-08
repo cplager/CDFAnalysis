@@ -1,0 +1,1163 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     32385,        980]*)
+(*NotebookOutlinePosition[     33103,       1005]*)
+(*  CellTagsIndexPosition[     33059,       1001]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Kinematic Fitting", "Title"],
+
+Cell["using the formalism from Paul Avery", "Subtitle"],
+
+Cell[CellGroupData[{
+
+Cell["Notebook initialization", "Section"],
+
+Cell[BoxData[
+    \(\(Clear["\<Global`*\>"];\)\)], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Framework", "Section"],
+
+Cell[TextData[{
+  "Let ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Alpha]\_0\)]],
+  " be a vector of the input parameters.  We assume the input is always a set \
+of ",
+  Cell[BoxData[
+      \(TraditionalForm\`n\)]],
+  " four vectors ",
+  Cell[BoxData[
+      \(TraditionalForm\`{p\^\[Mu]}\)]],
+  ", and thus",
+  Cell[BoxData[
+      FormBox[
+        OverscriptBox[
+          RowBox[{" ", 
+            FormBox[\(\[Alpha]\_0\),
+              "TraditionalForm"]}], "\[RightVector]"], TraditionalForm]]],
+  " has dimension ",
+  Cell[BoxData[
+      \(TraditionalForm\`4*n\)]],
+  ". Explicitly,"
+}], "Text"],
+
+Cell[TextData[Cell[BoxData[
+    FormBox[
+      RowBox[{\(\(\[Alpha]\_0\)\& \[RightVector] \), " ", "=", 
+        RowBox[{"(", GridBox[{
+              {\(p\_1\^0\)},
+              {\(p\_1\^1\)},
+              {\(p\_1\^2\)},
+              {\(p\_1\^3\)},
+              {\(p\_2\^0\)},
+              {\(p\_2\^1\)},
+              {"\[Ellipsis]"},
+              {\(p\_n\^3\)}
+              }], ")"}]}], TraditionalForm]]]], "NumberedEquation"],
+
+Cell[TextData[{
+  "We want to calculate ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Alpha]\&\[RightVector]\)]],
+  ", the result of applying constraints to this set of components .  We label \
+the resulting set of four vectors ",
+  Cell[BoxData[
+      \(TraditionalForm\`{p\&_\^\[Nu]}\)]],
+  "."
+}], "Text"],
+
+Cell[TextData[{
+  "Assume the constraints take the form ",
+  Cell[BoxData[
+      \(TraditionalForm\`\(H\&\[RightVector]\)(\[Alpha]) = 0\)]],
+  ", where ",
+  Cell[BoxData[
+      \(TraditionalForm\`H\&\[RightVector]\)]],
+  " is a vector of ",
+  Cell[BoxData[
+      \(TraditionalForm\`r\)]],
+  " constraints.  Series expansion of this constraint equation around the \
+point ",
+  Cell[BoxData[
+      \(TraditionalForm\`\(\[Alpha]\_A\)\&\[RightVector]\)]],
+  " yields"
+}], "Text"],
+
+Cell[TextData[Cell[BoxData[
+    \(TraditionalForm\`\(\[PartialD]H\&\[RightVector]\/\[PartialD]\[Alpha]\&\
+\[RightVector]\) \((\[Alpha]\&\[RightVector] - \[Alpha]\&\[RightVector]\_A)\) \
++ \(H\&\[RightVector]\)(\[Alpha]\&\[RightVector]\_A) + \[ScriptCapitalO](\
+\[Alpha]\&\[RightVector]\^2) = 0\)]]], "NumberedEquation"],
+
+Cell["or in component notation", "Text"],
+
+Cell[TextData[Cell[BoxData[
+    \(TraditionalForm\`\(\(\(\[PartialD]H\^\(\(\ \)\(i\)\)\/\[PartialD]\
+\[Alpha]\^\(\(\ \)\(j\)\)\)\(\[RightFloor]\)\)\_\(\[Alpha]\&\[RightVector]\_A\
+\)\) \((\[Alpha]\^j - \[Alpha]\_A\^\(\(\ \)\(j\)\))\) + \(H\^i\)(\[Alpha]\&\
+\[RightVector]\_A) + \[ScriptCapitalO](\[Alpha]\&\[RightVector]\^2) = 
+      0\)]]], "NumberedEquation"],
+
+Cell["Let ", "Text"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      \(TraditionalForm\`\(\(\(D\^i\)\_j\)\(=\)\)\)]],
+  Cell[BoxData[
+      \(TraditionalForm\`\(\(\[PartialD]H\^\(\(\ \)\(i\)\)\/\[PartialD]\
+\[Alpha]\^\(\(\ \)\(j\)\)\)\(\[RightFloor]\)\)\_\(\[Alpha]\&\[RightVector]\_A\
+\)\)]],
+  "\n",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Delta]\[Alpha]\^\(\(\ \)\(j\)\) = \ \[Alpha]\^j - \
+\[Alpha]\_A\^j\)]],
+  "\n",
+  Cell[BoxData[
+      \(TraditionalForm\`\(\(d\^\(\(\ \)\(i\)\)\)\(=\)\)\)]],
+  " ",
+  Cell[BoxData[
+      \(TraditionalForm\`\(H\^i\)(\[Alpha]\&\[RightVector]\_A)\)]]
+}], "NumberedEquation"],
+
+Cell[TextData[{
+  "and assume that the constraints are linear in ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Alpha]\&\[RightVector]\_A\)]],
+  ".  Then the constraint equation is"
+}], "Text"],
+
+Cell[TextData[Cell[BoxData[
+    \(TraditionalForm\`\(\(D\^\(\(\ \)\(i\)\)\)\_j\) \[Delta]\[Alpha]\^j + 
+        d\^i = 0\)]]], "NumberedEquation"],
+
+Cell["\<\
+This is a form well-suited for Lagrange multiplier \
+techniques.\
+\>", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+  Cell[BoxData[
+      \(TraditionalForm\`\[Chi]\^2\)]],
+  " Minimization with Lagrange Multiplier Constraints"
+}], "Section"],
+
+Cell[TextData[{
+  "The parameters ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Alpha]\&\[RightVector]\)]],
+  " that minimize"
+}], "Text"],
+
+Cell[TextData[Cell[BoxData[
+    \(TraditionalForm\`\[Chi]\^2 = \(\((\[Alpha]\&\[RightVector] - \[Alpha]\&\
+\[RightVector]\_0)\)\^T\) \(V\&~\^\(-1\)\)[\[Alpha]\&\[RightVector]\_0] \((\
+\[Alpha]\&\[RightVector] - \[Alpha]\&\[RightVector]\_0)\)\)]]], \
+"NumberedEquation"],
+
+Cell[TextData[{
+  "(where ",
+  Cell[BoxData[
+      \(TraditionalForm\`V\&~\)]],
+  " is the covariance matrix) are clearly ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Alpha]\&\[RightVector] = \
+\[Alpha]\&\[RightVector]\_0\)]],
+  "."
+}], "Text"],
+
+Cell["\<\
+Consider what happens after adding a zero term to Equation 6,\
+\>", \
+"Text"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      FormBox[
+        RowBox[{\(\[Chi]\^2\), "=", 
+          
+          RowBox[{\(\(\((\[Alpha]\&\[RightVector] - \
+\[Alpha]\&\[RightVector]\_0)\)\^T\) \(V\&~\^\(-1\)\)[\[Alpha]\&\[RightVector]\
+\_0] \((\[Alpha]\&\[RightVector] - \[Alpha]\&\[RightVector]\_0)\)\), " ", "+",
+             
+            RowBox[{"2", 
+              
+              FormBox[\(\(\[Lambda]\&\[RightVector]\^T\)(
+                  D\&~\ \[Delta]  \[Alpha]\&\[RightVector]\  + 
+                    d\&\[RightVector])\),
+                "TraditionalForm"]}]}]}], TraditionalForm]]],
+  " "
+}], "NumberedEquation"],
+
+Cell[TextData[{
+  "where ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Lambda]\&\[RightVector]\)]],
+  " is a vector of ",
+  Cell[BoxData[
+      \(TraditionalForm\`r\)]],
+  " Langrange multipliers for the ",
+  Cell[BoxData[
+      \(TraditionalForm\`r\)]],
+  " constraints.  Equation 7 encodes the magnitude of the changes  in each \
+parameter induced by the constraints, with greater weight given to the best \
+measured parameters.  "
+}], "Text"],
+
+Cell[TextData[{
+  "Minimizing w.r.t. ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Alpha]\&\[RightVector]\)]],
+  " and ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Lambda]\&\[RightVector]\)]],
+  ","
+}], "Text"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      FormBox[
+        RowBox[{\(\[Chi]\^2\), "=", 
+          
+          RowBox[{\(\(\((\[Alpha]\&\[RightVector] - \
+\[Alpha]\&\[RightVector]\_0)\)\_i\) \(\(V\^i\)\_j\^\(-1\)\)[\[Alpha]\&\
+\[RightVector]\_0] \((\[Alpha]\&\[RightVector] - \[Alpha]\&\[RightVector]\_0)\
+\)\^j\), " ", "+", 
+            RowBox[{"2", 
+              
+              FormBox[\(\(\[Lambda]\_i\)(\(D\^\(\(\ \)\(i\)\)\)\_j\ \[Delta]\
+\[Alpha]\^j + d\^i)\),
+                "TraditionalForm"]}]}]}], TraditionalForm]]],
+  " "
+}], "NumberedEquation"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      FormBox[
+        RowBox[{"0", "=", 
+          
+          RowBox[{\(\[PartialD]\[Chi]\^2\/\[PartialD]\[Alpha]\^\(\(\ \
+\)\(k\)\)\), "=", 
+            
+            RowBox[{\(\(V\_kj\^\(-1\)\)[\[Alpha]\&\[RightVector]\_0] \((\
+\[Delta]\[Alpha]\_0)\)\^j\), " ", "+", 
+              " ", \(\(\((\[Delta]\[Alpha]\_0)\)\_i\) \(\(V\^ik\)\^\(-1\)\)[\
+\[Alpha]\&\[RightVector]\_0]\), "   ", "+", 
+              RowBox[{"2", 
+                FormBox[\(\(\[Lambda]\_i\) \(D\^\(\(\ \)\(ik\)\)\)\(\ \)\),
+                  "TraditionalForm"]}]}]}]}], TraditionalForm]]],
+  " "
+}], "NumberedEquation"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      \(TraditionalForm\`0 = \
+\(\(\[PartialD]\[Chi]\^2\/\[PartialD]\[Lambda]\_k\)\(=\)\)\)]],
+  " ",
+  Cell[BoxData[
+      FormBox[
+        RowBox[{"2", 
+          FormBox[\((D\_kj\ \[Delta]\[Alpha]\^j + d\_k)\),
+            "TraditionalForm"]}], TraditionalForm]]],
+  " =",
+  Cell[BoxData[
+      \(TraditionalForm\`\(\(\ \)\(D\_kj\ \[Delta]\[Alpha]\^j + d\_k\)\)\)]],
+  " "
+}], "NumberedEquation"],
+
+Cell[TextData[{
+  "where  ",
+  Cell[BoxData[
+      \(TraditionalForm\`\(\[Delta]\[Alpha]\_0\)\&\[RightVector] = \[Alpha]\&\
+\[RightVector] - \[Alpha]\&\[RightVector]\_0\)]],
+  "."
+}], "Text"],
+
+Cell[TextData[{
+  "We chose the Lagrange term in Equation 7 so that Equation 10 is just the \
+constraint equation.  Let's assume ",
+  Cell[BoxData[
+      \(TraditionalForm\`\(\[Alpha]\& \[RightVector] \)\_A = \(\[Alpha]\& \
+\[RightVector] \)\_0\)]],
+  ".  Rewriting Equation 9 in matrix notation,"
+}], "Text"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      FormBox[
+        RowBox[{"0", "=", 
+          
+          RowBox[{\(\(V\_kj\^\(-1\)\)[\[Alpha]\&\[RightVector]\_0] \
+\((\[Delta]\[Alpha]\_0)\)\^j\), " ", 
+            "+", \(\(\(V\^ik\)\^\(-1\)\)[\[Alpha]\&\[RightVector]\_0]\ \((\
+\[Delta]\[Alpha]\_0)\)\_i\), "   ", "+", 
+            RowBox[{"2", 
+              FormBox[\(\(\[Lambda]\_i\) \(D\^\(\(\ \)\(ik\)\)\)\(\ \)\),
+                "TraditionalForm"]}]}]}], TraditionalForm]]],
+  "\n   = 2 ",
+  Cell[BoxData[
+      FormBox[
+        RowBox[{\(\(V\_kj\^\(-1\)\)[\[Alpha]\&\[RightVector]\_0] \((\[Delta]\
+\[Alpha]\_0)\)\^j\), "  ", "+", 
+          RowBox[{"2", 
+            FormBox[\(D\^\(\(\ \)\(ik\)\)\ \[Lambda]\_i\),
+              "TraditionalForm"]}]}], TraditionalForm]]],
+  "\n   = ",
+  Cell[BoxData[
+      \(TraditionalForm\`\(V\&~\^\(-1\)\)[\[Alpha]\&\[RightVector]\_0] \((\
+\[Alpha]\&\[RightVector] - \[Alpha]\&\[RightVector]\_0)\) + \ 
+        D\&~\^T\ \[Lambda]\&\[RightVector]\)]]
+}], "NumberedEquation"],
+
+Cell[TextData[{
+  "This is an analytic equation for the values ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Alpha]\&\[RightVector]\)]],
+  " that satisfy the constraints and minimize the original ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Chi]\^2\)]],
+  " function, and it is easy to implement in a computer program."
+}], "Text"],
+
+Cell["\<\
+Simultaneously solving Equations 10 and 11 to obtain the best fit \
+parameters,\
+\>", "Text"],
+
+Cell[BoxData[
+    \(TraditionalForm\`0\  = \(V\&~\^\(-1\)\)[\[Alpha]\&\[RightVector]\_0] \
+\((\[Alpha]\&\[RightVector] - \[Alpha]\&\[RightVector]\_0)\) + \ 
+        D\&~\^T\ \[Lambda]\&\[RightVector]\)], "DisplayFormula"],
+
+Cell[BoxData[
+    \(TraditionalForm\`0\  = \((\[Alpha]\&\[RightVector] - \[Alpha]\&\
+\[RightVector]\_0)\) + \ 
+        V\&~[\[Alpha]\&\[RightVector]\_0] 
+          D\&~\^T\ \[Lambda]\&\[RightVector]\)], "DisplayFormula"],
+
+Cell[BoxData[
+    \(TraditionalForm\`\[Alpha]\&\[RightVector]\  = \
+\[Alpha]\&\[RightVector]\_0 - \ 
+        V\&~[\[Alpha]\&\[RightVector]\_0] 
+          D\&~\^T\ \[Lambda]\&\[RightVector]\)], "NumberedEquation"],
+
+Cell["and", "Text"],
+
+Cell[BoxData[
+    \(TraditionalForm\`0\  = 
+      D\&~\ \(\[Delta]\[Alpha]\_0\)\&\[RightVector] + \(d\& \[RightVector] \)\
+\)], "DisplayFormula"],
+
+Cell[BoxData[
+    \(TraditionalForm\`\[Alpha]\&\[RightVector]\  = \
+\[Alpha]\&\[RightVector]\_0 - 
+        D\&~\^\(-1\)\ d\&\[RightVector]\)], "DisplayFormula"],
+
+Cell["so", "Text"],
+
+Cell[BoxData[
+    \(TraditionalForm\`D\&~\^\(-1\)\ d\&\[RightVector] = \(V\&~\)[\[Alpha]\&\
+\[RightVector]\_0] D\&~\^T\ \[Lambda]\&\[RightVector]\)], "DisplayFormula"],
+
+Cell[BoxData[
+    \(TraditionalForm\`\(\(\ \)\(d\&\[RightVector] = \(D\&~\) \(V\&~\)[\
+\[Alpha]\&\[RightVector]\_0] 
+        D\&~\^T\ \[Lambda]\&\[RightVector]\)\)\)], "DisplayFormula"],
+
+Cell["Let", "Text"],
+
+Cell[TextData[Cell[BoxData[
+    FormBox[
+      RowBox[{
+        FormBox[\(\(\(V\_D\)\&~\)\(=\)\(D\&~\)\(\ \)\),
+          "TraditionalForm"], 
+        SuperscriptBox[
+          FormBox[\(V\&~[\[Alpha]\&\[RightVector]\_0]\ D\&~\),
+            "TraditionalForm"], "T"]}], 
+      TraditionalForm]]]], "NumberedEquation"],
+
+Cell["Then ", "Text"],
+
+Cell[BoxData[
+    \(TraditionalForm\`\(\(\ \)\(d\&\[RightVector] = \(V\&~\)\_D\ \[Lambda]\&\
+\[RightVector]\)\)\)], "DisplayFormula"],
+
+Cell[BoxData[
+    \(TraditionalForm\`\[Alpha]\&\[RightVector]\  = \
+\[Alpha]\&\[RightVector]\_0 - \ 
+        V\&~[\[Alpha]\&\[RightVector]\_0] \(D\&~\^T\) \(V\&~\)\_D\^\(-1\)\ \
+d\&\[RightVector]\)], "DisplayFormula"],
+
+Cell[BoxData[
+    \(TraditionalForm\`\[Alpha]\&\[RightVector]\  = \
+\[Alpha]\&\[RightVector]\_0 - \ 
+        V\&~[\[Alpha]\&\[RightVector]\_0] \(\(\(D\&~\^T\)(
+                D\&~\^T)\)\^\(-1\)\) 
+          V\&~[\[Alpha]\&\[RightVector]\_0]\^\(-1\)\ \(D\&~\^\(-1\)\) 
+          d\&\[RightVector]\)], "DisplayFormula"],
+
+Cell[BoxData[
+    \(TraditionalForm\`\[Alpha]\&\[RightVector]\  = \
+\[Alpha]\&\[RightVector]\_0 - \ \ \(D\&~\^\(-1\)\) 
+          d\&\[RightVector]\)], "DisplayFormula"],
+
+Cell["The full solution is then", "Text"],
+
+Cell[BoxData[
+    \(TraditionalForm\`\(\(\ \)\(\[Lambda]\&\[RightVector] = \
+\(V\&~\)\_D\^\(-1\)\ d\&\[RightVector]\)\)\)], "NumberedEquation"],
+
+Cell[BoxData[
+    \(TraditionalForm\`\[Alpha]\&\[RightVector]\  = \
+\(\[Alpha]\&\[RightVector]\_0 - \ \ \(D\&~\^\(-1\)\) 
+            d\&\[RightVector] = \[Alpha]\&\[RightVector]\_0 - \ 
+          V\&~[\[Alpha]\&\[RightVector]\_0] \(D\&~\^T\) \(V\&~\)\_D\^\(-1\)\ \
+d\&\[RightVector]\)\)], "NumberedEquation"],
+
+Cell[TextData[{
+  "The ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Chi]\^2\)]],
+  " at the minimum is"
+}], "Text"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      FormBox[
+        RowBox[{\(\[Chi]\^2\), "=", 
+          
+          RowBox[{\(\(\((\(\(\[Delta]\[Alpha]\_0\)\& \[RightVector] \
+\))\)\^T\) \(V\&~\^\(-1\)\)[\[Alpha]\&\[RightVector]\_0] \((\(\(\[Delta]\
+\[Alpha]\_0\)\& \[RightVector] \))\)\), " ", "+", 
+            RowBox[{"2", 
+              
+              FormBox[\(\(\[Lambda]\&\[RightVector]\^T\)(\(D\&~\) \
+\(\(\[Delta]\[Alpha]\_0\)\& \[RightVector] \) + d\&\[RightVector])\),
+                "TraditionalForm"]}]}]}], TraditionalForm]]],
+  " "
+}], "DisplayFormula"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      FormBox[
+        RowBox[{\(\[Chi]\^2\), "=", 
+          
+          RowBox[{\(\(\((V\&~[\[Alpha]\&\[RightVector]\_0] \(D\&~\^T\) \(V\&~\
+\)\_D\^\(-1\)\ d\&\[RightVector])\)\^T\) \(V\&~\^\(-1\)\)[\[Alpha]\&\
+\[RightVector]\_0] \((\ 
+                V\&~[\[Alpha]\&\[RightVector]\_0] \(D\&~\^T\) \
+\(V\&~\)\_D\^\(-1\)\ d\&\[RightVector])\)\), " ", "+", 
+            RowBox[{"2", 
+              
+              FormBox[\(\(\[Lambda]\&\[RightVector]\^T\)(\(\(-D\)\&~\) 
+                      V\&~[\[Alpha]\&\[RightVector]\_0] \(D\&~\^T\) \
+\(V\&~\)\_D\^\(-1\)\ d\&\[RightVector] + d\&\[RightVector])\),
+                "TraditionalForm"]}]}]}], TraditionalForm]]],
+  " "
+}], "DisplayFormula"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      FormBox[
+        RowBox[{\(\[Chi]\^2\), "=", 
+          
+          RowBox[{\(\(\(\(d\&\[RightVector]\^T\)(\(V\&~\)\_D\^\(-1\))\)\^T\) 
+              D\&~\ \(V\&~[\[Alpha]\&\[RightVector]\_0]\^T\) \
+\(V\&~\^\(-1\)\)[\[Alpha]\&\[RightVector]\_0] 
+              V\&~[\[Alpha]\&\[RightVector]\_0] \(D\&~\^T\) \(V\&~\)\_D\^\(-1\
+\)\ d\&\[RightVector]\), " ", "+", 
+            RowBox[{"2", 
+              
+              FormBox[\(\(\[Lambda]\&\[RightVector]\^T\)(\(\(\(-V\)\&~\)\_D\) \
+\(V\&~\)\_D\^\(-1\)\ d\&\[RightVector] + d\&\[RightVector])\),
+                "TraditionalForm"]}]}]}], TraditionalForm]]],
+  " "
+}], "DisplayFormula"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      FormBox[
+        RowBox[{\(\[Chi]\^2\), "=", 
+          
+          RowBox[{\(\(\(\(d\&\[RightVector]\^T\)(\(V\&~\)\_D\^\(-1\))\)\^T\) 
+              D\&~\ \(V\&~[\[Alpha]\&\[RightVector]\_0]\^T\) \(D\&~\^T\) \
+\(V\&~\)\_D\^\(-1\)\ d\&\[RightVector]\), " ", "+", 
+            RowBox[{"2", 
+              
+              FormBox[\(\(\[Lambda]\&\[RightVector]\^T\)(\(-d\&\[RightVector]\
+\) + d\&\[RightVector])\),
+                "TraditionalForm"]}]}]}], TraditionalForm]]],
+  " "
+}], "DisplayFormula"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      \(TraditionalForm\`\[Chi]\^2 = \ \(\(\[Lambda]\& \[RightVector] \)\^T\) \
+\(\(V\&~\)\_D\^T\) \(\[Lambda]\& \[RightVector] \)\  + \ 
+          0\ \((by\ design)\)\)]],
+  " "
+}], "DisplayFormula"],
+
+Cell["or", "Text"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      \(TraditionalForm\`\(\(\[Chi]\^2\)\(=\)\(\ \)\)\)]],
+  " ",
+  Cell[BoxData[
+      \(TraditionalForm\`\(\(d\& \[RightVector] \)\^T\) \(V\&~\)\_D\^\(-1\)\ \
+d\&\[RightVector]\)]]
+}], "NumberedEquation"],
+
+Cell["\<\
+The new fit has covariance matrix and output-input parameter pulls \
+(check these two later; for now don't implement them)\
+\>", "Text"],
+
+Cell[TextData[Cell[BoxData[
+    FormBox[
+      RowBox[{\(V\&~[\[Alpha]\&\[RightVector]]\), " ", "=", 
+        RowBox[{\(V\&~[\[Alpha]\&\[RightVector]\_0]\), "-", 
+          RowBox[{\(V\&~[\[Alpha]\&\[RightVector]\_0]\), 
+            SuperscriptBox[
+              FormBox[\(\(\ \)\(D\&~\)\),
+                "TraditionalForm"], 
+              "T"], \(\(V\_D\)\&~\), \(\(\(D\)\(\ \)\)\&~\), \
+\(V\&~[\[Alpha]\&\[RightVector]\_0]\)}]}]}], 
+      TraditionalForm]]]], "NumberedEquation"],
+
+Cell[TextData[Cell[BoxData[
+    FormBox[
+      RowBox[{
+        FormBox[\(\(\[Sigma]\_j\)\(=\)\),
+          
+          "TraditionalForm"], \(\(\(\(D\_\(\(ji\)\(\ \
+\)\)\)(\[Delta]\[Alpha]\_0)\)\_i + d\_j\)\/\@\((V\_D\^\(-1\))\)\_jj\)}], 
+      TraditionalForm]]]], "NumberedEquation"],
+
+Cell["and for completeness", "Text"],
+
+Cell[TextData[{
+  Cell[BoxData[
+      \(TraditionalForm\`\(\(\(D\^i\)\_j\)\(=\)\)\)]],
+  Cell[BoxData[
+      \(TraditionalForm\`\(\(\[PartialD]H\^\(\(\ \)\(i\)\)\/\[PartialD]\
+\[Alpha]\^\(\(\ \)\(j\)\)\)\(\[RightFloor]\)\)\_\(\[Alpha]\&\[RightVector]\_A\
+\)\)]],
+  "\n",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Delta]\[Alpha]\^\(\(\ \)\(j\)\) = \ \[Alpha]\^j - \
+\[Alpha]\_A\^j\)]],
+  "\n",
+  Cell[BoxData[
+      \(TraditionalForm\`\(\(d\^\(\(\ \)\(i\)\)\)\(=\)\)\)]],
+  " ",
+  Cell[BoxData[
+      \(TraditionalForm\`\(H\^i\)(\[Alpha]\&\[RightVector]\_A)\)]]
+}], "NumberedEquation"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Example: Invariant Mass Constraint", "Section"],
+
+Cell[TextData[{
+  "The equation for ",
+  Cell[BoxData[
+      \(TraditionalForm\`n\)]],
+  " four vectors ",
+  Cell[BoxData[
+      \(TraditionalForm\`{p\^\[Mu]}\)]],
+  " constrained to an invariant mass ",
+  Cell[BoxData[
+      \(TraditionalForm\`M\)]],
+  " is "
+}], "Text"],
+
+Cell[BoxData[
+    \(TraditionalForm\`H = \(\((\(\[CapitalSigma]\+\(i = 1\)\%n\) 
+                p\_i\^\[Mu])\) \((\(\[CapitalSigma]\+\(j = 1\)\%n\) 
+                p\_j\^\[Nu])\) \[Eta]\_\[Mu]\[Nu] - M\^2 = 
+        0\)\)], "DisplayFormula"],
+
+Cell[BoxData[
+    \(TraditionalForm\`H = \(\(\[CapitalSigma]\+\(i, 
+                j = 1\)\%n\) \(p\_i\^\[Mu]\) \(p\_j\^\[Nu]\) \[Eta]\_\[Mu]\
+\[Nu] - M\^2 = 0\)\)], "DisplayFormula"],
+
+Cell[TextData[{
+  "Since ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Eta]\_\[Mu]\[Nu]\)]],
+  " is diagonal, the derivatives ",
+  Cell[BoxData[
+      \(TraditionalForm\`D\^\(\(\ \)\(ij\)\)\)]],
+  " all involve squares of the independent variables, and so every component \
+is easy to calculate."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Input Covariance Matrix", "Section"],
+
+Cell[TextData[{
+  "For uncorrelated measurements of ",
+  Cell[BoxData[
+      \(TraditionalForm\`n\)]],
+  " particles, the covariance matrix is block diagonal, consisting of the \
+independent covariance matrices of each particle,"
+}], "Text"],
+
+Cell[BoxData[
+    \(V\_ij = \(\(<\)\(\((x\_i - \[Mu]\_i)\) \((x\_j - \
+\[Mu]\_j)\)\)\(>\)\)\)], "DisplayFormula"],
+
+Cell[TextData[{
+  "The usual way to compute this matrix for a set of correlated variables ",
+  Cell[BoxData[
+      \(TraditionalForm\`x\&_\^i\)]],
+  " is to start with a set of uncorrelated variables ",
+  Cell[BoxData[
+      \(TraditionalForm\`x\^i\)]],
+  " and take derivatives of the transformation equations relating ",
+  Cell[BoxData[
+      \(TraditionalForm\`x\^i\)]],
+  " to ",
+  Cell[BoxData[
+      \(TraditionalForm\`x\&_\^i\)]],
+  ", ",
+  Cell[BoxData[
+      \(TraditionalForm\`x\&_\^i = \ \(T\^i\)({x\^j})\)]],
+  ".  "
+}], "Text"],
+
+Cell[TextData[{
+  "The covariance matrix ",
+  Cell[BoxData[
+      \(TraditionalForm\`V\)]],
+  " for the uncorrellated variables is diagonal,"
+}], "Text"],
+
+Cell[BoxData[
+    RowBox[{"V", "=", 
+      RowBox[{"(", GridBox[{
+            {\(\[Sigma]\_1\^2\), "0", "0"},
+            {"0", \(\[Sigma]\_2\^2\), "0"},
+            {"0", "0", "\[Ellipsis]"}
+            }], ")"}]}]], "DisplayFormula"],
+
+Cell[TextData[{
+  "where ",
+  Cell[BoxData[
+      \(TraditionalForm\`\[Sigma]\_i\)]],
+  " is the measurement uncertainty on variable ",
+  Cell[BoxData[
+      \(TraditionalForm\`x\^i\)]],
+  ".  Then the covariance matrix ",
+  Cell[BoxData[
+      \(TraditionalForm\`V\&_\)]],
+  " for the correlated variables is given by"
+}], "Text"],
+
+Cell[BoxData[
+    \(V\&_\_ij = \(\[PartialD]T\_i\/\[PartialD]x\_s\) \(\[PartialD]T\_j\/\
+\[PartialD]x\_t\) \[Sigma]\_\(s\ t\)\)], "DisplayFormula"],
+
+Cell[TextData[{
+  "The following is a short ",
+  StyleBox["Mathematica",
+    FontSlant->"Italic"],
+  " program which can be used to compute covariance matrices in this way."
+}], "Text"],
+
+Cell[BoxData[{\(Clear["\<Global`*\>"];\), "\[IndentingNewLine]", \(xi\  = \ \
+{en, \[Phi], \[CapitalLambda], 
+          m};\), "\[IndentingNewLine]", \(\[CapitalLambda]rules = {Cos[\
+\[Theta]] \[Rule] \[CapitalLambda]\/\@\(\[CapitalLambda]\^2 + 1\), 
+          Sin[\[Theta]] \[Rule] 
+            1\/\@\(\[CapitalLambda]\^2 + 1\)};\), "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"xbari", "=", 
+        RowBox[{
+          RowBox[{
+            RowBox[{"(", GridBox[{
+                  {"en"},
+                  {"0"},
+                  {"0"},
+                  {"0"}
+                  }], ")"}], "+", 
+            RowBox[{\(\@\(en\^2 - m\^2\)\), 
+              RowBox[{"(", GridBox[{
+                    {"0"},
+                    {\(Cos[\[Phi]] Sin[\[Theta]]\)},
+                    {\(Sin[\[Phi]] Sin[\[Theta]]\)},
+                    {\(Cos[\[Theta]]\)}
+                    }], ")"}]}]}], "/.", "\[CapitalLambda]rules"}]}], 
+      ";"}], "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"\[Sigma]", "=", 
+        RowBox[{"(", GridBox[{
+              {\(\[Sigma]en\^2\), "0", "0", "0"},
+              {"0", \(\[Sigma]\[Phi]\^2\), "0", "0"},
+              {"0", "0", \(\[Sigma]\[CapitalLambda]\^2\), "0"},
+              {"0", "0", "0", \(\[Sigma]m\^2\)}
+              }], ")"}]}], 
+      ";"}], "\[IndentingNewLine]", \(\[Sigma]bar = 
+        Table[\ Sum[
+            D[xbari[\([i, 1]\)], xi[\([s]\)]] 
+              D[xbari[\([j, 1]\)], xi[\([t]\)]]\ \[Sigma][\([s, t]\)], {s, 
+              Length[xi]}, {t, Length[xi]}], {i, Length[xbari]}, {j, 
+            Length[xbari]}];\)}], "Input",
+  CellLabel->"In[92]:="],
+
+Cell[CellGroupData[{
+
+Cell["Energy uncertainties only", "Subsection"],
+
+Cell["\<\
+As a cross check, here are the covariance matrix elements after one \
+removes the mass sector and assumes all angles are measured with infinite \
+precision.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[Sigma]simple = 
+      FullSimplify[\[Sigma]bar /. {m \[Rule] 0, \[Sigma]m \[Rule] 
+              0, \[Sigma]\[CapitalLambda] \[Rule] 0, \[Sigma]\[Phi] \[Rule] 
+              0, \[CapitalLambda] \[Rule] Cot[\[Theta]]}, {en > 0, 
+          Sin[\[Theta]] > 0, Csc[\[Theta]] > 0}]\)], "Input",
+  CellLabel->"In[110]:="],
+
+Cell[BoxData[
+    FormBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(\[Sigma]en\^2\), \(\[Sigma]en\^2\ \(cos(\[Phi])\)\ \(sin(\
+\[Theta])\)\), \(\[Sigma]en\^2\ \(sin(\[Theta])\)\ \(sin(\[Phi])\)\), \(\
+\[Sigma]en\^2\ \(cos(\[Theta])\)\)},
+            {\(\[Sigma]en\^2\ \(cos(\[Phi])\)\ \(sin(\[Theta])\)\), \
+\(\[Sigma]en\^2\ \(\(cos\^2\)(\[Phi])\)\ \(\(sin\^2\)(\[Theta])\)\), \(\
+\[Sigma]en\^2\ \(cos(\[Phi])\)\ \(\(sin\^2\)(\[Theta])\)\ \(sin(\[Phi])\)\), \
+\(\[Sigma]en\^2\ \(cos(\[Theta])\)\ \(cos(\[Phi])\)\ \(sin(\[Theta])\)\)},
+            {\(\[Sigma]en\^2\ \(sin(\[Theta])\)\ \(sin(\[Phi])\)\), \
+\(\[Sigma]en\^2\ \(cos(\[Phi])\)\ \(\(sin\^2\)(\[Theta])\)\ \
+\(sin(\[Phi])\)\), \(\[Sigma]en\^2\ \(\(sin\^2\)(\[Theta])\)\ \(\(sin\^2\)(\
+\[Phi])\)\), \(\[Sigma]en\^2\ \(cos(\[Theta])\)\ \(sin(\[Theta])\)\ \(sin(\
+\[Phi])\)\)},
+            {\(\[Sigma]en\^2\ \(cos(\[Theta])\)\), \(\[Sigma]en\^2\ \(cos(\
+\[Theta])\)\ \(cos(\[Phi])\)\ \(sin(\[Theta])\)\), \(\[Sigma]en\^2\ \(cos(\
+\[Theta])\)\ \(sin(\[Theta])\)\ \(sin(\[Phi])\)\), \(\[Sigma]en\^2\ \
+\(\(cos\^2\)(\[Theta])\)\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+      TraditionalForm]], "Output",
+  CellLabel->"Out[110]="]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[Sigma]simple[\([4, 4]\)]\)], "Input",
+  CellLabel->"In[120]:="],
+
+Cell[BoxData[
+    \(TraditionalForm\`\[Sigma]en\^2\ \(\(cos\^2\)(\[Theta])\)\)], "Output",
+  CellLabel->"Out[120]="]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Energy and angle uncertainties", "Subsection"],
+
+Cell["\<\
+Here are the covariance matrix elements after one removes the mass \
+sector and assumes the energy, \[Phi], and \[CapitalLambda] uncertainties are \
+uncorrelated.\
+\>", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[Sigma]diag = 
+      FullSimplify[\[Sigma]bar /. {m \[Rule] 0, \[Sigma]m \[Rule] 
+              0, \[CapitalLambda] \[Rule] Cot[\[Theta]]}, {en > 0, 
+          Sin[\[Theta]] > 0, Csc[\[Theta]] > 0}]\)], "Input",
+  CellLabel->"In[121]:="],
+
+Cell[BoxData[
+    FormBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(\[Sigma]en\^2\), \(\[Sigma]en\^2\ \(cos(\[Phi])\)\ \(sin(\
+\[Theta])\)\), \(\[Sigma]en\^2\ \(sin(\[Theta])\)\ \(sin(\[Phi])\)\), \(\
+\[Sigma]en\^2\ \(cos(\[Theta])\)\)},
+            {\(\[Sigma]en\^2\ \(cos(\[Phi])\)\ \(sin(\[Theta])\)\), \(\(\(sin\
+\^2\)(\[Theta])\)\ \((\((\[Sigma]en\^2 + 
+                          en\^2\ \[Sigma]\[CapitalLambda]\^2\ \(\(cos\^2\)(\
+\[Theta])\)\ \(\(sin\^2\)(\[Theta])\))\)\ \(\(cos\^2\)(\[Phi])\) + 
+                    en\^2\ \[Sigma]\[Phi]\^2\ \(\(sin\^2\)(\[Phi])\))\)\), \
+\(1\/16\ \((\((\[Sigma]\[CapitalLambda]\^2 - 
+                          8\ \[Sigma]\[Phi]\^2)\)\ en\^2 - \[Sigma]\
+\[CapitalLambda]\^2\ \(cos(4\ \[Theta])\)\ en\^2 + 
+                    8\ \[Sigma]en\^2)\)\ \(\(sin\^2\)(\[Theta])\)\ \(sin(
+                  2\ \[Phi])\)\), \(1\/8\ \(cos(\[Theta])\)\ \((8\ \[Sigma]en\
+\^2 - 3\ en\^2\ \[Sigma]\[CapitalLambda]\^2 - 
+                    en\^2\ \[Sigma]\[CapitalLambda]\^2\ \((cos(4\ \[Theta]) - 
+                          4\ \(cos(
+                              2\ \[Theta])\))\))\)\ \(cos(\[Phi])\)\ \(sin(\
+\[Theta])\)\)},
+            {\(\[Sigma]en\^2\ \(sin(\[Theta])\)\ \(sin(\[Phi])\)\), \(1\/16\ \
+\((\((\[Sigma]\[CapitalLambda]\^2 - 
+                          8\ \[Sigma]\[Phi]\^2)\)\ en\^2 - \[Sigma]\
+\[CapitalLambda]\^2\ \(cos(4\ \[Theta])\)\ en\^2 + 
+                    8\ \[Sigma]en\^2)\)\ \(\(sin\^2\)(\[Theta])\)\ \(sin(
+                  2\ \[Phi])\)\), \(\(\(sin\^2\)(\[Theta])\)\ \((en\^2\ \
+\[Sigma]\[Phi]\^2\ \(\(cos\^2\)(\[Phi])\) + \((\[Sigma]en\^2 + 
+                          en\^2\ \[Sigma]\[CapitalLambda]\^2\ \(\(cos\^2\)(\
+\[Theta])\)\ \(\(sin\^2\)(\[Theta])\))\)\ \(\(sin\^2\)(\[Phi])\))\)\), \(1\/8\
+\ \(cos(\[Theta])\)\ \((8\ \[Sigma]en\^2 - 
+                    3\ en\^2\ \[Sigma]\[CapitalLambda]\^2 - 
+                    en\^2\ \[Sigma]\[CapitalLambda]\^2\ \((cos(4\ \[Theta]) - 
+                          4\ \(cos(
+                              2\ \[Theta])\))\))\)\ \(sin(\[Theta])\)\ \(sin(\
+\[Phi])\)\)},
+            {\(\[Sigma]en\^2\ \(cos(\[Theta])\)\), \(1\/8\ \(cos(\[Theta])\)\ \
+\((8\ \[Sigma]en\^2 - 3\ en\^2\ \[Sigma]\[CapitalLambda]\^2 - 
+                    en\^2\ \[Sigma]\[CapitalLambda]\^2\ \((cos(4\ \[Theta]) - 
+                          4\ \(cos(
+                              
+                              2\ \[Theta])\))\))\)\ \(cos(\[Phi])\)\ \(sin(\
+\[Theta])\)\), \(1\/8\ \(cos(\[Theta])\)\ \((8\ \[Sigma]en\^2 - 
+                    3\ en\^2\ \[Sigma]\[CapitalLambda]\^2 - 
+                    en\^2\ \[Sigma]\[CapitalLambda]\^2\ \((cos(4\ \[Theta]) - 
+                          4\ \(cos(
+                              2\ \[Theta])\))\))\)\ \(sin(\[Theta])\)\ \(sin(\
+\[Phi])\)\), \(en\^2\ \[Sigma]\[CapitalLambda]\^2\ \(\(sin\^6\)(\[Theta])\) + \
+\[Sigma]en\^2\ \(\(cos\^2\)(\[Theta])\)\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+      TraditionalForm]], "Output",
+  CellLabel->"Out[121]="]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[Sigma]diag[\([4, 4]\)]\)], "Input",
+  CellLabel->"In[146]:="],
+
+Cell[BoxData[
+    \(TraditionalForm\`en\^2\ \[Sigma]\[CapitalLambda]\^2\ \(\(sin\^6\)(\
+\[Theta])\) + \[Sigma]en\^2\ \(\(cos\^2\)(\[Theta])\)\)], "Output",
+  CellLabel->"Out[146]="]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Simplification of some matrix elements for KinematicFitter.cc\
+\>", \
+"Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[Sigma]diag[\([3, 4]\)] /. {Cos[2  \[Theta]] \[Rule] 
+          TrigExpand[Cos[2  \[Theta]]], 
+        Cos[4  \[Theta]] \[Rule] TrigExpand[Cos[4  \[Theta]]]}\)], "Input",
+  CellLabel->"In[145]:="],
+
+Cell[BoxData[
+    \(TraditionalForm\`1\/8\ \(cos(\[Theta])\)\ \(sin(\[Theta])\)\ \((8\ \
+\[Sigma]en\^2 - 3\ en\^2\ \[Sigma]\[CapitalLambda]\^2 - 
+          en\^2\ \[Sigma]\[CapitalLambda]\^2\ \((\(cos\^4\)(\[Theta]) - 
+                6\ \(\(sin\^2\)(\[Theta])\)\ \(\(cos\^2\)(\[Theta])\) + \(sin\
+\^4\)(\[Theta]) - 
+                4\ \((\(cos\^2\)(\[Theta]) - \(sin\^2\)(\[Theta]))\))\))\)\ \
+\(sin(\[Phi])\)\)], "Output",
+  CellLabel->"Out[145]="]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[Sigma]diag[\([2, 4]\)] /. {Cos[2  \[Theta]] \[Rule] 
+          TrigExpand[Cos[2  \[Theta]]], 
+        Cos[4  \[Theta]] \[Rule] TrigExpand[Cos[4  \[Theta]]]}\)], "Input",
+  CellLabel->"In[141]:="],
+
+Cell[BoxData[
+    \(TraditionalForm\`1\/8\ \(cos(\[Theta])\)\ \(cos(\[Phi])\)\ \(sin(\
+\[Theta])\)\ \((8\ \[Sigma]en\^2 - 3\ en\^2\ \[Sigma]\[CapitalLambda]\^2 - 
+          en\^2\ \[Sigma]\[CapitalLambda]\^2\ \((\(cos\^4\)(\[Theta]) - 
+                6\ \(\(sin\^2\)(\[Theta])\)\ \(\(cos\^2\)(\[Theta])\) + \(sin\
+\^4\)(\[Theta]) - 
+                4\ \((\(cos\^2\)(\[Theta]) - \
+\(sin\^2\)(\[Theta]))\))\))\)\)], "Output",
+  CellLabel->"Out[141]="]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[Sigma]diag[\([2, 3]\)] /. {Sin[2  \[Phi]] \[Rule] 
+          TrigExpand[Sin[2  \[Phi]]], 
+        Cos[4  \[Theta]] \[Rule] TrigExpand[Cos[4  \[Theta]]]}\)], "Input",
+  CellLabel->"In[135]:="],
+
+Cell[BoxData[
+    \(TraditionalForm\`1\/8\ \(cos(\[Phi])\)\ \(\(sin\^2\)(\[Theta])\)\ \
+\((\((\[Sigma]\[CapitalLambda]\^2 - 
+                8\ \[Sigma]\[Phi]\^2)\)\ en\^2 - \[Sigma]\[CapitalLambda]\^2\ \
+\((\(cos\^4\)(\[Theta]) - 
+                6\ \(\(sin\^2\)(\[Theta])\)\ \(\(cos\^2\)(\[Theta])\) + \(sin\
+\^4\)(\[Theta]))\)\ en\^2 + 8\ \[Sigma]en\^2)\)\ \(sin(\[Phi])\)\)], "Output",\
+
+  CellLabel->"Out[135]="]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for Macintosh",
+ScreenRectangle->{{0, 997}, {0, 746}},
+WindowSize->{733, 657},
+WindowMargins->{{35, Automatic}, {Automatic, 19}},
+ShowSelection->True,
+Magnification->1.25,
+StyleDefinitions -> "ArticleModern.nb"
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 34, 0, 100, "Title"],
+Cell[1813, 55, 55, 0, 42, "Subtitle"],
+
+Cell[CellGroupData[{
+Cell[1893, 59, 42, 0, 75, "Section"],
+Cell[1938, 61, 59, 1, 51, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2034, 67, 28, 0, 75, "Section"],
+Cell[2065, 69, 601, 22, 54, "Text"],
+Cell[2669, 93, 436, 12, 206, "NumberedEquation"],
+Cell[3108, 107, 308, 9, 54, "Text"],
+Cell[3419, 118, 475, 15, 54, "Text"],
+Cell[3897, 135, 319, 4, 42, "NumberedEquation"],
+Cell[4219, 141, 40, 0, 32, "Text"],
+Cell[4262, 143, 361, 5, 47, "NumberedEquation"],
+Cell[4626, 150, 20, 0, 32, "Text"],
+Cell[4649, 152, 585, 17, 85, "NumberedEquation"],
+Cell[5237, 171, 192, 5, 32, "Text"],
+Cell[5432, 178, 146, 2, 35, "NumberedEquation"],
+Cell[5581, 182, 88, 3, 32, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5706, 190, 141, 4, 79, "Section"],
+Cell[5850, 196, 138, 5, 32, "Text"],
+Cell[5991, 203, 269, 4, 35, "NumberedEquation"],
+Cell[6263, 209, 245, 9, 32, "Text"],
+Cell[6511, 220, 87, 3, 32, "Text"],
+Cell[6601, 225, 617, 16, 38, "NumberedEquation"],
+Cell[7221, 243, 445, 13, 76, "Text"],
+Cell[7669, 258, 211, 8, 32, "Text"],
+Cell[7883, 268, 553, 15, 36, "NumberedEquation"],
+Cell[8439, 285, 624, 16, 43, "NumberedEquation"],
+Cell[9066, 303, 431, 14, 47, "NumberedEquation"],
+Cell[9500, 319, 191, 6, 32, "Text"],
+Cell[9694, 327, 309, 7, 54, "Text"],
+Cell[10006, 336, 1008, 25, 78, "NumberedEquation"],
+Cell[11017, 363, 332, 8, 54, "Text"],
+Cell[11352, 373, 103, 3, 32, "Text"],
+Cell[11458, 378, 221, 3, 38, "DisplayFormula"],
+Cell[11682, 383, 220, 4, 38, "DisplayFormula"],
+Cell[11905, 389, 212, 4, 38, "NumberedEquation"],
+Cell[12120, 395, 19, 0, 32, "Text"],
+Cell[12142, 397, 145, 3, 39, "DisplayFormula"],
+Cell[12290, 402, 160, 3, 39, "DisplayFormula"],
+Cell[12453, 407, 18, 0, 32, "Text"],
+Cell[12474, 409, 167, 2, 39, "DisplayFormula"],
+Cell[12644, 413, 185, 3, 39, "DisplayFormula"],
+Cell[12832, 418, 19, 0, 32, "Text"],
+Cell[12854, 420, 317, 8, 34, "NumberedEquation"],
+Cell[13174, 430, 21, 0, 32, "Text"],
+Cell[13198, 432, 133, 2, 39, "DisplayFormula"],
+Cell[13334, 436, 217, 4, 39, "DisplayFormula"],
+Cell[13554, 442, 318, 6, 39, "DisplayFormula"],
+Cell[13875, 450, 169, 3, 39, "DisplayFormula"],
+Cell[14047, 455, 41, 0, 32, "Text"],
+Cell[14091, 457, 143, 2, 39, "NumberedEquation"],
+Cell[14237, 461, 309, 5, 39, "NumberedEquation"],
+Cell[14549, 468, 116, 5, 32, "Text"],
+Cell[14668, 475, 558, 14, 38, "DisplayFormula"],
+Cell[15229, 491, 724, 17, 38, "DisplayFormula"],
+Cell[15956, 510, 671, 16, 38, "DisplayFormula"],
+Cell[16630, 528, 537, 14, 38, "DisplayFormula"],
+Cell[17170, 544, 232, 6, 36, "DisplayFormula"],
+Cell[17405, 552, 18, 0, 32, "Text"],
+Cell[17426, 554, 238, 7, 37, "NumberedEquation"],
+Cell[17667, 563, 146, 3, 54, "Text"],
+Cell[17816, 568, 483, 10, 34, "NumberedEquation"],
+Cell[18302, 580, 284, 7, 68, "NumberedEquation"],
+Cell[18589, 589, 36, 0, 32, "Text"],
+Cell[18628, 591, 585, 17, 85, "NumberedEquation"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[19250, 613, 53, 0, 75, "Section"],
+Cell[19306, 615, 272, 11, 32, "Text"],
+Cell[19581, 628, 243, 4, 54, "DisplayFormula"],
+Cell[19827, 634, 184, 3, 54, "DisplayFormula"],
+Cell[20014, 639, 308, 9, 54, "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20359, 653, 42, 0, 75, "Section"],
+Cell[20404, 655, 241, 6, 54, "Text"],
+Cell[20648, 663, 113, 2, 34, "DisplayFormula"],
+Cell[20764, 667, 540, 17, 76, "Text"],
+Cell[21307, 686, 153, 5, 32, "Text"],
+Cell[21463, 693, 235, 6, 77, "DisplayFormula"],
+Cell[21701, 701, 331, 11, 54, "Text"],
+Cell[22035, 714, 147, 2, 53, "DisplayFormula"],
+Cell[22185, 718, 185, 5, 54, "Text"],
+Cell[22373, 725, 1623, 38, 410, "Input"],
+
+Cell[CellGroupData[{
+Cell[24021, 767, 47, 0, 68, "Subsection"],
+Cell[24071, 769, 180, 4, 54, "Text"],
+
+Cell[CellGroupData[{
+Cell[24276, 777, 337, 6, 89, "Input"],
+Cell[24616, 785, 1290, 24, 129, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[25943, 814, 85, 2, 51, "Input"],
+Cell[26031, 818, 116, 2, 55, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[26196, 826, 52, 0, 68, "Subsection"],
+Cell[26251, 828, 186, 4, 54, "Text"],
+
+Cell[CellGroupData[{
+Cell[26462, 836, 258, 5, 70, "Input"],
+Cell[26723, 843, 3089, 54, 147, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[29849, 902, 83, 2, 51, "Input"],
+Cell[29935, 906, 181, 3, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[30153, 914, 96, 3, 49, "Subsubsection"],
+
+Cell[CellGroupData[{
+Cell[30274, 921, 217, 4, 70, "Input"],
+Cell[30494, 927, 450, 8, 97, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[30981, 940, 217, 4, 70, "Input"],
+Cell[31201, 946, 450, 8, 97, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[31688, 959, 213, 4, 70, "Input"],
+Cell[31904, 965, 417, 8, 97, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+
