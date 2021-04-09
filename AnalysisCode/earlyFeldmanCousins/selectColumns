@@ -1,0 +1,58 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+
+my @badvals;
+while ($ARGV[0] && $ARGV[0] =~ /^-/) {
+    my $arg = shift @ARGV;
+    if ($arg =~ /^-(\d+)/) {
+        my $col = $1;
+        my $badval = shift @ARGV;
+        push @badvals, [$col, $badval];
+        next;
+    }
+}
+
+
+die "Usage: $0 -args file col1 [col2 ..]\n" unless (@ARGV >= 2);
+
+
+my $filename = shift;
+my @cols;
+my $max = -1;
+foreach (@ARGV) {
+    if (/^(\d+)/) {
+        my $num = $1 - 1;
+        push @cols, $num if ($num >= 0);
+        if ($num > $max) {
+            $max = $num;
+        } # if max
+    } # if digit
+} # foreach
+
+die "Must suppy positive integers\n" unless @cols;
+
+open (SOURCE, $filename) or die "Can't open $filename\n";
+
+MAIN: while (<SOURCE>) {
+    s/^\s*//;
+    my @words = split (/\s+/, $_);
+    if (@words < $max + 1) {
+        next;
+    }
+    foreach my $bad (@badvals) {
+        my $col = $bad->[0] - 1;
+        my $val = $bad->[1];
+        if ($words[$col] == $val) {
+            # don't print this one
+            next MAIN;
+        }
+    }
+    foreach my $col (@cols) {
+        print "$words[$col]  ";
+    }
+    print "\n";
+}
+
+

@@ -1,0 +1,78 @@
+
+Processing fitBbest.c...
+ **********
+ **    5 **MIGRAD        5000     6.5e-05
+ **********
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
+ FCN=0.000331837 FROM MIGRAD    STATUS=CONVERGED     116 CALLS         117 TOTAL
+                     EDM=1.604e-24    STRATEGY= 1      ERR MATRIX NOT POS-DEF
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           5.16022e-02   5.82855e-01   1.21148e-05  -7.83074e-14
+   2  p1           1.02742e+00   1.89543e+00   6.16453e-05  -1.31908e-13
+   3  p2          -3.84807e-01   2.69853e+00   2.46877e-05   6.86199e-13
+   4  p3           1.32905e+00   3.54178e+00   7.97430e-05   3.31407e-13
+   5  p4          -1.60638e+00   4.10671e+00   9.63826e-05   2.60132e-13
+   6  p5           6.22797e-01   3.55825e+00   2.06982e-04   9.16677e-15
+ FCN=0.000331837 FROM MIGRAD    STATUS=CONVERGED     116 CALLS         117 TOTAL
+                     EDM=1.604e-24    STRATEGY= 1      ERR MATRIX NOT POS-DEF
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           5.16022e-02   5.82855e-01   1.21148e-05  -7.83074e-14
+   2  p1           1.02742e+00   1.89543e+00   6.16453e-05  -1.31908e-13
+   3  p2          -3.84807e-01   2.69853e+00   2.46877e-05   6.86199e-13
+   4  p3           1.32905e+00   3.54178e+00   7.97430e-05   3.31407e-13
+   5  p4          -1.60638e+00   4.10671e+00   9.63826e-05   2.60132e-13
+   6  p5           6.22797e-01   3.55825e+00   2.06982e-04   9.16677e-15
+<TCanvas::MakeDefCanvas>: created default TCanvas with name c1
+ **********
+ **   10 **MIGRAD        5000     6.5e-05
+ **********
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
+ FCN=0.000329883 FROM MIGRAD    STATUS=CONVERGED     132 CALLS         133 TOTAL
+                     EDM=5.00202e-25    STRATEGY= 1      ERR MATRIX NOT POS-DEF
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0          -5.99341e-02   6.23547e-01   6.05738e-05   1.83463e-13
+   2  p1           1.04182e+00   1.80271e+00   8.62510e-05  -1.31988e-13
+   3  p2           1.38203e-01   2.37266e+00   4.33216e-05  -5.31820e-13
+   4  p3          -7.89290e-01   2.95930e+00   1.27068e-04  -1.05589e-13
+   5  p4           9.86269e-01   3.26678e+00   1.43293e-04  -8.22837e-14
+   6  p5          -3.59678e-01   2.71669e+00   1.57627e-04   1.71957e-14
+ FCN=0.000329883 FROM MIGRAD    STATUS=CONVERGED     132 CALLS         133 TOTAL
+                     EDM=5.00202e-25    STRATEGY= 1      ERR MATRIX NOT POS-DEF
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0          -5.99341e-02   6.23547e-01   6.05738e-05   1.83463e-13
+   2  p1           1.04182e+00   1.80271e+00   8.62510e-05  -1.31988e-13
+   3  p2           1.38203e-01   2.37266e+00   4.33216e-05  -5.31820e-13
+   4  p3          -7.89290e-01   2.95930e+00   1.27068e-04  -1.05589e-13
+   5  p4           9.86269e-01   3.26678e+00   1.43293e-04  -8.22837e-14
+   6  p5          -3.59678e-01   2.71669e+00   1.57627e-04   1.71957e-14
+ **********
+ **   15 **MIGRAD        5000     6.5e-05
+ **********
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
+ FCN=46925.4 FROM MIGRAD    STATUS=CONVERGED     116 CALLS         117 TOTAL
+                     EDM=2.92614e-13    STRATEGY= 1      ERR MATRIX NOT POS-DEF
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           7.85225e+03   6.23546e-01   2.30799e+01   1.36188e-10
+   2  p1          -2.49030e+04   1.80271e+00   1.32095e-02  -2.63474e-07
+   3  p2           5.84744e+04   2.37265e+00   1.65869e-02   1.68312e-07
+   4  p3          -7.81668e+04   2.95930e+00   1.94606e-02  -5.85624e-09
+   5  p4           5.37288e+04   3.26677e+00   2.19456e-02   4.25995e-09
+   6  p5          -1.46157e+04   2.71669e+00   4.82817e-03   1.04400e-09
+ FCN=46925.4 FROM MIGRAD    STATUS=CONVERGED     116 CALLS         117 TOTAL
+                     EDM=2.92614e-13    STRATEGY= 1      ERR MATRIX NOT POS-DEF
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           7.85225e+03   6.23546e-01   2.30799e+01   1.36188e-10
+   2  p1          -2.49030e+04   1.80271e+00   1.32095e-02  -2.63474e-07
+   3  p2           5.84744e+04   2.37265e+00   1.65869e-02   1.68312e-07
+   4  p3          -7.81668e+04   2.95930e+00   1.94606e-02  -5.85624e-09
+   5  p4           5.37288e+04   3.26677e+00   2.19456e-02   4.25995e-09
+   6  p5          -1.46157e+04   2.71669e+00   4.82817e-03   1.04400e-09

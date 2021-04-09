@@ -1,0 +1,8 @@
+mount -f -s -b "C:/Documents and Settings/cplager/My Documents" "/mount/cplagerdoc"
+mount -f -s -b "C:/cygwin/usr/X11R6/lib/X11/fonts" "/usr/X11R6/lib/X11/fonts"
+mount -f -s -b "c:/Program Files" "/mount/programfiles"
+mount -f -s -b "C:/cygwin/bin" "/usr/bin"
+mount -f -s -b "C:/cygwin/lib" "/usr/lib"
+mount -f -s -b "c:/oldcygwin" "/mount/oldcygwin"
+mount -f -s -b "C:/cygwin" "/"
+mount -s -b --change-cygdrive-prefix "/cygdrive"

@@ -1,0 +1,6 @@
+68             fc_sys68.out
+95             fc_sys95.out
+best_measured  3.24272e-02  8.37096e-01  2.70459e-01 -1.33571e-01 
+measured       1.11
+limit          0.62
+prefix         FC_sys

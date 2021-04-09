@@ -1,0 +1,82 @@
+
+Processing fitBmaxFromPE.c...
+
+
+bBest as a function of bMeas
+ **********
+ **    5 **MIGRAD        5000       8e-05
+ **********
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ FCN=0.00315815 FROM MIGRAD    STATUS=CONVERGED      53 CALLS          54 TOTAL
+                     EDM=2.14972e-24    STRATEGY= 1  ERROR MATRIX UNCERTAINTY  27.3 per cent
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           2.85921e-02   3.91353e-01   3.86278e-13  -8.44715e-13
+   2  p1           8.66651e-01   2.82556e+00  -4.68205e-12   2.19264e-14
+   3  p2           2.38364e-01   6.27860e+00   1.16998e-11   3.32169e-13
+   4  p3          -1.39019e-01   4.21573e+00  -7.83063e-12  -4.12690e-14
+ FCN=0.00315815 FROM MIGRAD    STATUS=CONVERGED      53 CALLS          54 TOTAL
+                     EDM=2.14972e-24    STRATEGY= 1  ERROR MATRIX UNCERTAINTY  27.3 per cent
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           2.85921e-02   3.91353e-01   3.86278e-13  -8.44715e-13
+   2  p1           8.66651e-01   2.82556e+00  -4.68205e-12   2.19264e-14
+   3  p2           2.38364e-01   6.27860e+00   1.16998e-11   3.32169e-13
+   4  p3          -1.39019e-01   4.21573e+00  -7.83063e-12  -4.12690e-14
+Info in <TCanvas::Print>: PostScript file eps/bmax_b.eps has been created
+
+
+bMeas as a function of bBest
+ **********
+ **   10 **MIGRAD        5000       8e-05
+ **********
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
+ FCN=0.00340486 FROM MIGRAD    STATUS=CONVERGED      48 CALLS          49 TOTAL
+                     EDM=2.10749e-26    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0          -3.07817e-02   5.42409e-01   5.46844e-05   7.93062e-14
+   2  p1           1.13804e+00   4.47673e+00   9.83046e-05   3.30870e-14
+   3  p2          -2.32080e-01   1.01046e+01   1.32425e-04  -7.36858e-14
+   4  p3           1.28087e-01   6.58747e+00   1.61998e-04  -1.07083e-13
+ FCN=0.00340486 FROM MIGRAD    STATUS=CONVERGED      48 CALLS          49 TOTAL
+                     EDM=2.10749e-26    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0          -3.07817e-02   5.42409e-01   5.46844e-05   7.93062e-14
+   2  p1           1.13804e+00   4.47673e+00   9.83046e-05   3.30870e-14
+   3  p2          -2.32080e-01   1.01046e+01   1.32425e-04  -7.36858e-14
+   4  p3           1.28087e-01   6.58747e+00   1.61998e-04  -1.07083e-13
+Info in <TCanvas::Print>: PostScript file eps/b_bmax.eps has been created
+
+
+P(bMeas|bBest) as a function of bMeas
+ **********
+ **   15 **MIGRAD        5000     8.1e-05
+ **********
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
+ FCN=147760 FROM MIGRAD    STATUS=CONVERGED     160 CALLS         161 TOTAL
+                     EDM=2.3032e-13    STRATEGY= 1      ERR MATRIX NOT POS-DEF
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           8.54344e+03   3.23817e-01   2.08549e-02   5.33794e-07
+   2  p1          -4.48559e+04   1.52413e+00   3.65580e-02   4.62636e-08
+   3  p2           1.73386e+05   2.60706e+00   8.26769e-02  -2.78095e-07
+   4  p3          -3.74517e+05   3.29824e+00   1.78584e-01  -2.39566e-08
+   5  p4           4.43892e+05   3.96224e+00   2.11664e-01  -3.57500e-08
+   6  p5          -2.69489e+05   4.33200e+00   1.28502e-01  -1.76658e-08
+   7  p6           6.53026e+04   3.69367e+00   8.44663e-02   1.72281e-09
+ FCN=147760 FROM MIGRAD    STATUS=CONVERGED     160 CALLS         161 TOTAL
+                     EDM=2.3032e-13    STRATEGY= 1      ERR MATRIX NOT POS-DEF
+  EXT PARAMETER                APPROXIMATE        STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           8.54344e+03   3.23817e-01   2.08549e-02   5.33794e-07
+   2  p1          -4.48559e+04   1.52413e+00   3.65580e-02   4.62636e-08
+   3  p2           1.73386e+05   2.60706e+00   8.26769e-02  -2.78095e-07
+   4  p3          -3.74517e+05   3.29824e+00   1.78584e-01  -2.39566e-08
+   5  p4           4.43892e+05   3.96224e+00   2.11664e-01  -3.57500e-08
+   6  p5          -2.69489e+05   4.33200e+00   1.28502e-01  -1.76658e-08
+   7  p6           6.53026e+04   3.69367e+00   8.44663e-02   1.72281e-09
+Info in <TCanvas::Print>: PostScript file eps/bmax_const.eps has been created
