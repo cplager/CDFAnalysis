@@ -1,0 +1,315 @@
+// -*- C++ -*-
+
+//////////////////////////////////////////
+// Inline Template Function Definitions //
+//////////////////////////////////////////
+
+template <class T>
+inline void
+TreeFileInterface::addBranch (const std::string &branchName,
+                              const std::string &postfix)
+{
+   using namespace std;
+   // does this branch exist already
+   if (m_voidPtrMap.end() != m_voidPtrMap.find (branchName))
+   {
+      // already exists.  Leave it alone
+      cerr << "TreeFileInterface::addBranch(): " << branchName 
+           << "already exists." << endl;
+      return;
+   }
+   m_voidPtrMap [branchName] = (void *) new T;
+   m_rttiMap [branchName] = typeid (T).name();
+   m_retrievedBranchMap [branchName] = false;
+   _addToInputBranchSet (branchName);
+   if (postfix.length())
+   {
+      m_simplePostfixMap [branchName] = postfix;
+   }
+}
+
+template <class T>
+inline void
+TreeFileInterface::addClassBranch (const std::string &branchName)
+{
+   using namespace std;
+   // does this branch exist already
+   if (m_classPtrMap.end() != m_classPtrMap.find (branchName))
+   {
+      // already exists.  Leave it alone
+      cerr << "TreeFileInterface::addBranch(): " << branchName 
+           << "already exists." << endl;
+      return;
+   }
+   m_classPtrMap [branchName] = (void *) new T;
+   m_rttiMap [branchName] = typeid (T).name();
+   m_retrievedBranchMap [branchName] = false;
+   _addToInputBranchSet (branchName);
+}
+
+template <class T>
+inline void
+TreeFileInterface::removeBranch (const std::string &branchName)
+{
+   using namespace std;
+   NameVoidPtrMapIter iter = m_voidPtrMap.find (branchName);
+   if (m_voidPtrMap.end() == iter)
+   {
+      // nothing to delete
+      cerr << "TreeFileInterface::removeBranch(): " << branchName 
+           << "does not exists." << endl;
+      return;
+   }
+   T *tPtr = reinterpret_cast <T*> (iter->second);
+   delete tPtr;
+   m_voidPtrMap.erase (iter);
+   // take care of m_retrievedBranchMap as well
+   NameBoolMapIter nbIter = m_retrievedBranchMap.find (branchName);
+   if (m_retrievedBranchMap.end() != nbIter)
+   {
+      m_retrievedBranchMap.erase (nbIter);
+   }
+   _removeFromInputBranchSet (branchName);
+}
+
+template <class T>
+inline void
+TreeFileInterface::removeClassBranch (const std::string &branchName)
+{
+   using namespace std;
+   NameVoidPtrMapIter iter = m_classPtrMap.find (branchName);
+   if (m_classPtrMap.end() == iter)
+   {
+      // nothing to delete
+      cerr << "TreeFileInterface::removeClassBranch(): " << branchName 
+           << "does not exists." << endl;
+      return;
+   }
+   T *tPtr = reinterpret_cast <T*> (iter->second);
+   delete tPtr;
+   m_classPtrMap.erase (iter);
+   // take care of m_retrievedBranchMap as well
+   NameBoolMapIter nbIter = m_retrievedBranchMap.find (branchName);
+   if (m_retrievedBranchMap.end() != nbIter)
+   {
+      m_retrievedBranchMap.erase (nbIter);
+   }
+   _removeFromInputBranchSet (branchName);
+}
+
+template <class T>
+inline T *
+TreeFileInterface::ptr (const std::string &branchName)
+{
+   using namespace std;
+   NameBoolMapIter nbIter = m_retrievedBranchMap.find (branchName);
+   NameVoidPtrMapIter iter = m_voidPtrMap.find (branchName);
+   if (m_voidPtrMap.end() == iter ||
+       m_retrievedBranchMap.end() == nbIter)
+   {
+      // Uh oh
+      cerr << "TreeFileInterface::ptr(): '" << branchName
+           << "' does not exist.  Make sure you register branch by using"
+           << " 'addBranch()'." << endl;
+      _abort (__FILE__, __LINE__);
+      return 0;
+   }
+   // Lets make sure we're dealing with the SAME class as before
+   string thisType = typeid (T).name();
+   if (thisType != m_rttiMap[branchName])
+   {
+      // Boy, have you really messed up.
+      cerr << "TreeFileInterface:: ptr(): '" << branchName
+           << "' was called with a different type" << endl
+           << " than it was with addBranch(). ("
+           << thisType << " != " << m_rttiMap[branchName]
+           << ")" << endl;
+      _abort (__FILE__, __LINE__);
+      return 0;
+   }
+   // Have we gotten this already (i.e., Have we gotten this branch
+   // already or have we gotten the entire tree)?
+   if (!nbIter->second && ! m_getEntireTree)
+   {
+      // Haven't gotten this yet.  Get it now.
+      TBranch *branchPtr = m_treePtr->GetBranch( branchName.c_str() );
+      if (branchPtr)
+      {
+         branchPtr->GetEntry (m_loadTreeFlag);
+         // mark it as retrieved
+         m_retrievedBranchMap[branchName] = true;      
+      } else {
+         cerr << "TreeFileInterface::value(): GetEntry failed for '"
+              << branchName << "' branch." << endl;
+      }
+   } // getting the branch
+   // return the value
+   T *tPtr = reinterpret_cast <T*> (iter->second);
+   if (! tPtr)
+   {
+      cerr << "TreeFileInterface::ptr(): Null pointer value."
+           << endl;
+      _abort (__FILE__, __LINE__);
+   }
+   return tPtr;
+}
+
+template <class T>
+inline T *
+TreeFileInterface::classPtr (const std::string &branchName)
+{
+   using namespace std;
+   NameBoolMapIter nbIter = m_retrievedBranchMap.find (branchName);
+   NameVoidPtrMapIter iter = m_classPtrMap.find (branchName);
+   if (m_classPtrMap.end() == iter ||
+       m_retrievedBranchMap.end() == nbIter)
+   {
+      // Uh oh
+      cerr << "TreeFileInterface::classPtr(): '" << branchName
+           << "' does not exist.  Make sure you register branch by using"
+           << " 'addClassBranch()'." << endl;
+      _abort (__FILE__, __LINE__);
+      return 0;
+   }
+   // Lets make sure we're dealing with the SAME class as before
+   string thisType = typeid (T).name();
+   if (thisType != m_rttiMap[branchName])
+   {
+      // Boy, have you really messed up.
+      cerr << "TreeFileInterface:: ptr(): '" << branchName
+           << "' was called with a different type" << endl
+           << " than it was with addBranch(). ("
+           << thisType << " != " << m_rttiMap[branchName]
+           << ")" << endl;
+      _abort (__FILE__, __LINE__);
+      return 0;
+   }
+   // Have we gotten this already (i.e., Have we gotten this branch
+   // already or have we gotten the entire tree)?
+   if (!nbIter->second && ! m_getEntireTree)
+   {
+      // Haven't gotten this yet.  Get it now.
+      TBranch *branchPtr = m_treePtr->GetBranch( branchName.c_str() );
+      if (branchPtr)
+      {
+         branchPtr->GetEntry (m_loadTreeFlag);
+         // mark it as retrieved
+         m_retrievedBranchMap[branchName] = true;      
+      } else {
+         cerr << "TreeFileInterface::value(): GetEntry failed for '"
+              << branchName << "' branch." << endl;
+      }
+   } // getting the branch
+   // return the value
+   T *tPtr = reinterpret_cast <T*> (iter->second);
+   if (! tPtr)
+   {
+      cerr << "TreeFileInterface::classPtr(): Null pointer value."
+           << endl;
+      _abort (__FILE__, __LINE__);
+   }
+   return tPtr;
+}
+
+template <class T>
+inline T 
+TreeFileInterface::value (const std::string &branchName)
+{
+   T *tPtr = ptr <T> (branchName);
+   if (!tPtr)
+   {
+      // We should never be here as the 'ptr()' function should have
+      // already printed out an error message to STDERR and asserted.
+      _abort (__FILE__, __LINE__);
+   }
+   return *tPtr;
+}
+
+
+template <class T>
+inline T*
+TreeFileInterface::addBranchObject (const std::string &branchName,
+                                    const std::string &postfix,
+                                    T *ptr)
+{
+   using namespace std;
+   // does this branch exist already
+   if (m_voidPtrMap.end() != m_voidPtrMap.find (branchName))
+   {
+      // already exists.  Leave it alone
+      cerr << "TreeFileInterface::addBranchObject(): " << branchName 
+           << "already exists." << endl;
+      return 0;
+   }
+   if (! ptr)
+   {
+      ptr = new T;
+   }
+   m_voidPtrMap       [branchName] = (void *) ptr;
+   m_rttiMap          [branchName] = typeid (T).name();
+   m_simplePostfixMap [branchName] = postfix;
+   return ptr;
+}
+
+template <class T>
+inline T* 
+TreeFileInterface::addClassBranchObject (const std::string &branchName,
+                                         T *ptr)
+{
+   using namespace std;
+   // does this branch exist already
+   if (m_classPtrMap.end() != m_classPtrMap.find (branchName))
+   {
+      // already exists.  Leave it alone
+      cerr << "TreeFileInterface::addBranch(): " << branchName 
+           << "already exists." << endl;
+      return 0;
+   }
+   if (! ptr)
+   {
+      ptr = new T;
+   }
+   m_classPtrMap [branchName] = (void *) ptr;
+   m_rttiMap [branchName] = typeid (T).name();   
+   return ptr;
+}
+
+template <class T>
+inline T*
+TreeFileInterface::objectBranchObjectAddress (const std::string &branchName)
+{
+   using namespace std;   
+   NameVoidPtrMapIter iter = m_voidPtrMap.find (branchName);
+   if (m_voidPtrMap.end() == iter)
+   {
+      // Uh oh
+      cerr << "TreeFileInterface::objectBranchObjectAddress(): '" 
+           << branchName
+           << "' does not exist." << endl;
+      _abort (__FILE__, __LINE__);
+      return 0;
+   } // if not found
+   T *tPtr = reinterpret_cast <T*> (iter->second);
+   return tPtr;   
+}
+
+template <class T>
+inline T*
+TreeFileInterface::classBranchObjectAddress (const std::string &branchName)
+{
+   using namespace std;
+   NameVoidPtrMapIter iter = m_classPtrMap.find (branchName);
+   if (m_classPtrMap.end() == iter)
+   {
+      // Uh oh
+      cerr << "TreeFileInterface::classBranchObjectAddress(): '" 
+           << branchName
+           << "' does not exist." << endl;
+      _abort (__FILE__, __LINE__);
+      return 0;
+   } // if not found
+   T *tPtr = reinterpret_cast <T*> (iter->second);
+   return tPtr;   
+}
+
+
