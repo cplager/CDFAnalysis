@@ -1,0 +1,17 @@
+#!/usr/bin/env perl
+die "Usage: $0 directory/ basename\n" unless (@ARGV == 2);
+$dir = $ARGV[0];
+$dir =~ s|/$||; # remove trailing '/'
+$name = $ARGV[1];
+die "$dir is not a directory\n" unless (-d "$dir");
+@files = glob ("$dir/$name\.*");
+@numbers = ("0");
+foreach $file (@files) {
+	if ($file =~ /\.(\d+)$/) {
+		push @numbers, $1;
+	}
+}
+#make sure we're sorting numerically
+@numbers = sort {$a <=> $b} @numbers; 
+$number = pop (@numbers) + 1;
+print "$dir/$name.$number\n";

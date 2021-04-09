@@ -1,0 +1,121 @@
+#!/usr/bin/env perl
+
+# global variables
+@names = qw (.backup .backupDir backup backupDir);
+$notesFile = "backup.notes";
+$help = "Usage: $0 (n=X) file1
+X = 0 : latest version
+X < 0 : latest - |X| version
+X > 0 : version X\n";
+
+sub diffFile {
+	my ($backup, $target) = @_;
+	open (LISTING, "ls -alF $backup |") or die ("Couldn't get list");
+	my ($list) = <LISTING>;
+	chomp $list;
+	my (@parts) = split (/\s+/, $list);
+	if ($target =~  m|([^/]*\.\d+)$|) {
+		$shorttarget = $1;
+		$comment = `grep $shorttarget: $dir/$notesFile`;
+		print "$comment" if ($comment);
+	}
+	if ($backup =~ m|([^/]*)$|) {
+		$short = $1;
+		$comment = `grep $short: $dir/$notesFile`;
+		print "$comment" if ($comment);
+	}
+	print "unix> diff $short $target\n";
+	print `diff $backup $target`;
+	print "\n";
+}
+
+sub numberValue {
+	my ($name) = @_;
+	if ($name =~ /\.(-?\d+)$/) {
+		$retval = $1;
+	} else {
+		$retval = 0;
+	}
+	return $retval;
+}
+
+die $help unless (@ARGV);
+
+# find which directory to use
+foreach (@names) {
+	if (-d $_) {
+		$dir = $_;
+		last;
+	}
+}
+die "None of @names are directories.  D'oh\n." unless ($dir);
+#print "dir $dir\n";
+
+@files = ();
+$version = 0;
+$version2 = 0;
+foreach $arg (@ARGV) {
+	if ($arg =~ /^n=(\-?\d+)/i) {
+		$version = $1;
+	} elsif ($arg =~ /^o=(\-?\d+)/i) {
+		$version2 = $1;
+	} elsif ($arg =~ /^-/) {
+		print "argument $arg is not recognized\n";
+	} else {
+		push @files, $arg;
+	}
+} # foreach arg
+
+die "You haven't specified any files.\n" unless (@files);
+
+foreach $file (@files) {
+	# find comp file
+	if (0 == $version2) {
+		if (-e $file) {
+			$comp = $file;
+		} else {
+			print "Error: $file does not exist\n";
+			next;
+		}
+	} else {
+		if ($version2 > 0) {
+			$comp = "$dir/$file.$version2";
+			if (!-e $comp) {
+				print "Error: $comp does not exist\n";
+				next;
+			}
+		} else {
+			$num = @names = reverse sort { numberValue($a) <=> 
+						numberValue($b)} glob ("$dir/$file.*");
+			#print "backup @names\n";
+			die "No backup files of $file\n" if (! $num);
+			$version2 *= -1;
+			if ($version2 > $num) {
+				print "Error: There are not $version2 versions of $file\n";
+				next;
+			} else {
+				$comp = $names[$version2];
+			}
+		}
+	}
+	if ($version > 0) {
+		$filename = "$dir/$file.$version";
+		if (-e $filename) {
+			diffFile ($filename, $comp);
+		} else {
+			print "Error: $filename does not exist\n";
+		}
+	} else {
+		#print "$dir:$file\n";
+		$num = @names = reverse 
+			sort { numberValue($a) <=> numberValue($b)} glob  ("$dir/$file.*");
+		#print "backup @names\n";
+		warn "No backup files of $file\n", next if (! $num);
+		$version *= -1;
+		if ($version > $num) {
+			print "Error: There are not $version versions of $file\n";
+		} else {
+			diffFile ($names[$version], $comp);
+		}
+	}
+} # foreach file

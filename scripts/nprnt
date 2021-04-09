@@ -1,0 +1,408 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $version = "nprnt v1.51 050124 cplager+nprnt\@physics.ucla.edu";
+my $tempdir = "/tmp/print_temp";
+my $removelist = "";
+my $cpbin = "/cdf/home/cplager/bin/print";
+my $psutil;
+# use the right directory
+if ($ENV{OSTYPE} =~ /linux/i) {
+   if ($ENV{HOST} && $ENV{HOST} =~ /fcdflnx2/) {
+      $psutil = "/fnal/ups/prd/psutils/vp_17_1/Linux-2/bin/";
+   } else {
+      $psutil = $cpbin;
+   }
+} else {
+  $psutil = "/cdf/user/products/psutils/vp_17/IRIX+6/bin";
+}
+my $acroread = "/usr/bin/acroread";
+my $defaultprinter = "tlob_xrx_n32_simplex";
+# general variables
+my @list = ();
+my $flag = " ";
+my $lpr = "/usr/local/bin/flpr";
+my $text2ps_args = "";
+my $start = 1;
+my $perpage = 2;
+my $tabspace = 4;
+my $strangeDup = "";
+my $useLineNumbers = "true";
+my $printerSet = ""; # used to remind people to set a printer
+my $printCommand = "";
+# flipping variables
+my $noflip = "";
+my $flip = "| $psutil/pstops '2:0,1U(1w,1h)'";
+my $doflip = $flip;
+my $noDefaultFlip = ""; # default is to allow flipping when reasonable
+# duplexing variables
+my $textduplex = "| $cpbin/czduplex";
+my $psduplex = "| $cpbin/psduplex";
+my $doduplex = "yes";
+#make sure $tempdir exists
+if (!-e $tempdir) {
+	`mkdir $tempdir`;
+	chmod 0777, $tempdir;
+}
+
+
+################################
+## Check for default settings ##
+##         PRNT_DEFS          ##
+################################
+if ($ENV{'PRNT_DEFS'}) {
+	my $defflag = $ENV{'PRNT_DEFS'};
+
+	#tabs (t)
+	if ($defflag =~ /t(\d+)/i) {
+		if (($1 >= 1) && ($1 <= 20)) {
+			$tabspace = $1;
+		}
+	}
+
+	# no flip by default
+	if ($defflag =~ /f0/i) {
+		$noDefaultFlip = "true";
+		$doflip = $noflip;
+	}
+
+	#per page (n)
+	if ($defflag =~ /n(\d+)/i) {
+		$perpage = $1;
+		if ((2 == $perpage) && ! $noDefaultFlip) {
+			$doflip = $flip;
+		} else {
+			$doflip = $noflip;
+		}
+	}
+
+	#sides (k)
+	if ($defflag =~ /k1/i) {		
+		$doduplex = "";
+	} elsif ($defflag =~ /k2/i) {		
+		$doduplex = "yes";
+	}
+
+	#line numbers (u)
+	if ($defflag =~ /u1/i) {
+		$useLineNumbers = "true";
+	} elsif ($defflag =~ /u0/i) {
+		$useLineNumbers = "";
+	}
+} # if PRNT_DEFS
+
+################################
+## Check for default commands ##
+##        PRNT_CMDS           ##
+################################
+my %cmd;
+if ($ENV{'PRNT_CMDS'}) {
+	my @commands = split /,\s*/, $ENV{'PRNT_CMDS'};
+	foreach (@commands) {
+		if (/(\w+):/) {
+			(my $name = $1) =~ tr/A-Z/a-z/;
+			my $command = $'; #'; # stupid emacs
+            $command =~ s/-/ /g;
+            $cmd{$name} = $command;
+		}
+	}
+}
+
+###########################
+## Get printer nicknames ##
+###########################
+my %nickname = ();
+if ($ENV{'PRNT_NAMES'}) {
+	my @names = split (" ", $ENV{'PRNT_NAMES'});
+	foreach my $name (@names) {
+		if ($name =~ /(\w+):(\w+)/) {
+			my $nick = $1;
+			my $printer = $2;
+			$nick =~ tr/A-Z/a-z/;
+			$nickname{$nick} = $printer;
+		}
+	}
+}
+
+# set default printer
+my $printer;
+if ($ENV{'PRINTER'}) {
+	$printer = $ENV{'PRINTER'};
+	$printerSet = "true";
+} else {
+	$printer = $defaultprinter;
+}
+
+#set running to short version of command that has been run.
+my $running;
+if ($0 =~ m|/([^/]+)$|) {
+	$running = $1;
+} else {
+	$running = $0;
+}
+
+##################################
+## Parce command line arguments ##
+##################################
+foreach my $file (@ARGV) {
+	if ($file =~ /^-(.+)/) {
+		#do flag stuff here
+		my $tempflag = $1;
+        if ($file =~ /^-com/i) {
+            $printCommand = "true";
+            next;
+        }
+        if ($file =~ /^-col/i) {
+            $text2ps_args .= "-col ";
+            next;
+        }
+		if ($file =~ /^-p(\w+)/i) {
+			# choosing directly a printer name
+			$printer = $1;
+			$printerSet = "true";
+		} elsif ($file =~ /-a(\w+)/i) {
+			# using a command
+			(my $command = $1) =~ tr/A-Z/a-z/;
+			if ($cmd{$command}) {
+				$flag .= "$cmd{$command} ";
+			} else {
+				warn "Command $command not found in \$PRNT_CMDS:". 
+					"$ENV{PRNT_CMDS}\n";
+			}
+		} elsif ($file =~ /^-r(\w+)/i) {
+			# choosing a printer by nickname
+			my $nick = $1;
+			$nick =~ tr/A-Z/a-z/;
+			if ($nickname{$nick}) {
+				$printer = $nickname{$nick};
+				$printerSet = "true";
+				print "Printing on printer $printer\n";
+			} else {
+				print STDERR "'$nick' not found in environment variable \$PRNT_NAMES.\n";
+				if ($ENV{'PRNT_NAMES'}) {
+					print STDERR "\$PRNT_NAMES = $ENV{'PRNT_NAMES'}\n";
+				} else {
+					print STDERR "\$PRNT_NAMES not defined.\n";
+				}
+				exit -1;
+			}
+		} else {
+			# just a regular flag
+			$flag .= " $tempflag";
+		}
+	} elsif (-e $file) {
+		if ($file =~ /([\w\-\.]+)\.gz$/) {
+			my $name = $1;
+			`cp $file $tempdir/`;
+			`gunzip -f $tempdir/$name.gz`;
+			push @list, "$tempdir/$name";
+			$removelist .= " $tempdir/$name";
+		} else {
+			push @list, $file;
+		}
+	} else {
+		push @list, $file;
+        #print "File '$file' is not found.  Sorry, eh.\n";
+	}
+}
+
+
+# Have they selected a printer?  If not, we should ask them to do so.
+if (! $printerSet) {
+	print STDERR 
+        "Warning: You have not selected any printer.  Printer $printer is being
+used by default.  Please choose a printer or set up the environment variable
+\$PRINTER to choose a printer and avoid this warning.\n";
+}
+
+#find options
+if ($flag =~ / h/i) {
+	print qq"Usage: $running -flags file1 file2...
+Flags:
+             -Aname  -> use options you set up in \$PRNT_CMDS
+             -Cn     -> print text in n columns
+             -COL    -> print code (currently C++ & perl) text in color
+             -COM    -> prints command (for debugging purposes)
+             -F[10]  -> does (F1) or does not (F0) flip second side
+             (F1 default for 2 per page, otherwise F0 is default)
+             -FNn    -> print text with font size n
+             -H      -> this help screen
+             -Kn     -> print n sides (1, 2 : 2 default)
+             -L      -> prints in landscape mode
+             -Mn     -> have margin of n points
+             -Nn     -> print n pages per side (2 default)
+             -Pxxx   -> prints on printer xxx
+             (must be separate from other options: '$printer' default)
+             -Rname  -> prints on printer name (name is setup using the 
+                        \$PRNT_NAMES environment variable; 
+                        must be separate from other options)
+             -Tn     -> replace each tab by n spaces (text files only) 
+                        (1..20 : 4 default)
+             -Un     -> print text with (U1) or with out (U0) line numbers 
+                        (1 default)
+             -W      -> use alternative duplexing method for postscript
+             (not recommended EXCEPT for 'PAW' output, etc.)
+
+Example: 
+unix> prnt -N1K2 -Pmwlw1 print.ps
+             - prints 'print.ps' 1 per side and 2 side per sheet on mwlw1
+
+Notes:
+             - $running automatically unzips '.gz' files and prints them.
+             - $running automatically converts and prints '.pdf' files.
+             - $running uses the '\$PRINTER' as default printer, if it is 
+               defined.
+             ";
+	if ($ENV{'PRNT_DEFS'}) {
+		print "\nPRNT_DEFS = $ENV{'PRNT_DEFS'}\n";
+	}
+	if ($ENV{'PRNT_NAMES'}) {
+		print "\nPRNT_NAMES = $ENV{'PRNT_NAMES'}\n";
+	}
+	if ($ENV{'PRNT_CMDS'}) {
+		print "\nPRNT_CMDS = $ENV{'PRNT_CMDS'}\n";
+	}
+	print "\n$version\n";
+	exit 0;
+}
+
+#line numbers (u)
+if ($flag =~ / u1/i) {
+	$useLineNumbers = "true";
+} elsif ($flag =~ / u0/i) {
+	$useLineNumbers = "";
+}
+if ($useLineNumbers) {
+	$text2ps_args .= "-n ";
+} else {
+	$text2ps_args .= "-nn ";
+}
+
+# font size
+if ($flag =~ / fn([\d\.]+)/i) {
+	$text2ps_args .= "-f $1 ";
+}
+
+# margin size
+if ($flag =~ / m([\d\.]+)/i) {
+	$text2ps_args .= "-m $1 ";
+}
+
+#landscape
+if ($flag =~ / l/i) {
+	$text2ps_args .= "-l ";
+}
+
+#other duplexing method
+if ($flag =~ / o/i) {
+	print "The option -O is no longer necessary\n;"
+	}
+if ($flag =~ / w/i) {
+	$strangeDup = "true";
+}
+
+#columns
+if ($flag =~ / c(\d+)/i) {
+	if (($1 >= 1) && ($1 <= 20)) {
+		$text2ps_args .= "-c$1 ";
+	}
+}
+
+#tabs
+if ($flag =~ / t(\d+)/i) {
+	if (($1 >= 1) && ($1 <= 20)) {
+        $tabspace = $1;
+	}
+}
+$text2ps_args .= "-t $tabspace " if ($tabspace);
+
+#per page
+if ($flag =~ / n(\d+)/i) {
+	$perpage = $1;
+	if ((2 == $perpage) && ! $noDefaultFlip) {
+		$doflip = $flip;
+	} else {
+		$doflip = $noflip;
+	}
+}
+
+if (2 == $perpage) {
+	$text2ps_args .= "-ah 820 -tr 15 ";		
+}
+
+#flipping
+if ($flag =~ / f1/i) {
+	$doflip = $flip;
+} elsif ($flag =~ / f0/i) {
+	$doflip = $noflip;
+}
+
+#sides
+if ($flag =~ / k1/i) {		
+	$doduplex = "";
+} elsif ($flag =~ / k2/i) {		
+	$doduplex = "yes";
+}
+
+my $first = 1;
+my @textfiles;
+foreach my $file (@list) {
+	if ($file =~ /\.eps$/i) {
+		`$lpr -q $printer $file`;
+	} elsif (($file =~ /\.ps$/i) || ($file =~ /\.pdf$/i)) {
+		#printing postscript files
+		#put in 3 second pause between files
+		if ($first) {
+			$first = 0;
+		} else {
+			sleep 3;
+		}
+		if ($doduplex) {
+			# set duplex method
+			if ($strangeDup) {
+				$doduplex = $textduplex;
+			} else {
+				$doduplex = $psduplex;
+			}
+		}
+		#check for pdf file
+		if ($file =~ /([\w\-\.]+)\.pdf$/i)
+		{
+            my $name = $1;
+            my $tempfile = "$tempdir/$name.ps";
+            system "$acroread -toPostScript -level2 -pairs $file $tempfile";
+            $file = "$tempfile";
+            $removelist .= " $tempfile";
+		}
+        my $psnup = "$psutil/psnup -$perpage";
+        if (1 == $perpage) {
+            $psnup = "cat";
+        } 
+		my $command = "$psnup $file $doduplex $doflip | $lpr -q $printer";
+        print "$command\n\n" if $printCommand;
+        system $command;
+	} else {
+		push @textfiles, $file;
+		#printing text files
+		if ($doduplex) {
+			$doduplex = $textduplex;
+		}
+	}
+}
+if (@textfiles){
+    my $perpageCmd = "";
+	if ($perpage) {
+		$perpageCmd = " | $psutil/psnup -$perpage";
+	}
+	my $command = "$cpbin/text2ps.pl $text2ps_args @textfiles $perpageCmd $doflip $doduplex | $lpr -q $printer";
+	print "$command\n\n" if $printCommand;
+	system $command;
+} # multiple
+
+# Cleanup
+if ($removelist ne "") {
+    print "Executing rm -rf $removelist\n";
+    system("rm -rf $removelist");
+}

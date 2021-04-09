@@ -1,0 +1,86 @@
+#!/usr/bin/env perl
+
+# global variables
+@names = qw (.backup .backupDir backup backupDir);
+$notesFile = "backup.notes";
+$help = "Usage: $0 file1\n";
+
+sub diffFile {
+	my ($backup, $target) = @_;
+	open (LISTING, "ls -alF $backup |") or die ("Couldn't get list");
+	my ($list) = <LISTING>;
+	chomp $list;
+	my (@parts) = split (/\s+/, $list);
+	my $comment = "";
+	if ($target =~  m|([^/]*\.\d+)$|) {
+		$shorttarget = $1;
+		$comment .= `grep $shorttarget: $dir/$notesFile`;
+	}
+	if ($backup =~ m|([^/]*)$|) {
+		$short = $1;
+		$comment .= `grep $short: $dir/$notesFile`;
+	}
+	$diff = `diff $backup $target`;
+	if ($diff) {
+		print "$target is different than $short\n";
+		print "$comment\n\n";
+	}
+}
+
+sub numberValue {
+	my ($name) = @_;
+	if ($name =~ /\.(-?\d+)$/) {
+		$retval = $1;
+	} else {
+		$retval = 0;
+	}
+	return $retval;
+}
+
+die $help unless (@ARGV);
+
+# find which directory to use
+foreach (@names) {
+	if (-d $_) {
+		$dir = $_;
+		last;
+	}
+}
+die "None of @names are directories.  D'oh\n." unless ($dir);
+#print "dir $dir\n";
+
+@files = ();
+foreach $arg (@ARGV) {
+	if ($arg =~ /^-all/) {
+		$allFiles = "true";
+	} elsif ($arg =~ /^-/) {
+		print "argument $arg is not recognized\n";
+	} else {
+		push @files, $arg;
+	}
+} # foreach arg
+
+die "You haven't specified any files.\n" unless (@files);
+
+foreach $file (@files) {
+	if (! $allFiles) {
+		# are there any files we don't want to bother with
+		next if (($file =~ /~$/) || ($file =~/\.bak$/));
+	}
+	# find comp file
+	if (-e $file) {
+		$comp = $file;
+	} else {
+		print "Error: $file does not exist\n";
+		next;
+	}
+	#print "$dir:$file\n";
+	$num = @names = reverse 
+		sort { numberValue($a) <=> numberValue($b)} glob  ("$dir/$file.*");
+	#print "backup @names\n";
+	if (! $num) {
+		print "$file has never been backed up\n\n";
+		next;
+	}
+	diffFile ($names[0], $comp);
+} # foreach file

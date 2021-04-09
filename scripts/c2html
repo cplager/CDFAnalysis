@@ -1,0 +1,221 @@
+#! /usr/bin/perl -w
+
+# line number grouping
+$grouping = 5;
+
+# colors
+$pre_color     = '"#cc00cc"'; # preprocessor color
+$key_color     = '"#0000cc"'; # keyword color
+$string_color  = '"#cc0000"'; # string color
+$comment_color = '"#007700"'; # comment color
+$grey = "#555555"; # grey (for alternating with black)
+
+# Key words
+@preprocessor = ("#if defined", "#if !defined", "#elif defined",
+                 "#include", "#define", "#undef", "#line",
+                 "#error", "#pragma", "#if", "#ifdef",
+                 "#ifndef", "#elif", "#else", "#endif" );
+
+@keywords = ( "and", "and_eq", "asm", "auto", "bitand", "bitor",
+             "bool", "break", "case", "catch", "char", "class",
+             "compl", "const", "const_cast", "continue", "default",
+             "delete", "do", "double", "dynamic_cast", "else", "enum",
+             "explicit", "export", "extern", "false", "float", "for",
+             "friend", "goto", "if", "inline", "int", "long",
+             "mutable", "namespace", "new", "not", "not_eq",
+             "operator", "or", "or_eq", "private", "protected",
+             "public", "register", "reinterpret_cast", "return",
+             "short", "signed", "sizeof", "static", "static_cast",
+             "struct", "switch", "template", "this", "throw", "true",
+             "try", "typedef", "typeid", "typename", "union",
+             "unsigned", "using", "virtual", "void", "volatile",
+             "wchar_t", "while", "xor", "xor_eq", "_asm", "NULL" );
+
+
+# unlikely combination
+$spaceHolder = "__space__";
+
+# initialization
+($script_name = $0) =~ s|.+/||g;
+
+$header = "
+<html>
+<head>    
+<style type=\"text/css\"><!--
+TD.flip1
+{
+    color: white;
+    background-color: black;
+    font-family: courier;
+    white-space: pre;
+}
+
+TD.flip2
+{
+	color: white;
+	background-color: $grey;
+    font-family: courier;
+    white-space: pre;
+}
+
+TD
+{
+    font-family: courier;
+    white-space: pre;
+}
+--></style>
+
+<title>$spaceHolder</title>
+\n<center><h2>$spaceHolder</h2></center>
+
+<pre>
+<table cellspacing=0 cellpadding=0 border=0>
+\n";
+
+die "Usage: $script_name [file1] [file2] ...\n" unless @ARGV;
+chomp ($date = `date`);
+# get arguments
+foreach $arg (@ARGV) {
+    if ($arg =~ /^-/) {
+        push @flags, $arg;
+    } else {
+        push @files, $arg;
+    }
+}
+
+foreach $arg (@flags) {
+    if ($arg =~ /^-quiet/i) {
+        $quiet = "true";
+        next;
+    }
+}
+
+foreach $file (@files) {
+    # reset important variables
+    $multi = 0;
+    $lineNum = 0;
+    print STDERR "$file " unless ($quiet);
+    print_line($file);
+}
+print "\n" unless ($quiet);
+
+#################
+## Subroutines ##
+#################
+
+sub parse_line
+{
+    my $line = shift;
+
+    # <> characters
+    $line =~ s/</&lt;/g;
+    $line =~ s/>/&gt;/g;
+    # $line =~ s|(\w+)::|<b>$1::</b>|;
+    if ($line =~ m|/\*|) {
+        my $two = pos $line;
+        # We want to be very careful that the '/*' doesn't follow
+        # '//'
+        if ($line =~ m|//|g) {
+            $one = pos $line;
+            pos $line = 0;
+            $line =~ m|/\*|g;
+            $two = pos $line;
+            # o.k., now we know we have to be careful
+            if ($two < $one) {
+                ++$multi
+            }
+        } else {        
+            # Nope, everything is fine
+            ++$multi
+        }
+    }
+    if($multi) {    
+        # working w/ multiline comments
+        if (1 == $multi) {
+            # this is the first line; do this carefully
+            $line =~ s|/\*|<font color=$comment_color>/\*|;
+            ++$multi;
+        } else {
+            $line = "<font color=$comment_color>".$line;
+        }
+        if($line =~ m|\*/|) {
+            $line =~ s|\*/|\*/</font>|;
+            $multi = 0;
+        } else {
+            $line .= "</font>";
+        }
+    } else {  
+        # not working w/ multiline comments
+        # strings
+        $line =~s/(\".+?\")/<font color=$string_color>$1<\/font>/g;      
+        # characters
+        $line =~s/(\'.+?\')/<font color=$string_color>$1<\/font>/g;
+        # standard headers
+        $line =~s/(&lt;[^\&\|\;]+&gt;)/<font color=$string_color>$1<\/font>/g;
+
+        foreach my $preproc (@preprocessor) {
+            $line =~ s/$preproc/<font color=$pre_color>$preproc<\/font>/g;
+        }
+        foreach my $keyword (@keywords) {
+            $line =~ s/\b$keyword\b/<font color=$key_color>$keyword<\/font>/g;
+        }
+        
+        # pull all font tags out of comments
+        if($line =~ m|^(.*?)//(.+)|) {           
+            $previous = $1;
+            $after = $2;
+            $after =~ s/<[^>]*>//g;
+            $line = "$previous<font color=$comment_color>//$after</font>";
+        }
+    }
+
+    return $line;
+}
+
+sub print_line
+{
+    my $file = shift;
+    $multi = 0;
+    unless(open INFILE, $file) {
+        print "Could not open $file\n";
+        return;
+    }
+    ($prettyFile = $file) =~ s|.*/||g;
+    (my $html = $header) =~ s/$spaceHolder/$prettyFile/g;
+    my $line;
+    while(<INFILE>) {
+        chomp;
+        $line = parse_line($_);
+        #$html.=$line;
+        $which = int ($lineNum++ / $grouping);
+        # is which even or odd
+        if ($which / 2 == int ($which / 2)) {
+            # even
+            $class="flip1";
+        } else {
+            # odd
+            $class="flip2";
+        }
+        $prettyNum = sprintf "%4d", $lineNum;
+        $line =~ s/ /\&nbsp\;/g;
+        $line =~ s/<([^>]*)&nbsp\;([^>]*)/<$1 $2/g;
+        $html .= "<tr><td class=\"$class\">$prettyNum</td>".
+            "<td> $line</td></tr>\n";
+        #$html .= "<tr><td class=\"$class\"><pre>$prettyNum</pre></td>".
+        #    "<td><pre> $line</pre></td></tr>\n";
+    }
+    close INFILE;
+
+    # fix file extension
+    (my $htmlfile = $file) =~ s/\./_/g;
+    $htmlfile .= ".html";
+
+    unless(open OUTFILE, ">$htmlfile") {
+        print "Could not create $htmlfile\n";
+        return;
+    }
+    print OUTFILE $html."\n</table></pre>\n\n<hr><address>Colored on $date</address></body>\n</html>";
+    close OUTFILE;
+
+}
+

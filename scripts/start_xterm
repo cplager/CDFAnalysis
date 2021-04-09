@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if ( [ $# -eq 1 ] ) then
+   export DISPLAY=$1
+fi
+
+xterm -ls
+

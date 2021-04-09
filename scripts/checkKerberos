@@ -1,0 +1,83 @@
+#!/usr/bin/env perl
+
+use Time::Local;
+@units = qw (second minute hour day);
+@lines = `klist 2>1&`;
+$kerEpoch = 0;
+foreach (@lines) {
+    chomp;
+    @parts = split /\s+/, $_;
+    next unless (@parts >= 5);
+    $date = $parts[2];
+    $time = $parts[3];
+    $name = $parts[4];
+    next if ($name !~ /^krbtgt/i);
+    if ($date =~ m|(\d{2})/(\d{2})/(\d{2})|) {
+        $month = $1;
+        $day   = $2;
+        $year  = $3;
+    } else {
+        next;
+    }
+    if ($time =~ m|(\d{2}):(\d{2}):(\d{2})|) {
+        $hour = $1;
+        $min  = $2;
+        $sec  = $3;
+    } else {
+        next;
+    }
+    $kerEpoch = timelocal($sec, $min, $hour, $day, $month - 1, $year+ 100);
+    $now = time;
+    last;
+}
+
+if (! $kerEpoch) {
+    print "You don't have any tickets\n";
+} else {
+    $diff = $kerEpoch - $now;
+    if ($diff < 0) {
+        $diff *= -1;
+        $ago = "true";
+    }
+    $dSec = $diff % 60;
+    $diff = int ($diff / 60); # make diff minutes
+    $dMin = $diff % 60;
+    $diff = int ($diff / 60); # make diff hours
+    $dHour = $diff % 24;
+    $dDay = int ($diff / 24); # make diff days
+    push @diff, $dSec, $dMin, $dHour, $dDay;
+    if ($ago) {
+        print "Your kerberos ticket expired ", timeString(@diff), " ago\n";
+    } else {
+        print "Your kerberos ticket will expire in ", timeString(@diff), "\n";
+
+    }
+}
+
+sub timeString {
+    my @diff = @_;
+    my @revUnits = reverse @units;
+    return "Inproper input\n" if (4 != @diff);
+    @diff = reverse @diff;
+    $retval = "";
+    my $numUsed = 0;
+    while (defined (my $value = shift @diff)) {
+        my $unit = shift @revUnits;
+        # should we bother continuing?
+        ++$numUsed if ($value || $numUsed);
+        last if (! $value && ($numUsed >= 2));
+        next unless $value;
+        if ($retval) {
+            $retval .= " and ";
+        }
+        $retval .= "$value $unit";
+        if ($value > 1) {
+            $retval .= "s";
+        }
+        last if ($numUsed >= 2);
+    }
+    if (! $retval) {
+        $retval = "0 seconds";
+    }
+    return $retval;
+}

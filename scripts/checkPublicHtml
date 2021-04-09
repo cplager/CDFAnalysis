@@ -1,0 +1,7 @@
+#!/usr/bin/env perl
+chdir $ENV{HOME};
+if (-e "public_html") {
+    print "Directory exists\n";
+} else {
+    print "Everything ready\n";
+}

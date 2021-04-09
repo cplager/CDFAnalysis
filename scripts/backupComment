@@ -1,0 +1,92 @@
+#!/usr/bin/env perl
+
+# global variables
+@names = qw (.backup .backupDir backup backupDir);
+$notesFile = "backup.notes";
+$help = "Usage: $0 (n=X) file1 file2
+X = 0 : latest version
+X < 0 : latest - |X| version
+X > 0 : version X\n";
+
+sub numberValue {
+	my ($name) = @_;
+	if ($name =~ /\.(-?\d+)$/) {
+		$retval = $1;
+	} else {
+		$retval = 0;
+	}
+	return $retval;
+}
+
+sub commentFile {
+	my ($backup, $all) = @_;
+	if ($backup =~ m|([^/]*)$|) {
+		$short = $1;
+	}
+	my (@files) = 
+		sort { numberValue($a) <=> numberValue($b)} glob ("$backup*");
+	foreach $file (@files) {
+		open (LISTING, "ls -alF $file |") or die ("Couldn't get list");
+		$list = <LISTING>;
+		my (@parts) = split (/\s+/, $list);
+		if ($parts[8] =~ m|([^/]*)$|) {
+			$shortName = $1;
+		} else {
+			$shortName = $parts[8];
+		}
+		printf ("%-30s  %10d %3s %3d %5s\n",$shortName, @parts[4..7]);
+		$comment = `grep $shortName: $dir/$notesFile`;
+		chomp $comment;
+		$comment =~ s/$shortName:\s*//;
+		print "$comment\n" if ($comment);
+		print "\n";
+	}
+}
+
+die $help unless (@ARGV);
+# find which directory to use
+foreach (@names) {
+	if (-d $_) {
+		$dir = $_;
+		last;
+	}
+}
+die "None of @names are directories.  D'oh\n." unless ($dir);
+
+
+@files = ();
+$version = "all";
+foreach $arg (@ARGV) {
+	if ($arg =~ /^n=(\-?\d+)/i) {
+		$version = $1;
+	} elsif ($arg =~ /^-/) {
+		print "argument $arg is not recognized\n";
+	} else {
+		push @files, $arg;
+	}
+} # foreach arg
+
+die "You haven't specified any files.\n" unless (@files);
+
+foreach $file (@files) {
+	if ("all" eq $version) {
+		commentFile ("$dir/$file", "all");
+	} elsif ($version > 0) {
+		$filename = "$dir/$file.$version";
+		if (-e $filename) {
+			commentFile ($filename);
+		} else {
+			print "Error: $filename does not exist\n";
+		}
+	} else {
+		$num = @names = reverse 
+			sort { numberValue($a) <=> numberValue($b)} glob  ("$dir/$file.*");
+		die "No backup files of $file\n" if (! $num);
+		$version *= -1;
+		if ($version > $num) {
+			print "Error: There are not $version versions of $file\n";
+		} else {
+			commentFile ($names[$version]);
+		}
+	}
+} # foreach file

@@ -1,0 +1,29 @@
+#!/usr/bin/env perl
+
+
+
+my $noclear = "";
+while  (@ARGV && $ARGV[0] =~ /^-/) {
+   $arg = shift @ARGV;
+   if ($arg =~ /-nc/i) {
+      $noclear = "true";
+   }
+}
+
+die "Usage: $0 command (seconds)\n" unless (@ARGV);
+if (@ARGV >= 2) {
+	$seconds = $ARGV[1];
+} else {
+	$seconds = 1;
+}
+
+while (1) {
+   if ($noclear) {
+      print "\n" x 3;
+   } else {
+      system "clear";
+   }
+   print "unix> $ARGV[0]\n";
+   print `$ARGV[0]`;
+   select (undef, undef, undef, $seconds);
+}

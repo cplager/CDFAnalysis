@@ -1,0 +1,97 @@
+#!/usr/bin/env perl
+
+#initialize output
+@output = ();
+@long = ();
+@link = ();
+$shortOut = "true";
+
+if (@ARGV && ($ARGV[0] =~ /^-s/i)) {
+	shift @ARGV;
+	$shortOut = "true";
+}
+
+if (@ARGV && ($ARGV[0] =~ /^-l/i)) {
+	shift @ARGV;
+	$shortOut = "";
+}
+
+if (@ARGV && ($ARGV[0] =~ /^-h/i)) {
+	if ($0 =~ m|/([^/]+)$|) {
+		$running = $1;
+	} else {
+		$running = $0;
+	}
+	print "Usage: $running (-options) (directory)
+-h  -> this help output
+-l  -> long output (does tell where links are linked to)
+-s  -> short output (does not tell where links are linked to)
+
+Note : If no directory is given, current directory will be used.
+";
+	exit;
+}
+
+open (LISTING, "ls -alF @ARGV |") or die ("Couldn't get list");
+while ($line = <LISTING>) {
+	if ($line =~ /\/$/) {
+		@array = split /\s+/, $line;
+		# print out name of directory or name of link and where it points
+		push (@output, "@array[8..$#array]");
+	}
+}
+$where = 0;
+$short = "";
+foreach $dir (sort {lc($a) cmp lc($b)} @output) {
+	# remove '->' from links if listing shortOut together
+	if ($shortOut && ($dir =~ /\s/)) {
+		$dir = $`;
+	}
+	$len = length ($dir);
+	# put long names at the end
+	if (($dir =~ /@/) && !$shortOut){
+		push (@link, $dir);
+	} elsif ($len >= 20) {
+		push (@long, $dir);
+	} else {
+		$short = "True";
+		if ($len + $where > 79) {
+			$where = 0;
+			print "\n";
+		}
+		if (($dir ne "./") && ($dir ne "../")) {
+			print "$dir ";
+			if ($len + $where > 60) {
+				$where = 90; #something big
+			} else {
+				$left = 19 - ($len + $where) % 20;
+				print " " x $left;
+				$where += $left + $len + 1;
+			}
+		} # not ./ or ../
+	} # not link or long
+}
+print "\n" if $short;
+if (@long) {
+	$where = 0;
+	foreach $dir (@long) {
+		$len = length ($dir);
+		if ($len + $where > 79) {
+			$where = 0;
+			print "\n";
+		}
+		print "$dir ";
+		if ($len + $where > 60) {
+			$where = 90; #something big
+		} else {
+			$left = 19 - ($len + $where) % 20;
+			print " " x $left;
+			$where += $left + $len + 1;
+		}
+	}
+	print "\n";
+}
+
+if (@link) {
+	print join ("\n", @link), "\n";
+}

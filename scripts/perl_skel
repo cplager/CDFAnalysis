@@ -1,0 +1,11 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+# Option parcing
+while (@ARGV && $ARGV[0] =~ /^-/) {
+   (my $arg = shift) =~ s/^-+//;
+   die "I don't understand '-$arg'.  Aborting.\n";
+}
+

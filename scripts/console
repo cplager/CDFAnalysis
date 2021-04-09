@@ -1,0 +1,766 @@
+#!/usr/local/bin/perl
+
+# Require the Tk module
+use Tk;
+
+# global variables
+
+$version = "console 3.55 030206 cplager\@uiuc.edu";
+$defaultFile = "$ENV{'HOME'}/.console.properties";
+$entryWindow = "/cdf/home/cplager/bin/entryWindow";
+$dirBrowser = "/cdf/home/cplager/scripts/dirBrowser/dirBrowser";
+$startcommand = "/cdf/home/cplager/bin/startcommand";
+$checkKerberos = "/cdf/home/cplager/bin/checkKerberosWindow";
+$xterm = "/usr/bin/X11/rxvt";
+$ssh = "/usr/krb5/bin/ssh";
+
+#$GUIfont = "R20";
+$GUIfont = "10x20";
+$MENUfont = "8x16";
+$useSSH = "true";
+$xon = "xon"; # "/cdf/home/cplager/bin/xon";
+$otherUser = "";
+$krlogin = "krlogin";
+$rsh = "rsh";
+$useKrlogin = $krlogin;
+
+# process arguments
+#print "ARGS @ARGV\n";
+@myArgs = @ARGV;
+while ($_ = shift @ARGV) {
+	#print "looking at $_\n";
+	if (/^-display/i) {
+		my $display = shift @ARGV;
+		if ($display) {
+			if ($display !~ /\:/) {
+				$display .= ":0.0";
+			}
+			$ENV{DISPLAY} = $display;
+		}
+		next;
+	} # display
+	if (/^-small/i) {
+		#print "Using small fonts\n";
+		$GUIfont = "6x13";
+		$MENUfont = "6x10";
+		next;
+	} # small
+}
+
+if (-e $defaultFile) {
+	$defMachine = `/usr/bin/hostname`;
+	if ($defMachine =~ /^(\w+)/) {
+		$defMachine = $1;
+	}
+	@colorList = ();
+	$colorDef = 0;
+	$numColors = 0;
+	@fontList = ();
+	$fontDef = 0;
+	$numFonts = 0;
+	@users = ();
+	$scroll = "+sb";
+	open (DEFS, $defaultFile) or die "Can't open $defaultFile\n";
+	$currentName = "";
+	while (<DEFS>) {
+        chomp;
+		# is line a control line
+		if (/^-/) {
+			$currentName = "";
+			$line = $';
+			# get rid of comments
+			if ($line =~ /\#/) {
+				$line = $`;
+			}
+			# xterm ?
+			if ($line =~ /^\s*xterm\s+/i) {
+                $xterm = $';
+                $xterm =~ s/\s+//g;
+			} # if xterm
+			# font ?
+			if ($line =~ /^\s*font\s+/i) {
+				@fonts = split (/\s+/, $');
+				foreach $font (@fonts) {
+					if ($font =~ /\*/) {
+						$font = $`;
+						$fontDef = $numFonts;
+					}
+					if ($font) {
+						push (@fontList, $font);
+						++$numFonts;
+					}
+				} # foreach font
+			} # if font
+			# users ?
+			if ($line =~ /^\s*users\s+/i) {
+				push @userList, split (/\s+/, $');
+				foreach $user (@userList) {
+					if ($user =~ /\*/) {
+						$user =~ s/\*//g;
+						$otherUser = $user;
+					}
+					elsif (! $otherUser ) {
+						$otherUser = $user;
+					}
+					push @users, $user;
+				}
+			} # if font
+			# color ?
+			if ($line =~ /^\s*color\s+/i) {
+				@colors = split (/\s+/, $');
+				foreach $color (@colors) {
+					if ($color =~ /\*/) {
+						$color = $`;
+						$colorDef = $numColors;
+					}
+					if ($color) {
+						push (@colorList, $color);
+						++$numColors;
+					}
+				} # foreach color
+			} # if color
+			# scroll bar ?
+			if ($line =~ /^\s*scroll\s+/i) {
+				$rest = $';
+				if ($rest =~ /^y/i) {
+					$scroll = "-sb";
+				} elsif ($rest =~ /^n/i) {
+					$scroll = "+sb";
+				}
+			}
+			# ssh ?
+			if ($line =~ /^\s*ssh\s+/i) {
+				$rest = $';
+				if ($rest =~ /^y/i) {
+					$useSSH = "true";
+				} elsif ($rest =~ /^n/i) {
+					$useSSH = "";
+				}
+			}
+			# krlogin ?
+			if ($line =~ /^\s*krlogin\s+/i) {
+				$rest = $';
+				if ($rest =~ /^y/i) {
+					$useKrlogin = $krlogin;
+				} elsif ($rest =~ /^n/i) {
+					$useKrlogin = $rsh;
+				}
+			}
+			# default 
+			if ($line =~ /^\s*default\s+/i) {
+				$defMachine = $';
+				$defMachine =~ s/\s//g;
+			}
+		}
+		# is line a group name
+		elsif (/^@/) {
+			$currentName = $';
+			# get rid of comments
+			if ($currentName =~ /\#/) {
+				$currentName = $`;
+			}			
+			# get rid of spaces
+			$currentName =~ s/\s+//g;
+			push @listlist, $currentName;
+		}
+		# is line a computer name
+		elsif (/^\+/) {
+			if ($currentName) {
+				$computerName = $';
+				# get rid of comments
+				if ($computerName =~ /\#/) {
+					$computerName = $`;
+				}			
+				# get rid of spaces
+				#$computerName =~ s/\s+//g;
+				push @$currentName, $computerName;
+			}
+		}
+	} # while DEFS
+	# if no fonts, add a default
+	if (! $numFonts ) {
+		push @fontList, "6x13";
+	}
+	# if no colors, add a default
+	if (! $numColors ) {
+		push @colorList, "white_on_black";
+	}
+	$xtermFont = $fontList[$fontDef];
+	$xtermColor = $colorList[$colorDef];
+	if ($xtermColor =~ /^(\w+)_on_(\w+)$/) {
+		$colorOptions = "-fg $1 -bg $2 -cr $1";
+	} else {
+		$colorOptions = "";
+	}
+} else {
+	@fontList = qw (6x10 7x12 8x13 9x15);
+	$xtermFont = $fontList[1];
+	@colorList = qw (white_on_black 
+					 black_on_white 
+					 black_on_wheat 
+					 red_on_black);
+	$colorOptions = "-fg white -bg black";
+	$scroll = "";
+	$xtermOptions = "-vb";
+	$defMachine = "lnsil3";
+	@listlist = qw (Suns alphas);
+	@Suns = qw (solon1 solon2 solon3 solon4 solsda solssa sol210);
+	@alphas = qw (lnsil3 lns101);
+}
+@list = ();
+$globaltitle = "Console :";
+
+sub getComments {
+	%comments = ();
+	@machines = ();
+	foreach $machine (@list) {
+		if ($machine =~ /^([^\(]*)\((.*)\)/) {
+			$name = $1;
+			$comments{$name} = $2;
+			$comments{$name} =~ s/_/ /g;
+		} else {
+			$name = $machine;
+		}
+		push @machines, $name;
+	}
+	$numMachines = @machines;
+}
+
+# This subroutine gets active computer and strips off comments
+sub getActive
+{
+	my $name = noComments($listbox->get('active'));
+	# is this a computer or list name
+	if ($name =~ /^---/) {
+		return 0;
+	}
+	$name =~ s/\s//g;
+	return $name;
+}
+
+sub getOtherUser
+{
+	my $cmd = "$entryWindow Console Log_in_as_what_user $otherUser";
+	$otherUser = `$cmd`;
+	$otherUser =~ s/\s+//g;
+}
+
+sub noComments
+{
+	my ($name) = @_;
+	if ($name =~ /\(/) {
+		return $`;
+	}
+	return $name;
+}
+
+sub xloadcommand
+{
+    my ($machine, $index) = @_;
+	return if (! $machine);
+    my $vert = 80*$index;
+
+	if ($machine !~ /vmet/) {
+		system("$xon $machine /usr/bin/X11/xload -title '$machine\_xload' -hl green -bg black -fg red -geometry 100x50+0+$vert");
+	}
+}
+
+sub pingcommand
+{
+    my $machine = getActive;
+	return if (! $machine);
+	system ("$xon $defMachine /cdf/home/cplager/bin/windowPing $machine");
+}
+
+sub pingallcommand
+{
+	my $height = 1;
+	my @elements = $listbox->get(0, 'end');
+	my $computer;
+	my @machines = ();
+	foreach $computer (@elements) {
+		if ($computer !~ /^---/) {
+			$computer =~ s/\s*\(/\(/;
+			$computer =~ s/\s/_/g;
+			$computer =~ s/\(/\[/g;
+			$computer =~ s/\)/\]/g;
+			push @machines, $computer;
+			++$height;
+		}
+	}
+	system("$xon $defMachine $xterm -title 'Ping' -geometry 80x$height $xtermOptions $scroll $colorOptions -fn $xtermFont -e /cdf/home/cplager/bin/pingList @machines");
+}
+
+sub xloadsingle
+{
+	my $machine = getActive;
+	my $num = $listbox->curselection();
+	xloadcommand ($machine, $num);
+	
+}
+
+sub uptimecommand
+{
+	my $height = 1;
+	my @elements = $listbox->get(0, 'end');
+	my $computer;
+	my @machines = ();
+	foreach $computer (@elements) {
+		if (($computer !~ /^---/) && ($computer !~ /^vmet/)) {
+			push @machines, noComments($computer);
+			++$height;
+		}
+	}
+	system("$xon $defMachine $xterm -title 'Loads' -geometry 80x$height $xtermOptions $scroll $colorOptions -fn $xtermFont -e /cdf/home/cplager/bin/uptimes @machines");
+}
+
+sub xloadall
+{
+	my @elements = $listbox->get(0, 'end');
+	my $loop = 0;
+	my $computer;
+	foreach $computer (@elements) {
+		next if ($computer =~ /^---/);
+		next if ($computer =~ /^vmet/);
+		xloadcommand (noComments($computer), $loop++);
+	}
+}
+
+sub killallxload
+{
+	my @elements = $listbox->get(0, 'end');
+	my $loop = 0;
+	my $computer;
+	foreach $computer (@elements) {
+		next if ($computer =~ /^---/);
+		if ($computer !~ /vmet/) {
+			system ("$xon $computer /cdf/home/cplager/bin/killall xload");
+		}
+	}
+}
+
+sub topcommand
+{
+    my $machine = getActive;
+	return if (! $machine);
+	if ($comments{$machine}) {
+		$title = "$comments{$machine}\ \[$machine\]";
+		$title =~ s/ /\\ /g;
+	} else {
+		$title = "$machine";
+	}
+	if ($machine !~ /vmet/) {
+		system("$startcommand $xterm -title 'top\@$title' -geometry 80x15 $xtermOptions $scroll $colorOptions -fn $xtermFont -e ssh $machine top");
+	}
+}
+
+sub dircommand
+{
+	my $machine = getActive;
+	return if (! $machine);
+	if ($comments{$machine}) {
+		$title = "$comments{$machine}\ \[$machine\]";
+		$title =~ s/ /\\ /g;
+	} else {
+		$title = $machine;
+	}
+	my $command;
+	if ($machine =~ /vmet/) {
+		return;
+	} elsif (($machine =~ /\./) && $useSSH) {
+		return;
+	} else {
+		$command = "$xon $machine $dirBrowser -fn$xtermFont";
+	}
+	system ($command);
+}
+
+sub xtermcommand
+{
+	my $machine = getActive;
+	return if (! $machine);
+	if ($comments{$machine}) {
+		$title = "$comments{$machine}\ \[$machine\]";
+		$title =~ s/ /\\ /g;
+	} else {
+		$title = $machine;
+	}
+	my $command = "$startcommand $xterm -title '$title' $xtermOptions  $colorOptions -fn $xtermFont -sl 1000 -e ssh $machine";
+	system ($command);
+}
+
+sub xtermOtherComputer
+{
+	my $cmd = "$entryWindow Console Log_onto_what_computer $otherMachine";
+	$otherMachine = `$cmd`;
+	$otherMachine =~ s/\s+//g;
+	my $command;
+	my $title = "$otherMachine";
+	my $command = "$startcommand $xterm -title '$title' $xtermOptions  $colorOptions -fn $xtermFont -sl 1000 -e ssh $otherMachine";
+	system ($command);
+}
+
+sub xtermOthercommand
+{
+	my $machine = getActive;
+	return if (! $machine); # return if there is no machine selected
+	return if (! $otherUser); # return if there is no other user selected
+	if ($comments{$machine}) {
+		$title = "$comments{$machine}\ \[$otherUser\@$machine\]";
+		$title =~ s/ /\\ /g;
+	} else {
+		$title = "$otherUser\@$machine";
+	}
+	my $command = "$startcommand $xterm -title '$title' $xtermOptions  $colorOptions -fn $xtermFont -sl 1000 -e ssh $otherUser\@$machine";	
+	system ($command);
+}
+
+sub addAllEntries {
+    $listbox->delete(0, 'end'); 
+    @list = (); 
+    $globaltitle = "Console :";
+    $mainWindow->title($globaltitle);
+    foreach $entry (@listlist) {
+        pushList ($entry);
+    }
+}
+
+# This displays basic information about this tool.
+sub about
+{
+   ` /cdf/home/cplager/bin/windowMessage about "Written by Charles Plager ($version)"`;
+}
+
+sub pushList {
+	my $name = $_[0];
+	my ($computer, $machine);
+	my @niceNames = ();
+	$listbox->insert('end', "--- $name ---");
+	foreach $computer (@$name) {
+		chomp $computer;
+		if ($computer =~ /(\w+)\s*\((.+)\)/) {
+			$machine = $1;
+			$comments{$machine} = $2;
+			$listbox->insert('end', "$machine ($comments{$machine})");
+		} else {
+			$computer =~ s/\s//g;
+			$listbox->insert('end', $computer);
+		}
+	}
+#	$listbox->insert('end', @$name);
+	$globaltitle .= " $name";
+	$mainWindow->title($globaltitle);
+	#getComments;
+}
+
+sub checkKerberos {
+    system "$startcommand $checkKerberos";
+}
+
+sub kinit {
+	system "$startcommand $xterm -title 'kinit' $xtermOptions $scroll $colorOptions -fn $xtermFont -sl 1000 -e kinit -l 100d";
+}
+
+# Create the main window.
+$mainWindow = MainWindow->new;
+$mainWindow->title($globaltitle);
+$mainWindow->bind( "<q>" , sub { exit(0); } );
+$mainWindow->bind( "<Q>" , sub { exit(0); } );
+$mainWindow->bind( "<T>", sub { &topcommand; });
+$mainWindow->bind( "<t>", sub { &topcommand; });
+$mainWindow->bind( "<p>", sub { &pingcommand; });
+$mainWindow->bind( "<P>", sub { &pingcommand; });
+$mainWindow->bind( "<x>", sub { &xtermcommand; });
+$mainWindow->bind( "<l>", sub { &uptimecommand; });
+$mainWindow->bind( "<L>", sub { &uptimecommand; });
+# make button window at bottom
+$buttonWindow = $mainWindow->Frame(relief => groove,
+			 borderwidth => 2)->pack( side => bottom);
+$buttonWindow->Button(-command => sub { exit(0);}, 
+					  -activebackground => 'white',
+					  -activeforeground => 'red',
+					  -font => $GUIfont,
+					  -text => "Quit")->pack(side => right);
+$buttonWindow->Button(-command => \&xtermOthercommand, 
+					  -activebackground => 'white',
+					  -activeforeground => 'red',
+					  -font => $GUIfont,
+					  -text => "Other")->pack(side => right);
+$buttonWindow->Button(-command => \&xtermcommand, 
+					  -activebackground => 'white',
+					  -activeforeground => 'red',
+					  -font => $GUIfont,
+					  -text => "Xterm")->pack(side => right);
+# Create a menu bar frame.
+$menuBar = $mainWindow->Frame;
+$menuBar->pack(-side => 'top', -fill => 'x');
+
+# Create a Specific menu.
+$specificMenu = $menuBar->Menubutton(-text => 'Specific', 
+									 -font => $GUIfont,
+									 -activebackground => 'white',
+									 -activeforeground => 'red',
+									 -underline => 0, 
+									 -tearoff => false);
+$specificMenu->command(-label => 'Xterm', 
+					   -font => $MENUfont,
+					   -underline => 0, 
+					   -command => \&xtermcommand );
+$specificMenu->command(-label => 'Xterm as other', 
+					   -font => $MENUfont,
+					   -underline => 0, 
+					   -command => \&xtermOthercommand );
+$specificMenu->command(-label => 'Top', 
+					   -font => $MENUfont,
+					   -underline => 0, 
+					   -command => \&topcommand );
+$specificMenu->command(-label => 'Xload', 
+					   -font => $MENUfont,
+					   -underline => 1, 
+					   -command => \&xloadsingle );
+$specificMenu->command(-label => 'Ping', 
+					   -font => $MENUfont,
+					   -underline => 0, 
+					   -command => \&pingcommand );
+$specificMenu->command(-label => 'Dir', 
+					   -font => $MENUfont,
+					   -underline => 0, 
+					   -command => \&dircommand );
+$specificMenu->separator();
+$specificMenu->command(-label => 'Other Computer', 
+					   -font => $MENUfont,
+					   -underline => 7, 
+					   -command => \&xtermOtherComputer );
+$specificMenu->separator();
+$specificMenu->command(-label => 'Quit', 
+					   -font => $MENUfont,
+					   -underline => 0, 
+					   -command => sub { exit; } );
+$specificMenu->pack(-side => 'left');
+
+#create a general menu
+$generalMenu = $menuBar->Menubutton(-text => 'General', 
+									-font => $GUIfont,
+									-activebackground => 'white',
+									-activeforeground => 'red',
+									-underline => 0, 
+									-tearoff => false);
+$generalMenu->command(-label => 'All xloads', 
+					  -font => $MENUfont,
+					  -underline => 4, 
+					  -command => \&xloadall );
+$generalMenu->command(-label => 'Kill all xloads', 
+					  -font => $MENUfont,
+					  -underline => 0, 
+					  -command => \&killallxload );
+$generalMenu->command(-label => 'Ping all machines', 
+					  -font => $MENUfont,
+					  -underline => 0, 
+					  -command => \&pingallcommand );
+$generalMenu->command(-label => 'Loads', 
+					  -font => $MENUfont,
+					  -underline => 0, 
+					  -command => \&uptimecommand );
+$generalMenu->separator();
+
+# Fonts submenu
+$genFonts = "Fonts";
+$generalMenu->cascade(-label => $genFonts, 
+					  -font => $MENUfont,
+					  -underline => 0);
+$fontMenu = $generalMenu->cget(-menu);
+$fontRef = $fontMenu->Menu(-tearoff => false,
+						   -font => $MENUfont,
+						   -activebackground => 'white',
+						   -activeforeground => 'red');
+$generalMenu->entryconfigure($genFonts, 
+							 -menu => $fontRef);
+foreach $label (@fontList) {
+	$fontRef->radiobutton(-label => $label,
+						  -selectcolor => 'red',
+						  -variable => \$xtermFont,
+						  -value => $label);
+}
+
+# color submenu
+$genColors = "Colors";
+$generalMenu->cascade(-label => $genColors, 
+					  -font => $MENUfont,
+					  -underline => 0);
+$colorMenu = $generalMenu->cget(-menu);
+$colorRef = $colorMenu->Menu(-tearoff => false,
+							 -font => $MENUfont,
+							 -activebackground => 'white',
+							 -activeforeground => 'red');
+$generalMenu->entryconfigure($genColors, 
+							 -menu => $colorRef);
+foreach $label (@colorList) {
+	$nice = $label;
+	if ($label =~ /(\w+)_on_(\w+)/) {
+		$fg = $1;
+		$bg = $2;
+	}
+	$nice =~ s/_/ /g;
+	$colorRef->radiobutton(-label => $nice,
+						   -selectcolor => 'red',
+						   -variable => \$colorOptions,
+						   -value => "-fg $fg -bg $bg -cr $fg");
+}
+$colorRef->radiobutton(-label => 'Default',
+					   -selectcolor => 'red',
+					   -variable => \$colorOptions,
+					   -value => " ");
+
+# Preferences
+$genOther = "Preferences";
+$generalMenu->cascade(-label => $genOther, 
+					  -font => $MENUfont,
+					  -underline => 0);
+$otherMenu = $generalMenu->cget(-menu);
+$otherRef = $otherMenu->Menu(-tearoff => false,
+							 -font => $MENUfont,
+							 -activebackground => 'white',
+							 -activeforeground => 'red');
+$generalMenu->entryconfigure($genOther, 
+							 -menu => $otherRef);
+$otherRef->checkbutton(-label => "scroll bar",
+					   -variable => \$scroll,
+					   -selectcolor => 'red',
+					   -offvalue => "+sb",
+					   -onvalue  => "-sb");
+$otherRef->checkbutton(-label => "ssh for remote machines",
+					   -variable => \$useSSH,
+					   -selectcolor => 'red',
+					   -offvalue => "",
+					   -onvalue  => "true");
+$otherRef->separator();
+$otherRef->radiobutton(-label => "use krlogin for other",
+					   -variable => \$useKrlogin,
+                       -value => $krlogin,
+					   -selectcolor => 'red');
+$otherRef->radiobutton(-label => "use ssh for other",
+					   -variable => \$useKrlogin,
+                       -value => $ssh,
+					   -selectcolor => 'red');
+$otherRef->radiobutton(-label => "use rsh for other",
+					   -variable => \$useKrlogin,
+                       -value => $rsh,
+					   -selectcolor => 'red');
+	
+$generalMenu->separator();
+# Users submenu
+$genUsers = "Pick user";
+$generalMenu->cascade(-label => $genUsers, 
+					  -font => $MENUfont,
+					  -underline => 0);
+$userMenu = $generalMenu->cget(-menu);
+$userRef = $userMenu->Menu(-tearoff => false,
+						   -font => $MENUfont,
+						   -activebackground => 'white',
+						   -activeforeground => 'red');
+$generalMenu->entryconfigure($genUsers, 
+							 -menu => $userRef);
+foreach $label (@users) {
+	$userRef->radiobutton(-label => $label,
+						  -selectcolor => 'red',
+						  -variable => \$otherUser,
+						  -value => $label,);
+}
+$generalMenu->command( -label => "Set other user", 
+					   -font => $MENUfont,
+					   -underline => 0, 
+					   -command => \&getOtherUser );
+$generalMenu->pack(-side => 'left');
+
+$consoleMenu = $menuBar->Menubutton(-text => 'Console', 
+									-font => $GUIfont,
+									-activebackground => 'white',
+									-activeforeground => 'red',
+									-underline => 0, 
+									-tearoff => false);
+$consoleMenu->command( -label => 'Add all entries', 
+					   -font => $MENUfont,
+					   -underline => 0, 
+					   -command => \&addAllEntries);
+$consoleMenu->command( -label => 'Clear all entries', 
+					   -font => $MENUfont,
+					   -underline => 0, 
+					   -command => sub 
+					   {$listbox->delete(0, 'end'); 
+						@list = (); 
+						$globaltitle = "Console :";
+						$mainWindow->title($globaltitle);
+					   });
+$consoleMenu->command( -label => 'Kinit', 
+					   -font => $MENUfont,
+					   -underline => 0, 
+					   -command => \&kinit);
+$consoleMenu->command( -label => 'Check Kerberos', 
+					   -font => $MENUfont,
+					   -underline => 0, 
+					   -command => \&checkKerberos);
+$consoleMenu->separator();
+foreach $entry (@listlist) {
+	$label = "add $entry entries";
+	$consoleMenu->command(-label => $label, 
+						  -font => $MENUfont,
+						  -command=>[\&pushList, $entry]);
+}
+
+$consoleMenu->separator();
+$consoleMenu->command(-label => 'New console', 
+					  -font => $MENUfont,
+					  -underline => 0, 
+					  -command => sub 
+					  {system "$xon $defMachine $0 @myArgs&";});
+$consoleMenu->pack(-side => 'left');
+
+
+# Create a Help menu.
+$helpMenu = $menuBar->Menubutton(-text => 'Help', 
+								 -font => $GUIfont,
+								 -activebackground => 'white',
+								 -activeforeground => 'red',
+								 -underline => 0, 
+								 -tearoff => false);
+$helpMenu->command(-label => 'About', 
+				   -font => $MENUfont,
+				   -underline => 0, 
+				   -command => \&about );
+$helpMenu->pack(-side => 'left');
+
+# Create the Y axis scrollbar.
+$yscrollbar = $mainWindow->Scrollbar();
+$yscrollbar->pack(-side => 'right', -fill => 'y');
+
+# Create the list box.
+$listbox = $mainWindow->Listbox(-yscrollcommand => ['set'=> $yscrollbar],
+								-relief => 'sunken',
+								-font => $GUIfont,
+								-width => 25,
+								-height => 10,
+								-bg => black,
+								-fg => white,
+								-exportselection => 0,
+								-selectbackground => 'white',
+								-selectforeground => 'red',
+								#-selectmode => "extended",
+								-setgrid => 'yes');
+
+# Pack in the list
+$listbox->pack (-side => 'left', -fill => 'both', -expand => 'yes');
+
+# Bind a double click to an action.
+$listbox->bind ('<Double-Button-1>' => \&xtermcommand );
+$listbox->bind ('<Double-Button-2>' => \&pingcommand );
+$listbox->bind ('<Double-Button-3>' => \&topcommand );
+
+# Set 1st entry as default
+$listbox->activate(1);
+# Configure the scrollbar
+$yscrollbar->configure(-command => ['yview', $listbox]);
+
+addAllEntries();
+checkKerberos();
+# Let the user interact with the widget...
+MainLoop();

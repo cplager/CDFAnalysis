@@ -1,0 +1,144 @@
+#!/usr/bin/env perl
+
+# global variables
+@names = qw (.backup .backupDir backup backupDir);
+$notesFile = "backup.notes";
+$help = "Usage: $0 file1\n";
+
+# does one of the directores in names already exist as a directory
+$dir = "";
+foreach (@names) {
+	if (-d $_) {
+		# this is a direcory
+		$dir = $_;
+		last;
+	}
+}
+
+# did we find one?
+if (! $dir) {
+	# we need to create a directory
+	foreach (@names) {
+		if (! -e $_) {
+			# there is no file with this name, let's use this
+			$problems = `mkdir $_`;
+			if ($problems) {
+				# didn't work
+				print STDERR "Couldn't make $_: $problems\n";
+			} else {
+				# it worked
+				$dir = $_;
+				last;
+			} # if (!) problems
+		} # this name isn't in use
+	} # foreach names
+} # we don't have a default directory yet
+
+die "We couldn't create a backup directory.  Aborting.\n" unless ($dir);
+
+
+sub backupFile {
+	my ($file, $message) = @_;
+	my $command;
+	if ($message) {
+		$command = "perl /cdf/home/cplager/bin/backup -m \"$message\" $file";
+	} else {
+		$command = "perl /cdf/home/cplager/bin/backup $file";
+	}
+	system "$command";
+}
+
+sub diffFile {
+	my ($backup, $target, $message) = @_;
+	open (LISTING, "ls -alF $backup |") or die ("Couldn't get list");
+	my ($list) = <LISTING>;
+	chomp $list;
+	my (@parts) = split (/\s+/, $list);
+	my $comment = "";
+	if ($target =~  m|([^/]*\.\d+)$|) {
+		$shorttarget = $1;
+		$comment .= `grep $shorttarget: $dir/$notesFile`;
+	}
+	if ($backup =~ m|([^/]*)$|) {
+		$short = $1;
+		$comment .= `grep $short: $dir/$notesFile`;
+	}
+	$diff = `diff $backup $target`;
+	if ($diff) {
+		backupFile ($target, $message);
+		#print "$target is different than $short\n";
+		#print "$comment\n\n";
+	}
+}
+
+sub numberValue {
+	my ($name) = @_;
+	if ($name =~ /\.(-?\d+)$/) {
+		$retval = $1;
+	} else {
+		$retval = 0;
+	}
+	return $retval;
+}
+
+die $help unless (@ARGV);
+
+# find which directory to use
+foreach (@names) {
+	if (-d $_) {
+		$dir = $_;
+		last;
+	}
+}
+die "None of @names are directories.  D'oh\n." unless ($dir);
+#print "dir $dir\n";
+
+@files = ();
+my $checkExistance;
+while  ($arg = shift @ARGV) {
+	if ($arg =~ /^-m/i) {
+		$message = shift @ARGV;
+        next;
+	} 
+    if ($arg =~ /^-all/) {
+		$allFiles = "true";
+        next;
+	} 
+    if ($arg =~ /^-ifexist/i) {
+       $checkExistance = "true";
+       next;
+    }
+    if ($arg =~ /^-/) {
+		print "argument $arg is not recognized\n";
+        next;
+	}		
+    push @files, $arg;
+} # foreach arg
+
+die "You haven't specified any files.\n" unless (@files);
+
+foreach $file (@files) {
+	if (! $allFiles) {
+		# are there any files we don't want to bother with
+		next if (($file =~ /~$/) || ($file =~/\.bak$/));
+	}
+    # don't try to backup directories
+    next if (-d $file);
+	# find comp file
+	if (-e $file) {
+		$comp = $file;
+	} else {
+		print "Error: $file does not exist\n" unless $checkExistance;
+		next;
+	}
+	#print "$dir:$file\n";
+	$num = @names = reverse 
+		sort { numberValue($a) <=> numberValue($b)} glob  ("$dir/$file.*");
+	#print "backup @names\n";
+	if ($num) {
+		diffFile ($names[0], $comp, $message);
+	} else {
+		backupFile ($comp, $message);
+	}
+		
+} # foreach file

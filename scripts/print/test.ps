@@ -1,0 +1,1150 @@
+%!PS-Adobe-2.0
+%%Creator: text2ps v1.0 (cplager@uiuc.edu) 010719
+%%Pages: (atend)
+%%PageOrder: Ascending
+%%Orientation: Landscape
+%%BoundingBox: 0 -0 612 792
+%%EndComments
+
+
+/red {1.0 0.0 0.0 setrgbcolor} def
+/blue {0.0 0.0 1.0 setrgbcolor} def
+/green {0.0 1.0 0.0 setrgbcolor} def
+/black {0.0 0.0 0.0 setrgbcolor} def
+
+/rotateWorld
+{
+  306 396 translate
+  90 rotate 
+  -396 -306 translate
+} def
+
+/drawbox 
+{
+  1 setlinewidth
+  newpath
+  15 15 m 
+  15 777 lineto
+  597 777 lineto
+  597 15 lineto
+  closepath
+  stroke
+} def
+
+/drawboxLand 
+{
+  1 setlinewidth
+  newpath
+  15  15 m 
+  777  15 lineto
+  777 597 lineto
+  15 597 lineto
+  closepath
+  stroke
+} def
+
+/cour 
+{ /fontsize exch def
+  /Courier findfont	   % Get the basic font
+  fontsize scalefont   % Scale the font to 'fontsize' points
+  setfont			   % Make it the current font
+} def
+
+/courb 
+{ /fontsize exch def
+  /Courier-Bold findfont
+  fontsize scalefont	
+  setfont			    
+} def
+
+/couri 
+{ /fontsize exch def
+  /Courier-Oblique findfont
+  fontsize scalefont		
+  setfont			
+} def
+
+/courbi 
+{ /fontsize exch def
+  /Courier-BoldOblique findfont	
+  fontsize scalefont	
+  setfont			
+} def
+
+
+/m { moveto } def
+/s { show } def
+
+
+%%Page: 1 1
+gsave
+rotateWorld
+5 cour
+16.5 588.5 m
+(#!/usr/local/bin/perl -w) show
+16.5 583.5 m
+($version = "text2ps v1.0 \(cplager\\@uiuc.edu\) 010719";) show
+16.5 578.5 m
+() show
+16.5 573.5 m
+(sub setupConstants {) show
+16.5 568.5 m
+() show
+16.5 563.5 m
+($startLand =) show
+16.5 558.5 m
+("\%!PS-Adobe-2.0) show
+16.5 553.5 m
+(\%\%Creator: $version) show
+16.5 548.5 m
+(\%\%Pages: \(atend\)) show
+16.5 543.5 m
+(\%\%PageOrder: Ascending) show
+16.5 538.5 m
+(\%\%Orientation: Landscape) show
+16.5 533.5 m
+(\%\%BoundingBox: 0 -$translate $ABSheight $ABSwidth) show
+16.5 528.5 m
+(\%\%EndComments\\n";) show
+16.5 523.5 m
+() show
+16.5 518.5 m
+($startPort =) show
+16.5 513.5 m
+("\%!PS-Adobe-2.0) show
+16.5 508.5 m
+(\%\%Creator: $version) show
+16.5 503.5 m
+(\%\%Pages: \(atend\)) show
+16.5 498.5 m
+(\%\%PageOrder: Ascending) show
+16.5 493.5 m
+(\%\%BoundingBox: 0 -$translate $ABSwidth $ABSheight) show
+16.5 488.5 m
+(\%\%EndComments\\n";) show
+16.5 483.5 m
+() show
+16.5 478.5 m
+(my $bigH = $ABSheight - $margin;) show
+16.5 473.5 m
+(my $bigW = $ABSwidth - $margin;) show
+16.5 468.5 m
+(my $halfH = $ABSheight / 2;) show
+16.5 463.5 m
+(my $halfW = $ABSwidth / 2;) show
+16.5 458.5 m
+(if \($landscape\) {) show
+16.5 453.5 m
+(    \($bigH, $bigW\) = \($bigW, $bigH\);) show
+16.5 448.5 m
+(    \($halfH, $halfW\) = \($halfW, $halfH\);) show
+16.5 443.5 m
+(}) show
+16.5 438.5 m
+() show
+16.5 433.5 m
+($drawBoxCommands =) show
+16.5 428.5 m
+("/rotateWorld) show
+16.5 423.5 m
+({) show
+16.5 418.5 m
+(  $halfW $halfH translate) show
+16.5 413.5 m
+(  90 rotate) show
+16.5 408.5 m
+(  -$halfH -$halfW translate) show
+16.5 403.5 m
+(} def) show
+16.5 398.5 m
+() show
+16.5 393.5 m
+(/drawbox) show
+16.5 388.5 m
+({) show
+16.5 383.5 m
+(  1 setlinewidth) show
+16.5 378.5 m
+(  newpath) show
+16.5 373.5 m
+(  $margin $margin m) show
+16.5 368.5 m
+(  $margin $bigH lineto) show
+16.5 363.5 m
+(  $bigW $bigH lineto) show
+16.5 358.5 m
+(  $bigW $margin lineto) show
+16.5 353.5 m
+(  closepath) show
+16.5 348.5 m
+(  stroke) show
+16.5 343.5 m
+(} def) show
+16.5 338.5 m
+() show
+16.5 333.5 m
+(/drawboxLand) show
+16.5 328.5 m
+({) show
+16.5 323.5 m
+(  1 setlinewidth) show
+16.5 318.5 m
+(  newpath) show
+16.5 313.5 m
+(  $margin  $margin m) show
+16.5 308.5 m
+(  $bigH  $margin lineto) show
+16.5 303.5 m
+(  $bigH $bigW lineto) show
+16.5 298.5 m
+(  $margin $bigW lineto) show
+16.5 293.5 m
+(  closepath) show
+16.5 288.5 m
+(  stroke) show
+16.5 283.5 m
+(} def\\n";) show
+16.5 278.5 m
+() show
+16.5 273.5 m
+($otherCommands = ") show
+16.5 268.5 m
+(/m { moveto } def) show
+16.5 263.5 m
+(/s { show } def\\n\\n";) show
+16.5 258.5 m
+() show
+16.5 253.5 m
+($colorCommands = ") show
+16.5 248.5 m
+(/red {1.0 0.0 0.0 setrgbcolor} def) show
+16.5 243.5 m
+(/blue {0.0 0.0 1.0 setrgbcolor} def) show
+16.5 238.5 m
+(/green {0.0 1.0 0.0 setrgbcolor} def) show
+16.5 233.5 m
+(/black {0.0 0.0 0.0 setrgbcolor} def\\n";) show
+16.5 228.5 m
+() show
+16.5 223.5 m
+($fontCommands = "/cour) show
+16.5 218.5 m
+({ /fontsize exch def) show
+16.5 213.5 m
+(  /Courier findfont    \% Get the basic font) show
+16.5 208.5 m
+(  fontsize scalefont   \% Scale the font to 'fontsize' points) show
+16.5 203.5 m
+(  setfont              \% Make it the current font) show
+16.5 198.5 m
+(} def) show
+16.5 193.5 m
+() show
+16.5 188.5 m
+(/courb) show
+16.5 183.5 m
+({ /fontsize exch def) show
+16.5 178.5 m
+(  /Courier-Bold findfont) show
+16.5 173.5 m
+(  fontsize scalefont) show
+16.5 168.5 m
+(  setfont) show
+16.5 163.5 m
+(} def) show
+16.5 158.5 m
+() show
+16.5 153.5 m
+(/couri) show
+16.5 148.5 m
+({ /fontsize exch def) show
+16.5 143.5 m
+(  /Courier-Oblique findfont) show
+16.5 138.5 m
+(  fontsize scalefont) show
+16.5 133.5 m
+(  setfont) show
+16.5 128.5 m
+(} def) show
+16.5 123.5 m
+() show
+16.5 118.5 m
+(/courbi) show
+16.5 113.5 m
+({ /fontsize exch def) show
+16.5 108.5 m
+(  /Courier-BoldOblique findfont) show
+16.5 103.5 m
+(  fontsize scalefont) show
+16.5 98.5 m
+(  setfont) show
+16.5 93.5 m
+(} def\\n";) show
+16.5 88.5 m
+(}) show
+16.5 83.5 m
+() show
+16.5 78.5 m
+(sub startDocument {) show
+16.5 73.5 m
+(    if \($landscape\) {) show
+16.5 68.5 m
+(        print "$startLand\\n";) show
+16.5 63.5 m
+(    } else {) show
+16.5 58.5 m
+(        print "$startPort\\n";) show
+16.5 53.5 m
+(    }) show
+16.5 48.5 m
+(    print "$colorCommands\\n$drawBoxCommands\\n$fontCommands\\n$otherCommands\\n";) show
+16.5 43.5 m
+(}) show
+16.5 38.5 m
+() show
+16.5 33.5 m
+(sub startPage {) show
+16.5 28.5 m
+(    my \($useColumns\) = @_;) show
+16.5 23.5 m
+(    if \($useColumns && \(1 != $curColumn\)\) {) show
+16.5 18.5 m
+(        $linesPrinted = 0;) show
+newpath
+269 15 m
+269 597 lineto
+stroke
+269.5 588.5 m
+(        my $colOffset = $margin + \($realWidth / $columns\) * \($curColumn - 1\);) show
+269.5 583.5 m
+(        #$curWidth = $colOffset + 0.5 * $fontWidth; # fix this) show
+269.5 578.5 m
+(        $curWidth = $colOffset + \($realWidth - $pointWide\) / \(2 * $columns\);) show
+269.5 573.5 m
+(        $useWide = $numWide;) show
+269.5 568.5 m
+(        if \($printLineNumbers\) {) show
+269.5 563.5 m
+(            my $maxline = $lineNum + $numHigh + 2;) show
+269.5 558.5 m
+(            $numDigits = int \(log\($maxline\)/log\(10\)\) + 1;) show
+269.5 553.5 m
+(            if \($numDigits < 3\) {) show
+269.5 548.5 m
+(                $numDigits = 3;) show
+269.5 543.5 m
+(            }) show
+269.5 538.5 m
+(            $widthNumbers = \($numDigits + 0.5\) * $fontWidth;) show
+269.5 533.5 m
+(            $useWide = $numWide - $numDigits - 1;) show
+269.5 528.5 m
+(            $curWidth += \($numDigits + 1\) * $fontWidth;) show
+269.5 523.5 m
+(            # now draw grey box) show
+269.5 518.5 m
+(            $lowX = $colOffset;) show
+269.5 513.5 m
+(            $uppX = $colOffset + $widthNumbers;) show
+269.5 508.5 m
+(            $lowY = $margin;) show
+269.5 503.5 m
+(            $uppY = $ABSheight - $margin;) show
+269.5 498.5 m
+(            print "0 setlinewidth\\n";) show
+269.5 493.5 m
+(            print "$greycolor setgray\\n";) show
+269.5 488.5 m
+(            print "newpath\\n$lowX $lowY m\\n$lowX $uppY lineto\\n";) show
+269.5 483.5 m
+(            print "$uppX $uppY lineto\\n$uppX $lowY lineto\\nclosepath\\nfill\\n";) show
+269.5 478.5 m
+(            print "0 setgray\\n";) show
+269.5 473.5 m
+(            print "newpath\\n$lowX $lowY m\\n$lowX $uppY lineto\\n";) show
+269.5 468.5 m
+(            print "$uppX $uppY lineto\\n$uppX $lowY lineto\\nclosepath\\nstroke\\n";) show
+269.5 463.5 m
+(        } else {) show
+269.5 458.5 m
+(            # if we're not displaying numbers, draw a line) show
+269.5 453.5 m
+(            $lowY = $margin;) show
+269.5 448.5 m
+(            $uppY = $ABSheight - $margin;) show
+269.5 443.5 m
+(            print "newpath\\n$colOffset $lowY m\\n$colOffset $uppY lineto\\nstroke\\n";) show
+269.5 438.5 m
+(        }) show
+269.5 433.5 m
+(            return;) show
+269.5 428.5 m
+(    }) show
+269.5 423.5 m
+(    print "\%\%Page: $pageNum $pageNum\\ngsave\\n";) show
+269.5 418.5 m
+(    print "0 -$translate translate\\n" if \($translate\);) show
+269.5 413.5 m
+(    # rotate world if necessary) show
+269.5 408.5 m
+(    print "rotateWorld\\n" if \($landscape\);) show
+269.5 403.5 m
+(    # print line number box) show
+269.5 398.5 m
+(    if \($printLineNumbers\) {) show
+269.5 393.5 m
+(        my $maxline = $lineNum + $numHigh + 2;) show
+269.5 388.5 m
+(        $numDigits = int \(log\($maxline\)/log\(10\)\) + 1;) show
+269.5 383.5 m
+(        if \($numDigits < 3\) {) show
+269.5 378.5 m
+(            $numDigits = 3;) show
+269.5 373.5 m
+(        }) show
+269.5 368.5 m
+(        $widthNumbers = \($numDigits + 0.5\) * $fontWidth;) show
+269.5 363.5 m
+(        $useWide = $numWide - $numDigits - 1;) show
+269.5 358.5 m
+(        $curWidth = $startWidth + \($numDigits + 1\) * $fontWidth;) show
+269.5 353.5 m
+(        # now draw grey box) show
+269.5 348.5 m
+(        $lowX = $margin;) show
+269.5 343.5 m
+(        $uppX = $margin + $widthNumbers;) show
+269.5 338.5 m
+(        $lowY = $margin;) show
+269.5 333.5 m
+(        $uppY = $ABSheight - $margin;) show
+269.5 328.5 m
+(        print "0 setlinewidth\\n";) show
+269.5 323.5 m
+(        print "$greycolor setgray\\n";) show
+269.5 318.5 m
+(        print "newpath\\n$lowX $lowY m\\n$lowX $uppY lineto\\n";) show
+269.5 313.5 m
+(        print "$uppX $uppY lineto\\n$uppX $lowY lineto\\nclosepath\\nfill\\n";) show
+269.5 308.5 m
+(        print "0 setgray\\n";) show
+269.5 303.5 m
+(        print "newpath\\n$lowX $lowY m\\n$lowX $uppY lineto\\n";) show
+269.5 298.5 m
+(        print "$uppX $uppY lineto\\n$uppX $lowY lineto\\nclosepath\\nstroke\\n";) show
+269.5 293.5 m
+(    }) show
+269.5 288.5 m
+(    print "$fontHeight cour\\n";) show
+269.5 283.5 m
+(    ++$pageNum;) show
+269.5 278.5 m
+(    ++$filePageNum;) show
+269.5 273.5 m
+(    $linesPrinted = 0;) show
+269.5 268.5 m
+(    # do we need to figure out how many columns for numbers?) show
+269.5 263.5 m
+(    if \($printHeaders\) {) show
+269.5 258.5 m
+(        # now draw header box) show
+269.5 253.5 m
+(        $lowX = $margin;) show
+269.5 248.5 m
+(        $uppX = $ABSwidth - $margin;) show
+269.5 243.5 m
+(        $lowY = $ABSheight - $margin - 2 * $fontHeight;) show
+269.5 238.5 m
+(        $uppY = $ABSheight - $margin;) show
+269.5 233.5 m
+(        print "/printHeader\\n{\\n";) show
+269.5 228.5 m
+(        print "\% Start header\\n";) show
+269.5 223.5 m
+(        print "$greycolor setgray\\n";) show
+269.5 218.5 m
+(        print "newpath\\n$lowX $lowY m\\n$lowX $uppY lineto\\n";) show
+269.5 213.5 m
+(        print "$uppX $uppY lineto\\n$uppX $lowY lineto\\nclosepath\\nfill\\n";) show
+269.5 208.5 m
+(        print "0 setgray\\n";) show
+269.5 203.5 m
+(        print "newpath\\n$lowX $lowY m\\n$lowX $uppY lineto\\n";) show
+269.5 198.5 m
+(        print "$uppX $uppY lineto\\n$uppX $lowY lineto\\nclosepath\\nstroke\\n";) show
+269.5 193.5 m
+(        print "\% Stop header\\n";) show
+269.5 188.5 m
+(        # print file name in the middle) show
+269.5 183.5 m
+(        $curHeight = $startHeight =) show
+269.5 178.5 m
+(            $ABSheight - $heightOffset - \(2 * $fontHeight\);) show
+269.5 173.5 m
+(        $numHigh = int \($realHeight / $fontHeight - 1\) - 2;) show
+269.5 168.5 m
+(        my $startX = $ABSwidth / 2 - $fontWidth * length\($filename\);) show
+269.5 163.5 m
+(        my $startY = $ABSheight - $margin - $fontHeight * 1.5;) show
+269.5 158.5 m
+(        print \(\(2*$fontHeight\)." courb\\n$startX $startY m \($filename\) s\\n"\);) show
+269.5 153.5 m
+(        print "$fontHeight courb\\n";) show
+269.5 148.5 m
+(        # print date on the left) show
+269.5 143.5 m
+(        $startX = $margin + $fontWidth;) show
+269.5 138.5 m
+(        print "$startX $startY m\\n \($date\) s\\n";) show
+269.5 133.5 m
+(        # print page number on the right) show
+269.5 128.5 m
+(        $nicePage = "Page $filePageNum";) show
+269.5 123.5 m
+(        $startX = $ABSwidth - $margin - $fontWidth * \(length \($nicePage\) + 1\);) show
+269.5 118.5 m
+(        print "$startX $startY m\\n \($nicePage\) s\\n";) show
+269.5 113.5 m
+(        print "$fontHeight cour\\n";) show
+269.5 108.5 m
+(        print "} def\\n";) show
+269.5 103.5 m
+(    }) show
+269.5 98.5 m
+(}) show
+269.5 93.5 m
+() show
+269.5 88.5 m
+(sub endPage {) show
+269.5 83.5 m
+(    my \($useColumn\) = @_;) show
+269.5 78.5 m
+(    if \($useColumn && \($curColumn != $columns\)\) {) show
+269.5 73.5 m
+(        ++$curColumn;) show
+269.5 68.5 m
+(        return;) show
+269.5 63.5 m
+(    }) show
+269.5 58.5 m
+(    $curColumn = 1;) show
+269.5 53.5 m
+(    if \($landscape\) {) show
+269.5 48.5 m
+(        print "drawboxLand\\n\\n";) show
+269.5 43.5 m
+(    } else {) show
+269.5 38.5 m
+(        print "drawbox\\n\\n";) show
+269.5 33.5 m
+(    }) show
+269.5 28.5 m
+(    print "printHeader\\n" if \($printHeaders\);) show
+269.5 23.5 m
+(    print "showpage\\ngrestore\\n\\n";) show
+269.5 18.5 m
+(}) show
+newpath
+523 15 m
+523 597 lineto
+stroke
+523.5 588.5 m
+() show
+523.5 583.5 m
+(sub endDocument {) show
+523.5 578.5 m
+(    print "\%\%Trailer\\n\%end\\n\%\%EOF\\n\\n";) show
+523.5 573.5 m
+(}) show
+523.5 568.5 m
+() show
+523.5 563.5 m
+(sub removeTabs {) show
+523.5 558.5 m
+(    my \($string\) = @_;) show
+523.5 553.5 m
+(    my $retval = "";) show
+523.5 548.5 m
+(    my $pos = 0;) show
+523.5 543.5 m
+(    chomp $string;) show
+523.5 538.5 m
+(    my @chars = split //, $string;) show
+523.5 533.5 m
+(    foreach \(@chars\) {) show
+523.5 528.5 m
+(        if \(/\\t/\) {) show
+523.5 523.5 m
+(            $retval .= " " x \($tabs - \($pos \% $tabs\)\);) show
+523.5 518.5 m
+(            $pos += $tabs - \($pos \% $tabs\);) show
+523.5 513.5 m
+(            next;) show
+523.5 508.5 m
+(        }) show
+523.5 503.5 m
+(        ++$pos;) show
+523.5 498.5 m
+(        $retval .= $_;) show
+523.5 493.5 m
+(    }) show
+523.5 488.5 m
+(    return $retval;) show
+523.5 483.5 m
+(}) show
+523.5 478.5 m
+() show
+523.5 473.5 m
+(sub manyLines {) show
+523.5 468.5 m
+(    my \($line, $limit\) = @_;) show
+523.5 463.5 m
+(    my @retval = \(\);) show
+523.5 458.5 m
+(    while \(length\($line\) > $limit\) {) show
+523.5 453.5 m
+(        my $thisLine = substr $line, 0, $limit;) show
+523.5 448.5 m
+(        $line = substr $line, $limit;) show
+523.5 443.5 m
+(        push @retval, $thisLine;) show
+523.5 438.5 m
+(    }) show
+523.5 433.5 m
+(    push @retval, $line;) show
+523.5 428.5 m
+(    return @retval) show
+523.5 423.5 m
+(}) show
+523.5 418.5 m
+() show
+523.5 413.5 m
+(# I want to have one really long comment 1234567890123456789012345678901234567890123) show
+523.5 408.5 m
+(456789012345678901234567890123456789012345678901234567890123456789012345678901234567) show
+523.5 403.5 m
+(89012345678901234567890) show
+523.5 398.5 m
+() show
+523.5 393.5 m
+(sub printLine {) show
+523.5 388.5 m
+(    my \($line\) = @_;) show
+523.5 383.5 m
+(    $line =~ s/\\s+$//; # get rid of blank space at the end of lines) show
+523.5 378.5 m
+(    my @lines = manyLines \($line, $useWide\);) show
+523.5 373.5 m
+(    $first = "true";) show
+523.5 368.5 m
+(    foreach \(@lines\) {) show
+523.5 363.5 m
+(        if \($linesPrinted >= $numHigh\) {) show
+523.5 358.5 m
+(            endPage\($columns\);) show
+523.5 353.5 m
+(            startPage\($columns\);) show
+523.5 348.5 m
+(            $curHeight = $startHeight;) show
+523.5 343.5 m
+(        }) show
+523.5 338.5 m
+(        if \($first && $printLineNumbers\) {) show
+523.5 333.5 m
+(            my $numWidth = $startWidth - $fontWidth * 0.15;) show
+523.5 328.5 m
+(            if \($columns\) {) show
+523.5 323.5 m
+(                $numWidth += \($realWidth / $columns\) * \($curColumn - 1\);) show
+523.5 318.5 m
+(            }) show
+523.5 313.5 m
+(            my $digits = int \(log\($lineNum + 0.5\)/log\(10\)\) + 1;) show
+523.5 308.5 m
+(            my $prettyNum;) show
+523.5 303.5 m
+(            if \($numDigits > $digits\) {) show
+523.5 298.5 m
+(                $prettyNum = \(" " x \($numDigits - $digits\)\).$lineNum;) show
+523.5 293.5 m
+(            } else {) show
+523.5 288.5 m
+(                $prettyNum = $lineNum;) show
+523.5 283.5 m
+(            }) show
+523.5 278.5 m
+(            print "$numWidth $curHeight m\\n\($prettyNum\) show\\n";) show
+523.5 273.5 m
+(        }) show
+523.5 268.5 m
+(        $first = "";) show
+523.5 263.5 m
+(        # deal with special characters) show
+523.5 258.5 m
+(        s|\\\\|\\\\\\\\|g; # \\ -> \\\\) show
+523.5 253.5 m
+(        s|\\\(|\\\\\(|g;  # \( -> \\\() show
+523.5 248.5 m
+(        s|\\\)|\\\\\)|g;  # \) -> \\\)) show
+523.5 243.5 m
+(        s|\%|\\\\\%|g;   # \% -> \\\%) show
+523.5 238.5 m
+(        print "$curWidth $curHeight m\\n";) show
+523.5 233.5 m
+(        print "\($_\) show\\n";) show
+523.5 228.5 m
+(        $curHeight -= $fontHeight;) show
+523.5 223.5 m
+(        ++$linesPrinted;) show
+523.5 218.5 m
+(    }) show
+523.5 213.5 m
+(}) show
+523.5 208.5 m
+() show
+523.5 203.5 m
+(sub initVariables{) show
+523.5 198.5 m
+(    $realHeight = $ABSheight - 2 * $margin;) show
+523.5 193.5 m
+(    $realWidth = $ABSwidth - 2 * $margin;) show
+523.5 188.5 m
+(    $fontWidth  = $fontHeight * 0.6;) show
+523.5 183.5 m
+(    $useWide = $numWide = int \($realWidth  / $fontWidth - 1\);) show
+523.5 178.5 m
+(    $numHigh = int \($realHeight / $fontHeight - 1\);) show
+523.5 173.5 m
+(    $pointWide = $numWide * $fontWidth;) show
+523.5 168.5 m
+(    $pointHigh = $numHigh * $fontHeight;) show
+523.5 163.5 m
+(    $heightOffset = $margin + \($realHeight - $pointHigh\) / 2 + $fontHeight;) show
+523.5 158.5 m
+(    $startHeight = $ABSheight - $heightOffset;) show
+523.5 153.5 m
+(    $startWidth  = $margin + \($realWidth - $pointWide\) / 2;) show
+523.5 148.5 m
+(    $curHeight = $startHeight;) show
+523.5 143.5 m
+(    $curWidth = $startWidth;) show
+523.5 138.5 m
+(}) show
+523.5 133.5 m
+() show
+523.5 128.5 m
+(##################) show
+523.5 123.5 m
+(## Main Program ##) show
+523.5 118.5 m
+(##################) show
+523.5 113.5 m
+() show
+523.5 108.5 m
+($pageNum = 1;) show
+523.5 103.5 m
+($tabs = 4;) show
+523.5 98.5 m
+($ABSheight = 792;) show
+523.5 93.5 m
+($ABSwidth  = 612;) show
+523.5 88.5 m
+($fontHeight = 10;) show
+523.5 83.5 m
+($lineNum = 0;) show
+523.5 78.5 m
+($greycolor = 0.9;) show
+523.5 73.5 m
+($margin = 15;) show
+523.5 68.5 m
+($translate = 0;) show
+523.5 63.5 m
+(#default settings) show
+523.5 58.5 m
+($columns = 0; # I suppose it should be 1, but 0 tests differently) show
+523.5 53.5 m
+($printHeaders = "true";) show
+523.5 48.5 m
+($printLineNumbers = "true";) show
+523.5 43.5 m
+($landscape = ""; # false) show
+523.5 38.5 m
+() show
+523.5 33.5 m
+($help = "$0 -options file1.txt ...) show
+523.5 28.5 m
+(Options:) show
+523.5 23.5 m
+(-f N    Use font N points high \($fontHeight default\)) show
+523.5 18.5 m
+(-h      This help screen) show
+drawboxLand
+
+showpage
+grestore
+
+%%Page: 2 2
+gsave
+rotateWorld
+5 cour
+523.5 588.5 m
+(-l      Landscape mode) show
+523.5 583.5 m
+(-m N    Use a margin of N points) show
+523.5 578.5 m
+(-p      Portrait mode) show
+523.5 573.5 m
+(-n      With line numbers) show
+523.5 568.5 m
+(-nh     No headers) show
+523.5 563.5 m
+(-nn     No line numbers) show
+523.5 558.5 m
+(-wh     With headers) show
+523.5 553.5 m
+(";) show
+523.5 548.5 m
+() show
+523.5 543.5 m
+() show
+523.5 538.5 m
+() show
+523.5 533.5 m
+(# get arguments) show
+523.5 528.5 m
+(while \($ARGV[0] =~ /^-/\) {) show
+523.5 523.5 m
+(    $_ = $';) show
+523.5 518.5 m
+(    shift @ARGV;) show
+523.5 513.5 m
+(    # landscape) show
+523.5 508.5 m
+(    if \(/^l/i\) {) show
+523.5 503.5 m
+(        #landscape mode) show
+523.5 498.5 m
+(        $landscape = "true";) show
+523.5 493.5 m
+(        next;) show
+523.5 488.5 m
+(    }) show
+523.5 483.5 m
+(    # portrait) show
+523.5 478.5 m
+(    if \(/^p/i\) {) show
+523.5 473.5 m
+(        #portrait mode) show
+523.5 468.5 m
+(        $landscape = "";) show
+523.5 463.5 m
+(        next;) show
+523.5 458.5 m
+(    }) show
+523.5 453.5 m
+(    # font size) show
+523.5 448.5 m
+(    if \(/^f/i\) {) show
+523.5 443.5 m
+(        if \($' =~ /\([\\d\\.]+\)/\) {) show
+523.5 438.5 m
+(            $fontHeight = $1;) show
+523.5 433.5 m
+(        } elsif \($ARGV[0] =~ /^[\\d\\.]+$/\) {) show
+523.5 428.5 m
+(            $fontHeight = shift @ARGV;) show
+523.5 423.5 m
+(        }) show
+523.5 418.5 m
+(        next;) show
+523.5 413.5 m
+(    }) show
+523.5 408.5 m
+(    # margin) show
+523.5 403.5 m
+(    if \(/^m/i\) {) show
+523.5 398.5 m
+(        if \($' =~ /\([\\d\\.]+\)/\) {) show
+523.5 393.5 m
+(            $margin = $1;) show
+523.5 388.5 m
+(        } elsif \($ARGV[0] =~ /^[\\d\\.]+$/\) {) show
+523.5 383.5 m
+(            $margin = shift @ARGV;) show
+523.5 378.5 m
+(        }) show
+523.5 373.5 m
+(        next;) show
+523.5 368.5 m
+(    }) show
+523.5 363.5 m
+(    if \(/^c/i\) {) show
+523.5 358.5 m
+(        $columns = 2;) show
+523.5 353.5 m
+(        if \($' =~ /\(\\d+\)/\) {) show
+523.5 348.5 m
+(            $columns = $1;) show
+523.5 343.5 m
+(        } elsif \($ARGV[0] =~ /^\\d+$/\) {) show
+523.5 338.5 m
+(            $columns = shift @ARGV;) show
+523.5 333.5 m
+(        }) show
+523.5 328.5 m
+(        next;) show
+523.5 323.5 m
+(    }) show
+523.5 318.5 m
+(    # absolute height) show
+523.5 313.5 m
+(    if \(/^ah/i\) {) show
+523.5 308.5 m
+(        # 820 for 2up) show
+523.5 303.5 m
+(        if \($' =~ /\(\\d+\)/\) {) show
+523.5 298.5 m
+(            $ABSheight = $1;) show
+523.5 293.5 m
+(        } elsif \($ARGV[0] =~ /^\\d+$/\) {) show
+523.5 288.5 m
+(            $ABSheight = shift @ARGV;) show
+523.5 283.5 m
+(        }) show
+523.5 278.5 m
+(        next;) show
+523.5 273.5 m
+(    }) show
+523.5 268.5 m
+(    # absolute width) show
+523.5 263.5 m
+(    if \(/^aw/i\) {) show
+523.5 258.5 m
+(        if \($' =~ /\(\\d+\)/\) {) show
+523.5 253.5 m
+(            $ABSwidth = $1;) show
+523.5 248.5 m
+(        } elsif \($ARGV[0] =~ /^\\d+$/\) {) show
+523.5 243.5 m
+(            $ABSwidth = shift @ARGV;) show
+523.5 238.5 m
+(        }) show
+523.5 233.5 m
+(        next;) show
+523.5 228.5 m
+(    }) show
+523.5 223.5 m
+(    # Translate) show
+523.5 218.5 m
+(    if \(/^tr/i\) {) show
+523.5 213.5 m
+(        # 15 for 2up) show
+523.5 208.5 m
+(        if \($' =~ /\(\\d+\)/\) {) show
+523.5 203.5 m
+(            $translate = $1;) show
+523.5 198.5 m
+(        } elsif \($ARGV[0] =~ /^\\d+$/\) {) show
+523.5 193.5 m
+(            $translate = shift @ARGV;) show
+523.5 188.5 m
+(        }) show
+523.5 183.5 m
+(        next;) show
+523.5 178.5 m
+(    }) show
+523.5 173.5 m
+(    # no headers) show
+523.5 168.5 m
+(    if \(/^nh/i\) {) show
+523.5 163.5 m
+(        $printHeaders = "";) show
+523.5 158.5 m
+(        next;) show
+523.5 153.5 m
+(    }) show
+523.5 148.5 m
+(    # with headers) show
+523.5 143.5 m
+(    if \(/^wh/i\) {) show
+523.5 138.5 m
+(        $printHeaders = "true";) show
+523.5 133.5 m
+(        next;) show
+523.5 128.5 m
+(    }) show
+523.5 123.5 m
+(    # don't print line numbers) show
+523.5 118.5 m
+(    if \(\(/^nn/i\) || \(/^n0/i\)\) {) show
+523.5 113.5 m
+(        $printLineNumbers = "";) show
+523.5 108.5 m
+(        next;) show
+523.5 103.5 m
+(    }) show
+523.5 98.5 m
+(    # print line numbers) show
+523.5 93.5 m
+(    if \(/^n/i\) {) show
+523.5 88.5 m
+(        $printLineNumbers = "true";) show
+523.5 83.5 m
+(        next;) show
+523.5 78.5 m
+(    }) show
+523.5 73.5 m
+(    # Tabs) show
+523.5 68.5 m
+(    if \(/^t/i\) {) show
+523.5 63.5 m
+(        if \($' =~ /\(\\d+\)/\) {) show
+523.5 58.5 m
+(            $tabs = $1;) show
+523.5 53.5 m
+(        } elsif \($ARGV[0] =~ /^\\d+$/\) {) show
+523.5 48.5 m
+(            $tabs = shift @ARGV;) show
+523.5 43.5 m
+(        }) show
+523.5 38.5 m
+(        next;) show
+523.5 33.5 m
+(    }) show
+523.5 28.5 m
+(    # help) show
+523.5 23.5 m
+(    if \(/^h/i\) {) show
+523.5 18.5 m
+(        print STDERR $help;) show
+newpath
+269 15 m
+269 597 lineto
+stroke
+269.5 588.5 m
+(        exit;) show
+269.5 583.5 m
+(    }) show
+269.5 578.5 m
+(    print STDERR "Unknown option $_\\n";) show
+269.5 573.5 m
+(}) show
+269.5 568.5 m
+() show
+269.5 563.5 m
+() show
+269.5 558.5 m
+(if \($landscape\) {) show
+269.5 553.5 m
+(    \($ABSheight, $ABSwidth\) = \($ABSwidth, $ABSheight\)) show
+269.5 548.5 m
+(}) show
+269.5 543.5 m
+(setupConstants\(\);) show
+269.5 538.5 m
+(initVariables\(\);) show
+269.5 533.5 m
+(startDocument\(\);) show
+269.5 528.5 m
+() show
+269.5 523.5 m
+(# reset the number wide if we are using columns) show
+269.5 518.5 m
+(if \($columns\) {) show
+269.5 513.5 m
+(    $numWide = int \($numWide / $columns\);) show
+269.5 508.5 m
+(}) show
+269.5 503.5 m
+() show
+269.5 498.5 m
+(foreach $filename \(@ARGV\) {) show
+269.5 493.5 m
+(    $start = $stop = 0;) show
+269.5 488.5 m
+(    if \($filename =~ /:\(\\d+\),?\(\\d*\)$/\) {) show
+269.5 483.5 m
+(        $filename = $`;) show
+269.5 478.5 m
+(        $start = $1;) show
+269.5 473.5 m
+(        $stop = $2;) show
+269.5 468.5 m
+(    }) show
+269.5 463.5 m
+(    if \(! -e $filename\) {) show
+269.5 458.5 m
+(        warn "Can't find $filename.  Sorry\\n";) show
+269.5 453.5 m
+(        next;) show
+269.5 448.5 m
+(    }) show
+269.5 443.5 m
+(    if \($printHeaders\) {) show
+269.5 438.5 m
+(        chomp \($line = `ls -l $filename`\);) show
+269.5 433.5 m
+(        @parts = split /\\s+/, $line;) show
+269.5 428.5 m
+(        $date = "@parts[5..7]";) show
+269.5 423.5 m
+(    }) show
+269.5 418.5 m
+(    open \(SOURCE, $filename\) or warn "Couldn't open $filename\\n", next;) show
+269.5 413.5 m
+(    $filename =~ s|.*/||g;) show
+269.5 408.5 m
+(    if \($start\) {) show
+269.5 403.5 m
+(        $filename .= ":$start..";) show
+269.5 398.5 m
+(        if \($stop\) {) show
+269.5 393.5 m
+(            $filename .= $stop;) show
+269.5 388.5 m
+(        }) show
+269.5 383.5 m
+(    }) show
+269.5 378.5 m
+(    $lineNum = 0;) show
+269.5 373.5 m
+(    $filePageNum = 0;) show
+269.5 368.5 m
+(    $curColumn = 1;) show
+269.5 363.5 m
+(    startPage\(\);) show
+269.5 358.5 m
+(    while \(<SOURCE>\) {) show
+269.5 353.5 m
+(        ++$lineNum;) show
+269.5 348.5 m
+(        if \(\($start && \(\($lineNum < $start\)\)\) ||) show
+269.5 343.5 m
+(            \($stop &&  \(\($lineNum > $stop\)\)\)\) {) show
+269.5 338.5 m
+(            next;) show
+269.5 333.5 m
+(        }) show
+269.5 328.5 m
+(        chomp;) show
+269.5 323.5 m
+(        printLine \( removeTabs\($_\) \);) show
+269.5 318.5 m
+(    }) show
+269.5 313.5 m
+(    endPage\(\);) show
+269.5 308.5 m
+(}) show
+269.5 303.5 m
+() show
+269.5 298.5 m
+(endDocument\(\);) show
+drawboxLand
+
+showpage
+grestore
+
+%%Trailer
+%end
+%%EOF
+

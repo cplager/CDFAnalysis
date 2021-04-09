@@ -1,0 +1,40 @@
+#!/usr/bin/env perl
+
+$printdir = "temp/print";
+$target = "fcdflnx4";
+@names = ();
+$args = "";
+if (@ARGV && $ARGV[0] =~ /^-user/i) {
+    shift @ARGV;
+    my $user = shift @ARGV;
+    $target = "$user\@$target";
+}
+foreach $file (@ARGV) {
+	if ($file =~ /^-/) {
+		$args .= "$file ";
+	} else {
+        if ($file =~ /(\:\d+,\d*)/) {
+            $file = $`;
+            $ending = $1;
+        } else {
+            $ending = "";
+        }
+        if (($file =~ m|([^/]+)$|) && (-e $file)) {
+            push @names, "$printdir/$1$ending";
+            push @sources, $file;
+            #system "scp $file $target:$printdir/$1"; 
+        }
+	}
+}
+
+#die "No files to print\n"  unless @sources;
+if (@sources) {
+    print "copying @sources\n";
+    system "scp @sources $target:$printdir/";
+}
+die "Usage: $0 file1 ...\n" unless (@names || $args);
+$command = "ssh $target \"~cplager/bin/nprnt $args @names\"";
+if (@names) {
+    $command .= ";rm -rf @names";
+}
+system $command;

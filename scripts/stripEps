@@ -1,0 +1,100 @@
+#!/usr/bin/env perl
+
+$version = "stripEps v1.0 cplager\@uiuc.edu 010327";
+$uniqueName = "/cdf/home/cplager/bin/uniqueName";
+die "Usage: $0 file.ps\n$version\n" unless (@ARGV);
+
+# look through arguments
+while ($_ = shift @ARGV) {
+	if (/^-/) {
+		# this is an argument
+		next;
+	} else {
+		# this is a file name
+		# does this file name exist
+		if (-e $_) {
+			#does the filename suggest that it is postscript
+			if (/ps$/i) {
+				# lets add it on the list
+				push @files, $_;
+			}  else { # if ps
+				warn "$_ does not have a .(e)ps ending. Skipping this file.\n";
+			}
+		} else { # if -e
+			warn "Can not find file $_.  Continuing...\n";
+		}
+	} # else if ^-
+} #ARGV
+
+foreach (@files) {
+	open (SOURCE, $_) or next;
+	($short) = m|([^/]+)$|;
+	if ($short =~ /\.\w+/) {
+		$prefix = $`;
+		if (length $prefix) {
+			$short = $prefix;
+		}
+	}
+	if ($ENV{PWD}) {
+		$pwd = $ENV{PWD};
+	} else {
+		$pwd = `pwd`;
+		chomp $pwd;
+	}
+	$dir = `$uniqueName $pwd $short`;
+	chomp $dir;
+	print "Creating directory $dir\n";
+	system "mkdir $dir";
+	$begins = 0;
+	while (<SOURCE>) {
+		# %%EndDocument
+		if (/^\%\%EndDocument/) {
+			if ($begins > 1) {
+				# this is not the real end document, keep going
+				print TARGET;
+				--$begins;
+			} else {
+				# this is it, let's close up this file and get out
+				close (TARGET);
+				$begins = 0;
+			}
+			next;
+		}
+		# %%BeginDocument
+		if (/^\%\%BeginDocument\:?\s*/) {
+			$rest = $';
+			# is this the first
+			if ($begins) {
+				++$begins;
+				next;
+			}
+			# o.k., this is the first.  Lets go.
+			# lets look for a name
+			chomp $rest;
+			if ($rest =~ m|([^/]*)$|) {
+				$name = $1;
+			} else {
+				$name = "unknown.eps";
+			}
+			# lets make sure this name doesn't already
+			# exist in our directory
+			if (-e "$dir/$name") {
+				# phooey
+				$fullname = `$uniqueName $dir $name`;
+				chomp $fullname;
+			} else {
+				# now this is mroe like it
+				$fullname = "$dir/$name";
+			}
+			open (TARGET, ">$fullname") or 
+				die "Can't open $fullname for output\n";
+			print "Extracting $name\n";
+			$begins = 1;
+			next;
+		}
+		if ($begins) {
+			print TARGET;
+		}
+	}
+	close (SOURCE);
+} # foreach files

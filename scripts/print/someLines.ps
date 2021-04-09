@@ -1,0 +1,214 @@
+%!PS-Adobe-2.0
+%%Creator: text2ps v1.0 (cplager@uiuc.edu) 010719
+%%Pages: (atend)
+%%PageOrder: Ascending
+%%BoundingBox: 0 -0 612 792
+%%EndComments
+
+
+/red {1.0 0.0 0.0 setrgbcolor} def
+/blue {0.0 0.0 1.0 setrgbcolor} def
+/green {0.0 1.0 0.0 setrgbcolor} def
+/black {0.0 0.0 0.0 setrgbcolor} def
+
+/rotateWorld
+{
+  306 396 translate
+  90 rotate 
+  -396 -306 translate
+} def
+
+/drawbox 
+{
+  1 setlinewidth
+  newpath
+  15 15 m 
+  15 777 lineto
+  597 777 lineto
+  597 15 lineto
+  closepath
+  stroke
+} def
+
+/drawboxLand 
+{
+  1 setlinewidth
+  newpath
+  15  15 m 
+  777  15 lineto
+  777 597 lineto
+  15 597 lineto
+  closepath
+  stroke
+} def
+
+/cour 
+{ /fontsize exch def
+  /Courier findfont	   % Get the basic font
+  fontsize scalefont   % Scale the font to 'fontsize' points
+  setfont			   % Make it the current font
+} def
+
+/courb 
+{ /fontsize exch def
+  /Courier-Bold findfont
+  fontsize scalefont	
+  setfont			    
+} def
+
+/couri 
+{ /fontsize exch def
+  /Courier-Oblique findfont
+  fontsize scalefont		
+  setfont			
+} def
+
+/courbi 
+{ /fontsize exch def
+  /Courier-BoldOblique findfont	
+  fontsize scalefont	
+  setfont			
+} def
+
+
+/m { moveto } def
+/s { show } def
+
+
+%%Page: 1 1
+gsave
+0 setlinewidth
+0.9 setgray
+newpath
+15 15 m
+15 777 lineto
+36 777 lineto
+36 15 lineto
+closepath
+fill
+0 setgray
+newpath
+15 15 m
+15 777 lineto
+36 777 lineto
+36 15 lineto
+closepath
+stroke
+10 cour
+/printHeader
+{
+% Start header
+0.9 setgray
+newpath
+15 757 m
+15 777 lineto
+597 777 lineto
+597 757 lineto
+closepath
+fill
+0 setgray
+newpath
+15 757 m
+15 777 lineto
+597 777 lineto
+597 757 lineto
+closepath
+stroke
+% Stop header
+20 courb
+252 762 m (someLines) s
+10 courb
+21 762 m
+ (Nov 2 19:40) s
+555 762 m
+ (Page 1) s
+10 cour
+} def
+17.1 741 m
+(  1) show
+42 741 m
+(#!/usr/local/bin/perl -w) show
+17.1 731 m
+(  2) show
+42 731 m
+(die "Usage: $0 start \(finish\)\\n" unless \(@ARGV\);) show
+17.1 721 m
+(  3) show
+42 721 m
+($start = $ARGV[0];) show
+17.1 711 m
+(  4) show
+42 711 m
+(if \(@ARGV >= 2\) {) show
+17.1 701 m
+(  5) show
+42 701 m
+(    $finish = $ARGV[1];) show
+17.1 691 m
+(  6) show
+42 691 m
+(} else {) show
+17.1 681 m
+(  7) show
+42 681 m
+(    $finish = 1e6;) show
+17.1 671 m
+(  8) show
+42 671 m
+(}) show
+17.1 661 m
+(  9) show
+42 661 m
+() show
+17.1 651 m
+( 10) show
+42 651 m
+red
+(# one really really really) show
+black
+( really really really really really really really really really re) show
+black
+42 641 m
+(ally really really really really really long line.) show
+17.1 631 m
+( 11) show
+42 631 m
+() show
+17.1 621 m
+( 12) show
+42 621 m
+($count = 1;) show
+17.1 611 m
+( 13) show
+42 611 m
+(while \(<STDIN>\) {) show
+17.1 601 m
+( 14) show
+42 601 m
+(    if \(\($count >= $start\) && \($count <= $finish\)\) {) show
+17.1 591 m
+( 15) show
+42 591 m
+(        print;) show
+17.1 581 m
+( 16) show
+42 581 m
+(    }) show
+17.1 571 m
+( 17) show
+42 571 m
+(    ++$count;) show
+17.1 561 m
+( 18) show
+42 561 m
+(}) show
+drawbox
+
+printHeader
+showpage
+grestore
+
+%%Trailer
+%end
+%%EOF
+

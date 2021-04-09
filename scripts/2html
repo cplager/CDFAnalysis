@@ -1,0 +1,99 @@
+#!/usr/bin/env perl
+
+use lib '/cdf/home/cplager/bin/print';
+use Coloring;
+
+$bin_dir = "/cdf/home/cplager/bin/print";
+
+# Just to make life easier
+$special = $Coloring::special;
+$start   = $Coloring::start;
+$end     = $Coloring::end;
+$finish  = $Coloring::finish;
+$stringStart ="$special$start$Coloring::string";
+$stringEnd ="$special$end$Coloring::string";
+$preStart ="$special$start$Coloring::pre";
+$preEnd ="$special$end$Coloring::pre";
+$keyStart ="$special$start$Coloring::keyword";
+$keyEnd ="$special$end$Coloring::keyword";
+$commentStart ="$special$start$Coloring::comment";
+$commentEnd ="$special$end$Coloring::comment";
+
+# line number grouping
+$grouping = 5;
+
+# colors
+$pre_color     = '"#cc00cc"'; # preprocessor color
+$key_color     = '"#0000cc"'; # keyword color
+$string_color  = '"#cc0000"'; # string color
+$comment_color = '"#007700"'; # comment color
+
+# unlikely combination
+$spaceHolder = "__space__";
+
+# initialization
+($script_name = $0) =~ s|.+/||g;
+$title = "";
+while ($ARGV[0] =~ /^-/) {
+    $arg = shift @ARGV;
+    if ($arg =~ /^-verbose/i) {
+        $verbose = "true";
+    }
+    if ($arg =~ /^-t/i) {
+        $title = shift @ARGV;
+    }
+}
+
+foreach $file (@ARGV) {
+    print STDERR "$file " if ($verbose);
+    ($output = $file) =~ s|\.|_|g;
+    $output .= ".html";
+    open (TARGET, ">$output") or 
+        warn "Couldn't open $output for output\n", next;
+    my $type = typeOfFile($file);
+    if ($Coloring::perl eq $type) {
+        open (SOURCE, "$bin_dir/perlPreColor.pl $file|") or
+            warn "Couldn't do it, dude.\n", next;
+    } elsif ($Coloring::cplusplus eq $type) {
+        open (SOURCE, "$bin_dir/cPreColor.pl $file|") or
+            warn "Couldn't do it, dude.\n", next;
+    } else {
+        # Couldn't guess
+        open (SOURCE, $file) or warn "Couldn't open $file\n", next;
+    }
+    ($title = $file) =~ s|.+/||g;
+    ($header = $Coloring::HTMLheader) =~ s/$Coloring::spaceHolder/$title/g;
+    print TARGET "$header\n";
+    $lineNum = 0;
+    while (<SOURCE>) {
+        $which = int ($lineNum++ / $grouping);
+        # is which even or odd
+        if ($which / 2 == int ($which / 2)) {
+            # even
+            $class="flip1";
+        } else {
+            # odd
+            $class="flip2";
+        }
+        $prettyNum = sprintf "%4d", $lineNum;
+        chomp;
+        s|<|&lt;|g;
+        s|>|&gt;|g;
+        s|$stringStart\d+$finish|<font color=$string_color>|g;
+        s|$stringEnd\d+$finish|</font>|g;
+        s|$preStart\d+$finish|<font color=$pre_color>|g;
+        s|$preEnd\d+$finish|</font>|g;
+        s|$keyStart\d+$finish|<font color=$key_color><b>|g;
+        s|$keyEnd\d+$finish|</b></font>|g;
+        s|$commentStart\d+$finish|<font color=$comment_color><i>|g;
+        s|$commentEnd\d+$finish|</i></font>|g;
+        s/ /\&nbsp\;/g;
+        s/<([^>]*)&nbsp\;([^>]*)/<$1 $2/g;
+        print TARGET "<tr><td class=\"$class\">$prettyNum</td>".
+            "<td> $_</td></tr>\n";
+    }
+    chomp ($date = `date`);
+    print TARGET "</table></pre>\n\n<hr><address>Colored on $date</address></body>\n</html>\n";
+}
+
+print STDERR "\n" if ($verbose);

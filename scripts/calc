@@ -1,0 +1,25 @@
+#!/usr/bin/env perl
+
+$pi = 3.14159265358979323846;
+$e  = 2.71828182845904523536;
+
+if (@ARGV) {
+    $line = join(' ',@ARGV);
+    print eval $line,"\n";
+    exit;
+}
+use Term::ReadLine;
+
+$term = new Term::ReadLine "Simple perl Calc";
+$prompt = "Calc> ";
+$OUT = $term->OUT || STDOUT;
+
+print 
+    "Calc - simple command line calculator in Perl -- exit or ^D to exit\n";
+while (defined ($_ = $term->readline($prompt))) {
+    $ans = eval $_;
+    print $OUT $ans; 
+    ($@ && warn $@) || print $OUT "\n";
+}
+
+print "\n";

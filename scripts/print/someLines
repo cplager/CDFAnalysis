@@ -1,0 +1,18 @@
+#!/usr/local/bin/perl -w
+die "Usage: $0 start (finish)\n" unless (@ARGV);
+$start = $ARGV[0];
+if (@ARGV >= 2) {
+	$finish = $ARGV[1];
+} else {
+	$finish = 1e6;
+}
+
+# one really really really really really really really really really really really really really really really really really really long line.
+
+$count = 1;
+while (<STDIN>) {
+	if (($count >= $start) && ($count <= $finish)) {
+		print;
+	}
+	++$count;
+}

@@ -1,0 +1,47 @@
+#!/usr/bin/env perl
+
+use Tk;
+
+die "Usage: $0 title question starting value\n" unless (@ARGV >= 2);
+$title = shift @ARGV;
+$question = shift @ARGV;
+$title =~ s/_/ /g;
+$question =~ s/_/ /g;
+$answer = "@ARGV";
+
+$main = MainWindow->new(-bg => 'white',
+						-fg => 'black',
+						title => $title);
+$label = $main->Label(-text => $question)->pack(-side => 'top');
+$entry = $main->Entry(-bg => 'white',
+					  -fg => 'black',
+					  -selectforeground => 'white',
+					  -selectbackground => 'red',
+					  -width => 80,
+					  -textvariable => \$answer)->pack;
+
+$okButton = $main->Button(-text => "OK",
+						  -relief => 'flat',
+						  -borderwidth => 2,
+						  -width => 4,
+						  -takefocus => 1,
+						  -highlightthickness => 3,
+						  -background => 'white',
+						  -foreground => 'black',
+ 						  -activebackground => 'white',
+						  -activeforeground => 'red',
+						  -command => \&answer)->
+	pack (-side => 'bottom',
+		  -anchor => 'center',
+		  -padx => 5,
+		  -pady => 5);
+$entry->focus();
+$entry->icursor('end');
+$main->bind ('<Return>', \&answer);
+$main->bind ('<KP_Enter>', \&answer);
+MainLoop;
+
+sub answer {
+	print "$answer\n";
+	exit;
+}

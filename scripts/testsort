@@ -1,0 +1,16 @@
+#!/usr/bin/env perl
+
+sub bydot {
+	$numa = $numb = "";
+	if ($a =~ /\.(\d+)/) {
+		$numa = $1;
+	}
+	if ($b =~ /\.(\d+)/) {
+		$numb = $1;
+	}
+	$numa <=> $numb;
+}
+
+@array = ("a.31", "b.2", "c.5", "d.1");
+@sort = sort bydot @array;
+print "@sort\n";

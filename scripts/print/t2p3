@@ -1,0 +1,334 @@
+#!/usr/local/bin/perl -w
+$version = "text2ps v0.5 (cplager\@uiuc.edu)";
+
+$startLand = 
+"%!PS-Adobe-2.0
+%%Creator: $version
+%%Pages: (atend)
+%%PageOrder: Ascending
+%%Orientation: Landscape
+%%BoundingBox: 0 0 612 792
+%%EndComments\n";
+
+$startPort = 
+"%!PS-Adobe-2.0
+%%Creator: $version
+%%Pages: (atend)
+%%PageOrder: Ascending
+%%Orientation: Landscape
+%%BoundingBox: 0 0 612 792
+%%EndComments\n";
+
+$drawBoxCommands = 
+"/drawbox 
+{
+  0 setlinewidth
+   newpath
+   40  40 m 
+   40 752 lineto
+  572 752 lineto
+  572  40 lineto
+  closepath
+  stroke
+} def
+
+/drawboxLand 
+{
+  306 396 translate
+  90 rotate 
+  -396 -306 translate
+  0 setlinewidth
+   newpath
+   40  40 m 
+  752  40 lineto
+  752 572 lineto
+   40 572 lineto
+  closepath
+  stroke
+} def\n";
+
+$otherCommands = "
+/m { moveto } def
+/s { show } def\n\n";
+
+$colorCommands = "
+/red {1.0 0.0 0.0 setrgbcolor} def
+/blue {0.0 0.0 1.0 setrgbcolor} def
+/green {0.0 1.0 0.0 setrgbcolor} def
+/black {0.0 0.0 0.0 setrgbcolor} def\n";
+
+$fontCommands = "/cour 
+{ /fontsize exch def
+  /Courier findfont	   % Get the basic font
+  fontsize scalefont   % Scale the font to 'fontsize' points
+  setfont			   % Make it the current font
+} def
+
+/courb 
+{ /fontsize exch def
+  /Courier-Bold findfont
+  fontsize scalefont	
+  setfont			    
+} def
+
+/couri 
+{ /fontsize exch def
+  /Courier-Oblique findfont
+  fontsize scalefont		
+  setfont			
+} def
+
+/courbi 
+{ /fontsize exch def
+  /Courier-BoldOblique findfont	
+  fontsize scalefont	
+  setfont			
+} def\n";
+
+sub startDocument {
+	if ($landscape) {
+		print "$startLand\n";
+	} else {
+		print "$startPort\n";
+	}
+	print "$drawBoxCommands\n$colorCommands\n$fontCommands\n$otherCommands\n";
+}
+
+sub startPage {
+	print "%%Page: $pageNum $pageNum\ngsave\n";
+	if ($landscape) {
+		print "drawboxLand\n\n";
+	} else {
+		print "drawbox\n\n";
+	}
+	print "$fontHeight cour\n";
+	++$pageNum;
+	$linesPrinted = 0;
+	# do we need to figure out how many columns for numbers?
+	if ($printLineNumbers) {
+		my $maxline = $lineNum + $numHigh + 2;
+		$numDigits = int (log($maxline)/log(10)) + 1;
+		if ($numDigits < 3) {
+			$numDigits = 3;
+		}
+		$widthNumbers = ($numDigits + 0.5) * $fontWidth;
+		$useWide = $numWide - $numDigits - 1;
+		$curWidth = $startWidth + ($numDigits + 1) * $fontWidth;
+		# now draw grey box
+		$lowX = $margin;
+		$uppX = $margin + $widthNumbers;
+		$lowY = $margin;
+		$uppY = $ABSheight - $margin;
+		print "$greycolor setgray\n";
+		print "newpath\n$lowX $lowY m\n$lowX $uppY lineto\n";
+		print "$uppX $uppY lineto\n$uppX $lowY lineto\nclosepath\nfill\n";
+		print "0 setgray\n";
+		print "newpath\n$lowX $lowY m\n$lowX $uppY lineto\n";
+		print "$uppX $uppY lineto\n$uppX $lowY lineto\nclosepath\nstroke\n";
+	}
+	if ($printHeaders) {
+		# now draw header box
+		$lowX = $margin;
+		$uppX = $ABSwidth - $margin;
+		$lowY = $ABSheight - $margin - 2 * $fontHeight;
+		$uppY = $ABSheight - $margin;
+		print "% Start here\n";
+		print "$greycolor setgray\n";
+		print "newpath\n$lowX $lowY m\n$lowX $uppY lineto\n";
+		print "$uppX $uppY lineto\n$uppX $lowY lineto\nclosepath\nfill\n";
+		print "0 setgray\n";
+		print "newpath\n$lowX $lowY m\n$lowX $uppY lineto\n";
+		print "$uppX $uppY lineto\n$uppX $lowY lineto\nclosepath\nstroke\n";
+		print "% Stop here\n";
+		$curHeight = $startHeight = 
+			$ABSheight - $heightOffset - (2 * $fontHeight);
+		$numHigh = int ($realHeight / $fontHeight - 1) - 2;
+		my $startX = $ABSwidth / 2 - $fontWidth * length($filename);
+		my $startY = $ABSheight - $margin - $fontHeight * 1.5;
+		print ((2*$fontHeight)." courb\n$startX $startY m ($filename) s\n");
+		print "$fontHeight cour\n";
+	}
+}
+
+sub endPage {
+	print "showpage\ngrestore\n\n";
+}
+
+sub endDocument {
+	print "%%Trailer\n%end\n%%EOF\n\n";
+}
+
+sub removeTabs {
+	my ($string) = @_;
+	my $retval = "";
+	my $pos = 0;
+	chomp $string;
+	my @chars = split //, $string;
+	foreach (@chars) {
+		if (/\t/) {
+			$retval .= " " x ($tabs - ($pos % $tabs));
+			$pos += $tabs - ($pos % $tabs);
+			next;
+		}
+		++$pos;
+		$retval .= $_;
+	}
+	return $retval;
+}
+
+sub manyLines {
+	my ($line, $limit) = @_;
+	my @retval = ();
+	while (length($line) > $limit) {
+		my $thisLine = substr $line, 0, $limit;
+		$line = substr $line, $limit;
+		push @retval, $thisLine;
+	}
+	push @retval, $line;
+	return @retval
+}
+
+sub printLine {
+	my ($line) = @_;
+	my @lines = manyLines ($line, $useWide);
+	$first = "true";
+	foreach (@lines) {
+		if ($linesPrinted >= $numHigh) {
+			endPage();
+			startPage();
+			$curHeight = $startHeight;
+		}
+		if ($first && $printLineNumbers) {
+			my $numWidth = $startWidth - $fontWidth / 2;
+			my $digits = int (log($lineNum)/log(10)) + 1;
+			my $prettyNum;
+			if ($numDigits > $digits) {
+				$prettyNum = (" " x ($numDigits - $digits)).$lineNum;
+			} else {
+				$prettyNum = $lineNum;
+			}
+			print "$numWidth $curHeight m\n($prettyNum) show\n";
+		}
+		$first = "";
+		# deal with special characters
+		s|\\|\\\\|g; # \ -> \\
+		s|\(|\\(|g;  # ( -> \(
+		s|\)|\\)|g;  # ) -> \)
+		s|%|\\%|g;   # % -> \%
+		print "$curWidth $curHeight m\n";
+		print "($_) show\n";
+		$curHeight -= $fontHeight;
+		++$linesPrinted;
+	}
+}
+
+sub initVariables{
+	$realHeight = $ABSheight - 2 * $margin;
+	$realWidth = $ABSwidth - 2 * $margin;
+	$fontWidth  = $fontHeight * 0.6;
+	$useWide = $numWide = int ($realWidth  / $fontWidth - 1);
+	$numHigh = int ($realHeight / $fontHeight - 1);
+	$pointWide = $numWide * $fontWidth;
+	$pointHigh = $numHigh * $fontHeight;
+	$heightOffset = $margin + ($realHeight - $pointHigh) / 2 + $fontHeight;
+	$startHeight = $ABSheight - $heightOffset;
+	$startWidth  = $margin + ($realWidth - $pointWide) / 2;
+	$curHeight = $startHeight;
+	$curWidth = $startWidth;
+}
+
+##################
+## Main Program ##
+##################
+
+$pageNum = 1;
+$tabs = 4;
+$ABSheight = 792;
+$ABSwidth  = 612;
+$margin    = 40;
+$fontHeight = 10;
+$lineNum = 0;
+$greycolor = 0.9;
+
+# get arguments
+while ($ARGV[0] =~ /^-/) {
+	$_ = $';
+	shift @ARGV;
+	# landscape
+	if (/^l/i) {
+		#landscape mode
+		$landscape = "true";
+		next;
+	}
+	# portrait
+	if (/^p/i) {
+		#portrait mode
+		$landscape = "";
+		next;
+	}
+	# font size
+	if (/^f/i) {
+		if ($' =~ /(\d+)/) {
+			$fontHeight = $1;
+		} elsif ($ARGV[0] =~ /^\d+$/) {
+			$fontHeight = shift @ARGV;
+		}
+		next;
+	}
+	if (/^h/i) {
+		$printHeaders = "true";
+		next;
+	}
+	# don't print line numbers
+	if ((/^nn/i) || (/^n0/i)) {
+		$printLineNumbers = "";
+		next;
+	}
+	# print line numbers
+	if (/^n/i) {
+		$printLineNumbers = "true";
+		next;
+	}
+	print STDERR "Unknown option $_\n";
+}
+
+if ($landscape) {
+	($ABSheight, $ABSwidth) = ($ABSwidth, $ABSheight) 
+}
+
+initVariables();
+startDocument();
+foreach $filename (@ARGV) {
+	$start = $stop = 0;
+	if ($filename =~ /:(\d+),?(\d*)$/) {
+		$filename = $`;
+		$start = $1;
+		$stop = $2;
+	}
+	if (! -e $filename) {
+		warn "Can't find $filename.  Sorry\n";
+		next;
+	}
+	open (SOURCE, $filename) or warn "Couldn't open $filename\n", next;
+	$filename =~ s|.*/||g;
+	if ($start) {
+		$filename .= ":$start..";
+		if ($stop) {
+			$filename .= $stop;
+		}
+	}
+	$lineNum = 0;
+	startPage();
+	while (<SOURCE>) {
+		++$lineNum;
+		if (($start && (($lineNum < $start))) ||
+			($stop &&  (($lineNum > $stop)))) {
+			next;
+		}
+		chomp;
+		printLine ( removeTabs($_) );
+	}
+	endPage();
+}
+
+endDocument();

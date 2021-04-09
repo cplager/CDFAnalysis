@@ -1,0 +1,36 @@
+#!/usr/bin/env perl
+
+# Change this to the location of your krb5.conf file
+my $krb = "/my/dir/krb5.conf";
+
+
+use LWP;
+
+# address that tells you your IP address
+my $url = "http://www.myipaddress.com";;
+# get a new agent
+my $agent   = LWP::UserAgent->new;
+# format request
+my $request = HTTP::Request->new(GET => $url);
+# get web page
+my $response = $agent->request($request);
+# check results
+$response->is_success or die "$url: ", $response->message,"\n";
+# parce answer
+@parts = split /\n/, $response->content; 
+foreach $_ (@parts) {
+    if (/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/) {
+        $ipaddress = $1;
+        warn "Found ip address $ipaddress\n";
+    }
+}
+# copy old file to .bak
+system "cp $krb $krb.bak";
+open (SOURCE, "$krb.bak") or die;
+open (TARGET, ">$krb") or die;
+
+while (<SOURCE>) {
+    # update proxy_gateway line
+    s/proxy_gateway = \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/proxy_gateway = $ipaddress/;
+    print TARGET;
+}

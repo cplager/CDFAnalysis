@@ -1,0 +1,84 @@
+#!/usr/bin/env perl
+# variables
+$dir = "backup";
+@names = qw (.backup .backupDir backup backupDir);
+$notesFile = "backup.notes";
+$message = "";
+
+# does one of the directores in names already exist as a directory
+$dir = "";
+foreach (@names) {
+	if (-d $_) {
+		# this is a direcory
+		$dir = $_;
+		last;
+	}
+}
+
+# did we find one?
+if (! $dir) {
+	# we need to create a directory
+	foreach (@names) {
+		if (! -e $_) {
+			# there is no file with this name, let's use this
+			$problems = `mkdir $_`;
+			if ($problems) {
+				# didn't work
+				print STDERR "Couldn't make $_: $problems\n";
+			} else {
+				# it worked
+				$dir = $_;
+				last;
+			} # if (!) problems
+		} # this name isn't in use
+	} # foreach names
+} # we don't have a default directory yet
+
+die "We couldn't create a backup directory.  Aborting.\n" unless ($dir);
+
+#print "Using $dir\n";
+
+$next = "";
+@files = ();
+foreach $arg (@ARGV) {
+	if ($next) {
+		$message = $arg;
+		$next = "";
+	} elsif ($arg =~ /^-m/i) {
+		$next = "true";
+	} else {
+		push (@files, $arg);
+	}
+}
+
+
+# loop over files
+foreach $file (@files) {
+	if (!-e $file) {
+		print STDERR "$file does not exist.\n";
+		next;
+	}
+	if ($file =~ m|([/]*)$|) {
+		$name = $file;
+	} else {
+		print "merde\n";
+	}
+	$unique = `/cdf/home/cplager/bin/uniqueName $dir $name`;
+	chomp $unique;
+	print "$file being copied to $unique\n";
+	print `cp $file $unique`;
+	`chmod 444 $unique`;
+	# put message into $notes
+	if ($message) {
+		if ($unique =~ m|([^/]*)$|) {
+			$unique = $1;
+		}
+		print "Putting \"$unique: $message\" into $dir/$notesFile\n";
+		open (LOG, ">>$dir/$notesFile") or 
+			warn "I couldn't open $dir/$notesFile\n";
+		print LOG "$unique: $message\n";
+	} else {
+		# make sure the file exists
+		system "touch $dir/$notesFile" if (! -e "$dir/$notesFile");
+	}
+}

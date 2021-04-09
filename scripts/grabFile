@@ -1,0 +1,28 @@
+#!/usr/bin/env perl
+
+use lib "/local/ups/prd/perl/v5_005/lib/site_perl/5.005";
+use LWP;
+
+$url = "http://www-cdfonline.fnal.gov/~cplager/summary.txt";
+$file = "summary.txt";
+
+save_file_from_link ($url, $file);
+
+sub save_file_from_link {
+    my $url = shift;
+    my $filename = shift;
+
+    my $agent    = LWP::UserAgent->new;
+    my $request  = HTTP::Request->new(GET => $url);
+    
+    my $response = $agent->request($request);
+    local $index_number;
+    $response->is_success or die "$url: ",$response->message,"\n";
+    
+    binmode TARGET;
+    open (TARGET, ">$filename") or die;
+    binmode TARGET;
+    print TARGET $response->content;
+    return $filename;
+}
+

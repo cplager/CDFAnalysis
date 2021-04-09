@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+
+
+while (@ARGV && ($ARGV[0] =~ /^-/)) {
+    $arg = shift @ARGV;
+    if ($arg =~ /-o/i) {
+        $here_only = "true";
+        next;
+    }
+    if ($arg =~ /-a/i) {
+        $all = "true";
+    }
+}
+
+if (@ARGV) {
+	push @dirList, @ARGV;
+} else {
+	@dirList = (".");
+}
+
+#print "dirlist @dirList\n";
+%done =();
+
+open (STDERR, ">/dev/null");
+
+$max = @dirList;
+for ($dir = 0; $dir < $max; ++$dir) {
+	$pwd = `cd $dirList[$dir];pwd`;
+#	print "** $pwd\n";
+	next if ($done{$pwd});
+	$done{$pwd} = "done";
+	@files = glob ("$dirList[$dir]/*");
+	foreach $file (@files) {
+        if (!$all) {
+            next if ($file =~ /~$/);
+            next if ($file =~ /\.bak$/);
+        }
+		if (-d $file && ! $here_only) {
+			push @dirList, $file;
+		} else {
+			$top = `head -1 $file`;
+			if ($top =~ m|^\#\!.+perl|) {
+				# we found one
+                if ($here_only) {
+                    $file =~ s|^\./||;
+                }
+				print "$file\n";
+			}
+		} # directory or file
+	} # foreach $file
+	$max = @dirList;
+}

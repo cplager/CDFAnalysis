@@ -1,0 +1,126 @@
+%!PS-Adobe-2.0
+%%Creator: text2ps v1.5 (cplager+text2ps@physics.ucla.edu) 031103
+%%Pages: (atend)
+%%PageOrder: Ascending
+%%Orientation: Landscape
+%%BoundingBox: 0 -0 612 792
+%%EndComments
+
+
+/small 6.9 def
+/large 13.8 def
+
+/MakeFont
+{ findfont  % Get the font definition
+  exch      % Put the font size before the font's dictionary
+  scalefont % Enlarge to needed size from 1 point with visual hinting
+} def
+
+
+/normalFont small /Courier         MakeFont def
+/boldFont   small /Courier-Bold    MakeFont def
+/italicFont small /Courier-Oblique MakeFont def
+
+/preSetup     {0.75 0.00 0.75 setrgbcolor normalFont setfont} bind def
+/keySetup     {0.00 0.00 0.75 setrgbcolor normalFont setfont} bind def
+/stringSetup  {0.75 0.00 0.00 setrgbcolor normalFont setfont} bind def
+/commentSetup {0.00 0.50 0.00 setrgbcolor italicFont setfont} bind def
+/normalSetup  {0.00 0.00 0.00 setrgbcolor normalFont setfont} bind def
+
+
+/rotateWorld
+{
+  306 396 translate
+  90 rotate
+  -396 -306 translate
+} def
+
+/drawbox
+{
+  1 setlinewidth
+  newpath
+  15 15 m
+  15 777 lineto
+  597 777 lineto
+  597 15 lineto
+  closepath
+  stroke
+} def
+
+/drawboxLand
+{
+  1 setlinewidth
+  newpath
+  15  15 m
+  777  15 lineto
+  777 597 lineto
+  15 597 lineto
+  closepath
+  stroke
+} def
+
+
+/m { moveto } def
+/s { show } def
+
+
+%%Page: 1 1
+gsave
+rotateWorld
+0 setlinewidth
+0.9 setgray
+newpath
+15 15 m
+15 597 lineto
+29.49 597 lineto
+29.49 15 lineto
+closepath
+fill
+0 setgray
+newpath
+15 15 m
+15 597 lineto
+29.49 597 lineto
+29.49 15 lineto
+closepath
+stroke
+normalSetup
+/printHeader
+{
+% Start header
+0.9 setgray
+newpath
+15 583.2 m
+15 597 lineto
+777 597 lineto
+777 583.2 lineto
+closepath
+fill
+0 setgray
+newpath
+15 583.2 m
+15 597 lineto
+777 597 lineto
+777 583.2 lineto
+closepath
+stroke
+% Stop header
+large /Courier-Bold MakeFont setfont
+362.88 586.65 m (HFAna.cc) s
+small /Courier-Bold MakeFont setfont
+19.14 586.65 m
+ (Jun 15 09:31) s
+748.02 586.65 m
+ (Page 1) s
+normalSetup
+} def
+drawboxLand
+
+printHeader
+showpage
+grestore
+
+%%Trailer
+%end
+%%EOF
+
