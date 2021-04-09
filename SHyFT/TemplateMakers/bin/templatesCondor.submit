@@ -1,0 +1,15 @@
+universe = vanilla
+executable = runTemplatesCondor.csh
+notification = Never
+log = condor_output/templates.logfile
+getenv = True
+
+List = wjets
+NJobs = 30
+Jes = none
+Jer = 0.0
+arguments = $(List).list $(Process) $(NJobs) $(Jes) $(Jer)
+output = templatesCondor/condorLogs/condor_$(List)_$(Jes)_$(Jer)_$(Process).stdout
+error = templatesCondor/condorLogs/condor_$(List)_$(Jes)_$(Jer)_$(Process).stderr
+queue $(NJobs)
+

@@ -1,0 +1,29 @@
+<use   name="DataFormats/PatCandidates"/>
+<use   name="DataFormats/FWLite"/>
+<use   name="FWCore/PythonParameterSet"/>
+<use   name="boost_python"/>
+<use   name="FWCore/FWLite"/>
+<use   name="rootcintex"/>
+<use   name="root"/>
+<use   name="boost"/>
+<use   name="CommonTools/Utils"/>
+<use   name="PhysicsTools/SelectorUtils"/>
+<use   name="PhysicsTools/FWLite"/>
+<use   name="PhysicsTools/Utilities"/>
+<use   name="PhysicsTools/KinFitter" />
+<environment>
+  <bin   file="shyft_pretag.C">
+  </bin>
+  <bin   file="combinedTemplates.cc">
+  </bin>
+  <bin   file="shyft_treeMaker.C">
+  </bin>
+  <bin   file="treeMaker_MCTruth.C">
+  </bin>
+  <bin   file="wPlusJetsDataModel.C">
+  </bin>
+  <bin   file="mttbarTree.C">
+  </bin>
+  <bin   file="printTrig.C">
+  </bin>
+</environment>

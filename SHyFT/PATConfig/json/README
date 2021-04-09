@@ -1,0 +1,31 @@
+2010-08-08: Switched to the following scheme for json files:
+
+   1.  Copy the most recent DCS-Only JSON file from the official area (see example below)
+   2.  Use printJSON.py (form PythonUtilities) to make it more user friendly
+   3.  Manually edit it to contain only the runs I want to process.
+
+The JSON files names skim_DCS_* were created this way from DCSTRONLY_132440-142188.
+
+---
+
+2010-08-02: For adding to the prompt dataset after 250 nb^-1, created
+a JSON file as follows:
+
+wget https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions10/7TeV/DCSOnly/DCSTRONLY_132440-140388
+wget https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions10/7TeV/DCSOnly/DCSTRONLY_132440-142188
+compareJSON.py --sub DCSTRONLY_132440-142188 DCSTRONLY_132440-140388 custom_DCSTRONLY_140399_142188
+
+Then edit custom_DCSTRONLY_140399_142188 to remove run 140359 already included in previous JSON file.
+
+---
+
+This directory contains copies of the JSON files copied from the
+official area thusly:
+
+wget https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions10/7TeV/DCSOnly/DCSTRONLY_132440-141876
+
+The point is to maintain a "backup" copy of what file was actually
+used, so that if a change occurs in the official file, we have a way
+to tell which version was used for the jobs.  If you make a skim,
+please commit the actual JSON file used for the skim here (if it's not
+there already) so that we can keep track.

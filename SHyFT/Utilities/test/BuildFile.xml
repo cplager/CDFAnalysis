@@ -1,0 +1,4 @@
+<bin name="testBtagProb.exe" file="testBtagProb.cc">
+  <use   name="rootcore"/>
+  <use name="SHyFT/Utilities"/>
+</bin>

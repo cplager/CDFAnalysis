@@ -1,0 +1,15 @@
+universe = vanilla
+executable = runMttbarTree.csh
+notification = Never
+log = mttbarCondor/templates.logfile
+getenv = True
+
+List = ttbar
+NJobs = 7
+Jes = none
+Jer = 0.0
+arguments = $(List).list $(Process) $(NJobs) $(Jes) $(Jer)
+output = mttbarCondor/condorLogs/condor_$(List)_$(Jes)_$(Jer)_$(Process).stdout
+error = mttbarCondor/condorLogs/condor_$(List)_$(Jes)_$(Jer)_$(Process).stderr
+queue $(NJobs)
+

@@ -1,0 +1,17 @@
+
+
+
+
+
+================ README =========================
+
+
+cvs co -d Analysis/SkimFilter UserCode/SHyFT/SkimFilter
+
+You need to put this in your release at this directory level:
+
+src/Blah/Meh
+
+That's the only way the buildfile works.
+
+

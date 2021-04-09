@@ -1,0 +1,17 @@
+universe = vanilla
+executable = runTemplatesCondor.csh
+notification = Never
+log = batchMttbarTree/templates.logfile
+getenv = True
+
+####################################
+# MC
+####################################
+
+
+List = ttbar
+NJobs = 2191
+arguments = $(List).list $(Process) $(NJobs)
+output = batchMttbarTree/condorLogs/condor_$(List)_$(Process).stdout
+error = batchMttbarTree/condorLogs/condor_$(List)_$(Process).stderr
+queue $(NJobs)
