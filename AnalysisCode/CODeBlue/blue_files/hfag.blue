@@ -1,0 +1,320 @@
+# -*- sh -*- # for font lock mode
+
+numMeasurements 14
+numErrors       2
+
+name  1  1  
+mean  1  0.50 
+errorVec  1 0 0.25	
+errorVec  1 1 0.055
+
+name  2  2  
+mean  2  0.06 
+errorVec  2 0 0.33	
+errorVec  2 1 0.09 
+
+name  3  3  
+mean  3  0.30 
+errorVec  3 0 0.14	
+errorVec  3 1 0.02 
+
+name  4  4  
+mean  4  0.65 
+errorVec  4 0 0.18	
+errorVec  4 1 0.04 
+
+name  5  5  
+mean  5  0.95 
+errorVec  5 0 0.275	
+errorVec  5 1 0.1	 
+
+name  6  6  
+mean  6 -0.47 
+errorVec  6 0 0.41	
+errorVec  6 1 0.08 
+
+name  7  7  
+mean   7 0.35 
+errorVec  7 0 0.313	
+errorVec  7 1 0.04 
+
+name  8  8  
+mean   8 0.30 
+errorVec  8 0 0.59	
+errorVec  8 1 0.11 
+
+name  9  9  
+mean   9 0.50 
+errorVec  9 0 0.36	
+errorVec  9 1 0.02 
+
+name 10 10  
+mean  10 0.75 
+errorVec 10 0 0.64	
+errorVec 10 1 0.145
+
+name 11 11  
+mean  11 0.55 
+errorVec 11 0 0.22	
+errorVec 11 1 0.12 
+
+name 12 12  
+mean  12 0.49 
+errorVec 12 0 0.18	
+errorVec 12 1 0.105
+
+name 13 13  
+mean 13  0.71 
+errorVec 13 0 0.35	
+errorVec 13 1 0.04 
+
+name 0 0  
+mean  0 -1.26 
+errorVec  0 0 0.68	
+errorVec  0 1 0.18 
+
+
+
+
+# allhad/dilep
+#correlation   0   1    0   0.0  # stats
+
+correlation  0  1  1  1.0
+correlation  0  2  1  1.0
+correlation  0  3  1  1.0
+correlation  0  4  1  1.0
+correlation  0  5  1  1.0
+correlation  0  6  1  1.0
+correlation  0  7  1  1.0
+correlation  0  8  1  1.0
+correlation  0  9  1  1.0
+correlation  0 10  1  1.0
+correlation  0 11  1  1.0
+correlation  0 12  1  1.0
+correlation  0 13  1  1.0
+ 
+correlation  1  0  1  1.0
+correlation  1  2  1  1.0
+correlation  1  3  1  1.0
+correlation  1  4  1  1.0
+correlation  1  5  1  1.0
+correlation  1  6  1  1.0
+correlation  1  7  1  1.0
+correlation  1  8  1  1.0
+correlation  1  9  1  1.0
+correlation  1 10  1  1.0
+correlation  1 11  1  1.0
+correlation  1 12  1  1.0
+correlation  1 13  1  1.0
+ 
+correlation  1  0  1  1.0
+correlation  1  2  1  1.0
+correlation  1  3  1  1.0
+correlation  1  4  1  1.0
+correlation  1  5  1  1.0
+correlation  1  6  1  1.0
+correlation  1  7  1  1.0
+correlation  1  8  1  1.0
+correlation  1  9  1  1.0
+correlation  1 10  1  1.0
+correlation  1 11  1  1.0
+correlation  1 12  1  1.0
+correlation  1 13  1  1.0
+ 
+correlation  1  0  1  1.0
+correlation  1  2  1  1.0
+correlation  1  3  1  1.0
+correlation  1  4  1  1.0
+correlation  1  5  1  1.0
+correlation  1  6  1  1.0
+correlation  1  7  1  1.0
+correlation  1  8  1  1.0
+correlation  1  9  1  1.0
+correlation  1 10  1  1.0
+correlation  1 11  1  1.0
+correlation  1 12  1  1.0
+correlation  1 13  1  1.0
+ 
+correlation  2  0  1  1.0
+correlation  2  1  1  1.0
+correlation  2  3  1  1.0
+correlation  2  4  1  1.0
+correlation  2  5  1  1.0
+correlation  2  6  1  1.0
+correlation  2  7  1  1.0
+correlation  2  8  1  1.0
+correlation  2  9  1  1.0
+correlation  2 10  1  1.0
+correlation  2 11  1  1.0
+correlation  2 12  1  1.0
+correlation  2 13  1  1.0
+ 
+correlation  3  0  1  1.0
+correlation  3  1  1  1.0
+correlation  3  2  1  1.0
+correlation  3  4  1  1.0
+correlation  3  5  1  1.0
+correlation  3  6  1  1.0
+correlation  3  7  1  1.0
+correlation  3  8  1  1.0
+correlation  3  9  1  1.0
+correlation  3 10  1  1.0
+correlation  3 11  1  1.0
+correlation  3 12  1  1.0
+correlation  3 13  1  1.0
+ 
+correlation  4  0  1  1.0
+correlation  4  1  1  1.0
+correlation  4  2  1  1.0
+correlation  4  3  1  1.0
+correlation  4  5  1  1.0
+correlation  4  6  1  1.0
+correlation  4  7  1  1.0
+correlation  4  8  1  1.0
+correlation  4  9  1  1.0
+correlation  4 10  1  1.0
+correlation  4 11  1  1.0
+correlation  4 12  1  1.0
+correlation  4 13  1  1.0
+ 
+correlation  5  0  1  1.0
+correlation  5  1  1  1.0
+correlation  5  2  1  1.0
+correlation  5  3  1  1.0
+correlation  5  4  1  1.0
+correlation  5  6  1  1.0
+correlation  5  7  1  1.0
+correlation  5  8  1  1.0
+correlation  5  9  1  1.0
+correlation  5 10  1  1.0
+correlation  5 11  1  1.0
+correlation  5 12  1  1.0
+correlation  5 13  1  1.0
+ 
+correlation  6  0  1  1.0
+correlation  6  1  1  1.0
+correlation  6  2  1  1.0
+correlation  6  3  1  1.0
+correlation  6  4  1  1.0
+correlation  6  5  1  1.0
+correlation  6  7  1  1.0
+correlation  6  8  1  1.0
+correlation  6  9  1  1.0
+correlation  6 10  1  1.0
+correlation  6 11  1  1.0
+correlation  6 12  1  1.0
+correlation  6 13  1  1.0
+ 
+correlation  7  0  1  1.0
+correlation  7  1  1  1.0
+correlation  7  2  1  1.0
+correlation  7  3  1  1.0
+correlation  7  4  1  1.0
+correlation  7  5  1  1.0
+correlation  7  6  1  1.0
+correlation  7  8  1  1.0
+correlation  7  9  1  1.0
+correlation  7 10  1  1.0
+correlation  7 11  1  1.0
+correlation  7 12  1  1.0
+correlation  7 13  1  1.0
+ 
+correlation  8  0  1  1.0
+correlation  8  1  1  1.0
+correlation  8  2  1  1.0
+correlation  8  3  1  1.0
+correlation  8  4  1  1.0
+correlation  8  5  1  1.0
+correlation  8  6  1  1.0
+correlation  8  7  1  1.0
+correlation  8  9  1  1.0
+correlation  8 10  1  1.0
+correlation  8 11  1  1.0
+correlation  8 12  1  1.0
+correlation  8 13  1  1.0
+ 
+correlation  9  0  1  1.0
+correlation  9  1  1  1.0
+correlation  9  2  1  1.0
+correlation  9  3  1  1.0
+correlation  9  4  1  1.0
+correlation  9  5  1  1.0
+correlation  9  6  1  1.0
+correlation  9  7  1  1.0
+correlation  9  8  1  1.0
+correlation  9 10  1  1.0
+correlation  9 11  1  1.0
+correlation  9 12  1  1.0
+correlation  9 13  1  1.0
+ 
+correlation 10  0  1  1.0
+correlation 10  1  1  1.0
+correlation 10  2  1  1.0
+correlation 10  3  1  1.0
+correlation 10  4  1  1.0
+correlation 10  5  1  1.0
+correlation 10  6  1  1.0
+correlation 10  7  1  1.0
+correlation 10  8  1  1.0
+correlation 10  9  1  1.0
+correlation 10 11  1  1.0
+correlation 10 12  1  1.0
+correlation 10 13  1  1.0
+ 
+correlation 11  0  1  1.0
+correlation 11  1  1  1.0
+correlation 11  2  1  1.0
+correlation 11  3  1  1.0
+correlation 11  4  1  1.0
+correlation 11  5  1  1.0
+correlation 11  6  1  1.0
+correlation 11  7  1  1.0
+correlation 11  8  1  1.0
+correlation 11  9  1  1.0
+correlation 11 10  1  1.0
+correlation 11 12  1  1.0
+correlation 11 13  1  1.0
+ 
+correlation 12  0  1  1.0
+correlation 12  1  1  1.0
+correlation 12  2  1  1.0
+correlation 12  3  1  1.0
+correlation 12  4  1  1.0
+correlation 12  5  1  1.0
+correlation 12  6  1  1.0
+correlation 12  7  1  1.0
+correlation 12  8  1  1.0
+correlation 12  9  1  1.0
+correlation 12 10  1  1.0
+correlation 12 11  1  1.0
+correlation 12 13  1  1.0
+ 
+correlation 13  0  1  1.0
+correlation 13  1  1  1.0
+correlation 13  2  1  1.0
+correlation 13  3  1  1.0
+correlation 13  4  1  1.0
+correlation 13  5  1  1.0
+correlation 13  6  1  1.0
+correlation 13  7  1  1.0
+correlation 13  8  1  1.0
+correlation 13  9  1  1.0
+correlation 13 10  1  1.0
+correlation 13 11  1  1.0
+correlation 13 12  1  1.0
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

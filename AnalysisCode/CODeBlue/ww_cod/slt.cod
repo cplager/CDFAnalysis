@@ -1,0 +1,26 @@
+# -*- sh -*- # for font lock mode
+
+# All data points start with '+'
+#  acceptance     observed    background   
++  0.00998         20         9.62  #slt
+
+# percent error on all acceptances
+#acceptPctErr 0.11
+
+# error on all backgrounds
+#backAbsErr   4.0
+
+# Amound that background events move between 
+# groups 1, 2, and 3
+#backAbsErr 0.4
+
+# Which fits NOT to do
+# 0x01 Chi^2
+# 0x02 Likelihood
+fitFlags 2
+
+# number of trials
+numTrials 100
+
+# total luminosity
+totalPb 200

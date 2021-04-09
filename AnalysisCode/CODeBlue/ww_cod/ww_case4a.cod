@@ -1,0 +1,31 @@
+# -*- sh -*- # for font lock mode
+
+# Assuming:
+# * WW cross section of 12.4 pb and 200 pb^-1 of data
+# * Background to acceptance ratios are constant in common/DIL
+# * background errors are constant percentage and correlated
+
+
+# All data points start with '+'
+#  acceptance     observed    background   
++  0.002497         7         2.5     # common
++  0.001617         7          2.5     # DIL
++  0.001629        16          9.6     # LTRK
+
+# percent error on all acceptances
+acceptPctErr 0.10 0.10 0.10
+
+# error on all backgrounds
+backAbsErr  0.65   0.7  0.0
+backAbsErr  0.55   0.0  3.3
+
+# Which fits NOT to do
+# 0x01 Chi^2
+# 0x02 Likelihood
+fitFlags 2 # leave at 2
+
+# number of trials
+numTrials 100
+
+# total luminosity
+totalPb 200

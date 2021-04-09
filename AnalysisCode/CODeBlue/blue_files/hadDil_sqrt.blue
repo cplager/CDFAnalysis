@@ -1,0 +1,26 @@
+# -*- sh -*- # for font lock mode
+
+numMeasurements 2
+numErrors       1
+
+# All Hadronic
+name 0      All_Hadronic
+mean 0      7.8 
+errorVec   0    0      2.09008e+00  2.78397e-02  1.84048e-04 -1.42778e-05 
+
+# Dilepton
+name 1      Dilep
+mean 1      7.0 
+errorVec   1    0    1.39183e+00  1.59212e-01 -4.75393e-03  9.85035e-05 
+
+# allhad/dilep
+#             m1  m2  err  corr
+correlation   0   1    0   0.0  # stats
+
+## Where:
+## m1   - the number of the first measurement
+## m2   - the number of the second measurement
+## err  - the number of the error
+## corr - the correlation between errors
+
+

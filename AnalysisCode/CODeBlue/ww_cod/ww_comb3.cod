@@ -1,0 +1,42 @@
+# -*- sh -*- # for font lock mode
+
+
+## 	Nexpect	Accpt			
+## common	 6.19	0.002495968			
+## dilOnly	 4.01	0.001616935			
+## ltrkOnly	 4.04	0.001629032			
+## total	14.24	0.005741935			
+## 					
+## 	    Accpt	    %AccptErr	Bkgnd	BkgndErr	Total
+## dil	0.004113	10%	         5.82	0.86	    16.02
+## dil2	0.004113	10%	         5.10	1.89	    15.30
+## ltrk	0.004125	11%	        13.95	5.08	    24.18
+
+
+# All data points start with '+'
+#  acceptance     observed    background   
++  0.002496         8.01        1.82     # common
++  0.001617         8.01        4.00     # DIL
++  0.001629        16.11       12.07     # LTRK
+
+# percent error on all acceptances
+acceptPctErr 0.10 0.10 0.10
+
+# error on all backgrounds
+backAbsErr  0.26 0.60 0.00
+backAbsErr  0.00 0.00 4.82
+
+# Amound that background events move between 
+# groups 1, 2, and 3
+#backAbsErr 0.4
+
+# Which fits NOT to do
+# 0x01 Chi^2
+# 0x02 Likelihood
+fitFlags 2
+
+# number of trials
+numTrials 100000
+
+# total luminosity
+totalPb 200

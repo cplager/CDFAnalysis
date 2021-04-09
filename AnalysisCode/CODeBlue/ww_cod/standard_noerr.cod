@@ -1,0 +1,29 @@
+# -*- sh -*- # for font lock mode
+
+# All data points start with '+'
+#  acceptance     observed    background   
++  0.00464        11.         1.8  # overlap
++  0.00156         2.         0.9  # DIL
++  0.00411         8.         5.1  # LTRK
+
+# percent error on all acceptances
+#acceptPctErr 0.100 0.251 0.168
+
+
+
+# percent error on all backgrounds
+#backPctErr   0.300 0.178 0.227
+
+# Amound that background events move between 
+# groups 1, 2, and 3
+backAbsErr 0.4 -0.4 -0.4
+
+
+# number of trials
+#numTrials 1000000
+
+# Which fits NOT to do
+# 0x01 Chi^2
+# 0x02 Likelihood
+fitFlags 2
+

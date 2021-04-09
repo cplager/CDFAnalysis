@@ -1,0 +1,36 @@
+unix> ./runCod.exe ww_cod/ww_dil.cod
+Loading file ww_cod/ww_dil.cod
+simple answer 12.3967
+Constraint 12.3967 +5.7196 -4.80374 : 5.26167
+chisq stat 12.3967 +5.15184 -4.34219 : 4.74702
+
+unix> ./runCod.exe ww_cod/ww_ltrk.cod
+Loading file ww_cod/ww_ltrk.cod
+simple answer 12.397
+Constraint 12.397 +8.06272 -7.30266 : 7.68269
+chisq stat 12.397 +6.13807 -5.32983 : 5.73395
+
+unix> ./runCod.exe ww_cod/ww_case1.cod
+Loading file ww_cod/ww_case1.cod
+simple answer 12.3977
+Constraint 12.3969 +5.64174 -4.79632 : 5.21903
+chisq stat 12.3972 +4.67772 -4.04859 : 4.36316
+
+unix> ./runCod.exe ww_cod/ww_case2.cod
+Loading file ww_cod/ww_case2.cod
+simple answer 12.3977
+Constraint 12.3972 +5.54452 -4.73459 : 5.13956
+chisq stat 12.3972 +4.67772 -4.04859 : 4.36316
+
+unix> ./runCod.exe ww_cod/ww_case3.cod
+Loading file ww_cod/ww_case3.cod
+simple answer 11.9624
+Constraint 12.3203 +5.51623 -4.71126 : 5.11375
+chisq stat 12.2462 +4.64394 -4.01032 : 4.32713
+
+unix> ./runCod.exe ww_cod/ww_case4.cod
+Loading file ww_cod/ww_case4.cod
+simple answer 11.9624
+Constraint 12.3553 +5.45738 -4.64551 : 5.05145
+chisq stat 12.2462 +4.64394 -4.01032 : 4.32713
+

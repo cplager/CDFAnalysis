@@ -1,0 +1,17 @@
+# -*- sh -*- # for font lock mode
+
+# All data points start with '+'
+#  acceptance     observed    background   
++   0.008156         48.        17.31
+
+# percent error on all acceptances
+acceptPctErr 0.123
+
+
+
+# percent error on all backgrounds
+backPctErr   0.231
+
+# Amound that background events move between 
+# groups 1, 2, and 3
+backAbsErr 0.8
