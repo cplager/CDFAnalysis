@@ -1,0 +1,46 @@
+# -*- conf -*-
+
+# templates to load
++ templateFile  = templatesCms/shyftPretag.root
+
+# names of templates
++ names = Data, Top, WJets
+
+# names of the different groups
++ groupNames = _ht_1j, _ht_2j, _ht_3j, _ht_4j, _ht_5j
+
+# Display Names
++ groupStrings = 1_Jet, 2_Jets,  3_Jets, 4_Jets, 5_Jets
+
+
+
+# integrated luminosity
+# in fb-1
++ intLumi       = 0.005
+
+# binning of templates
++ binsPerGroup = 10, 10, 10, 10, 10
+
+# How to throw PEs
++ peNames  =   Top,  WJets
++ peMeans  = 0.165,   28.0 
++ peSigmas = 0.020,    0.5 
+
+# defaults
++ defaultNames     =   Top,   WJets
++ defaultValues    =   0.165,  28.0 
+
+# colors
++ colorNames  = Data, Top, WJets
++ colorValues =    1,   2,    93
+
+# legend coordiates
++ legendCoordinates = 0.285, 0.55, 0.365, 0.88
+
+# output file name
++ output = output/pretag_ht_noQcd
+
+# turn on data error bars
++ dataErrorBars = 1
+
+

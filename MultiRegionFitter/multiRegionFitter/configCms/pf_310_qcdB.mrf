@@ -1,0 +1,18 @@
+# -*- conf -*-
+
+# fix QCD here
++ fixParamVal = QCD_B=1.0
+
+# QCD_B floating.                            Relative errors
+- qcdConstr_1j 0 1 -10.0 10.0 1
+-- _svm_1j_1t            :  QCD_B :   1.0    0.136
+
+- qcdConstr_2j 0 1 -10.0 10.0 1
+-- _svm_2j_1t _svm_2j_2t :  QCD_B :   1.0    0.242
+
+- qcdConstr_3j 0 1 -10.0 10.0 1
+-- _svm_3j_1t _svm_3j_2t :  QCD_B :   1.0    0.526
+
+- qcdConstr_4j 0 1 -10.0 10.0 1
+-- _svm_4j_1t _svm_4j_2t :  QCD_B :   1.0    0.649
+

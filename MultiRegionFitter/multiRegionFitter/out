@@ -1,0 +1,108 @@
+unix> ./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/calo_31_default.root fitData=1
+creating MRFitter object
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/calo_31_default.root
+
+creating MRFitter object (PE)
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/calo_31_default.root
+
+Fit Results:
+ 0)        Top :       0.1787   +-   0.0453
+ 1)  SingleTop :       1.5209   +-   2.8542
+ 2)        Wbx :      -0.2140   +-   3.7745
+ 3)        Wcx :       1.2003   +-   0.6224
+ 4)        Wqq :       1.1779   +-   0.7013
+ 5)        QCD :       0.1692   +-   0.2528
+
+
+unix> ./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/jpt_31_default.root fitData=1
+creating MRFitter object
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/jpt_31_default.root
+
+creating MRFitter object (PE)
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/jpt_31_default.root
+
+Fit Results:
+ 0)        Top :       0.1367   +-   0.0431
+ 1)  SingleTop :       4.6915   +-   3.2133
+ 2)        Wbx :      -0.1217   +-   3.7930
+ 3)        Wcx :       1.1644   +-   0.6117
+ 4)        Wqq :       1.0194   +-   0.6248
+ 5)        QCD :       0.1160   +-   0.2342
+
+
+unix> ./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/pf_31_default.root fitData=1
+creating MRFitter object
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/pf_31_default.root
+
+creating MRFitter object (PE)
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/pf_31_default.root
+
+Fit Results:
+ 0)        Top :       0.1474   +-   0.0431
+ 1)  SingleTop :       1.0636   +-   3.5807
+ 2)        Wbx :       1.3785   +-   3.7194
+ 3)        Wcx :       0.6848   +-   0.5453
+ 4)        Wqq :       1.1918   +-   0.5569
+ 5)        QCD :       0.5048   +-   0.3515
+
+
+unix> ./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/calo_31_metcut.root fitData=1
+creating MRFitter object
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/calo_31_metcut.root
+
+creating MRFitter object (PE)
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/calo_31_metcut.root
+
+Fit Results:
+ 0)        Top :       0.1836   +-   0.0472
+ 1)  SingleTop :       1.1920   +-   2.8452
+ 2)        Wbx :      -0.4066   +-   3.8118
+ 3)        Wcx :       0.0920   +-   0.7127
+ 4)        Wqq :       1.3869   +-   0.7408
+ 5)        QCD :       0.9520   +-   0.4449
+
+
+unix> ./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/jpt_31_metcut.root fitData=1
+creating MRFitter object
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/jpt_31_metcut.root
+
+creating MRFitter object (PE)
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/jpt_31_metcut.root
+
+Fit Results:
+ 0)        Top :       0.1932   +-   0.0448
+ 1)  SingleTop :       1.6224   +-   3.1056
+ 2)        Wbx :      -0.7288   +-   3.6253
+ 3)        Wcx :       0.8105   +-   0.5118
+ 4)        Wqq :       0.9687   +-   0.5910
+ 5)        QCD :       0.6000   +-   0.4863
+
+
+unix> ./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/pf_31_metcut.root fitData=1
+creating MRFitter object
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/pf_31_metcut.root
+
+creating MRFitter object (PE)
+loading configuration: configCms/tag_310.mrf
+loading templates:     templatesCms/pf_31_metcut.root
+
+Fit Results:
+ 0)        Top :       0.1379   +-   0.0414
+ 1)  SingleTop :       1.2574   +-   3.4907
+ 2)        Wbx :       1.3478   +-   3.6041
+ 3)        Wcx :       0.1451   +-   0.4465
+ 4)        Wqq :       1.2397   +-   0.5130
+ 5)        QCD :       1.0060   +-   0.4920
+
+

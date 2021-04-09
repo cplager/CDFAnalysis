@@ -1,0 +1,74 @@
+# -*- conf -*-
+
+# templates to load
++ templateFile  = templatesCms/combined_120bins.root
+
+# names of templates
++ names = Data, Top, WJets
+
+# names of the different groups
++ groupNames          = _hT_1j,   _hT_2j,   _hT_3j,   _hT_4j,   _hT_5j
+                                                           
+# Display Names                                            
++ groupStrings        =  1_Jet,   2_Jets,   3_Jets,   4_Jets,   5_Jets
+# Axis ranges                                              
++ lowerEdgeVector     =     50,       80,      110,      140,      170
++ upperEdgeVector     =    300,      500,      600,      600,      600
+# binning of templates
++ binsPerGroup        =     10,       10,       10,        5,        5
+
+
+# Which templates will use morphing
++ morphNames = Top, WJets
+
+# Which templates should be used as default
++ morphDefaultTemplates =                              Top_hT_1j:Top_hT_1j_080,     Top_hT_2j:Top_hT_2j_080,
++ morphDefaultTemplates = Top_hT_3j:Top_hT_3j_080,     Top_hT_4j:Top_hT_4j_080,     Top_hT_5j:Top_hT_5j_080
++ morphDefaultTemplates =                              WJets_hT_1j:WJets_hT_1j_080, WJets_hT_2j:WJets_hT_2j_080,
++ morphDefaultTemplates = WJets_hT_3j:WJets_hT_3j_080, WJets_hT_4j:WJets_hT_4j_080, WJets_hT_5j:WJets_hT_5j_080
+
+# For each varable, what is the value of the default template
++ morphDefaultValues =                     Top_hT_1j:JES:-2,   Top_hT_2j:JES:-2,
++ morphDefaultValues = Top_hT_3j:JES:-2,   Top_hT_4j:JES:-2,   Top_hT_5j:JES:-2
++ morphDefaultValues =                     WJets_hT_1j:JES:-2, WJets_hT_2j:JES:-2,
++ morphDefaultValues = WJets_hT_3j:JES:-2, WJets_hT_4j:JES:-2, WJets_hT_5j:JES:-2
+
+# Which templates should be used as default
++ morphAddTemplates =                                    Top_hT_1j:Top_hT_1j_120:JES:2,     Top_hT_2j:Top_hT_2j_120:JES:2,
++ morphAddTemplates = Top_hT_3j:Top_hT_3j_120:JES:2,     Top_hT_4j:Top_hT_4j_120:JES:2,     Top_hT_5j:Top_hT_5j_120:JES:2
++ morphAddTemplates =                                    WJets_hT_1j:WJets_hT_1j_120:JES:2, WJets_hT_2j:WJets_hT_2j_120:JES:2,
++ morphAddTemplates = WJets_hT_3j:WJets_hT_3j_120:JES:2, WJets_hT_4j:WJets_hT_4j_120:JES:2, WJets_hT_5j:WJets_hT_5j_120:JES:2
+
+
+# integrated luminosity
+# in fb-1
++ intLumi       = 0.01
+
+# How to throw PEs
++ peNames  =   Top,  WJets,  JES
++ peMeans  = 0.165,  28.0 ,   0. 
++ peSigmas = 0.020,  0.5  ,   1. 
+
+# defaults
++ defaultNames     =   Top,   WJets
++ defaultValues    =   0.165, 28.0
+
+# colors
++ colorNames  = Data, Top, WJets
++ colorValues =    1,   2,  93
+
+# legend coordiates
++ legendCoordinates = 0.285, 0.55, 0.365, 0.88
+
+# output file name
++ output = output/jesMorph
+
+# turn on data error bars
++ dataErrorBars = 1
+
+# dont plot data by default since we don't have any
++ dontPlotData = 1
+
+# include
+@ configCms/jes_Ht_cms.mrf
+

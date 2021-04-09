@@ -1,0 +1,77 @@
+# -*- conf -*-
+
+# templates to load
++ templateFile  = templatesCms/special4j_120bins.root
+
+# names of templates
++ names = Data, Top
+
+# names of the different groups
++ groupNames          =   _hT_4j
+                               
+# Display Names                
++ groupStrings        =   4_Jets
+# Axis ranges                  
++ lowerEdgeVector     =      150
++ upperEdgeVector     =      800
+# binning of templates
++ binsPerGroup        =       26
+
+# or 
+# + lowerEdge
+# + upperEdge
+
+# Which templates will use morphing
++ morphNames = Top # , Wjets
+
+# Which templates should be used as default
++ morphDefaultTemplates = Top_hT_4j:Top_hT_4j_080
+# For each varable, what is the value of the default template
++ morphDefaultValues = Top_hT_4j:JES:-2
+
+# Which templates should be used as default
++ morphAddTemplates = Top_hT_4j:Top_hT_4j_120:JES:2
++ morphAddTemplates = Top_hT_4j:Top_hT_4j_110:JES:1
++ morphAddTemplates = Top_hT_4j:Top_hT_4j_105:JES:0.5
++ morphAddTemplates = Top_hT_4j:Top_hT_4j_100:JES:0
++ morphAddTemplates = Top_hT_4j:Top_hT_4j_095:JES:-0.5
++ morphAddTemplates = Top_hT_4j:Top_hT_4j_090:JES:-1
+
+
+
+# integrated luminosity
+# in fb-1
++ intLumi       = 0.1
+
+# How to throw PEs
++ peNames  =   Top,  JES
++ peMeans  = 0.165,   0. 
++ peSigmas = 0.020,   1. 
+
+# defaults
++ defaultNames     =   Top,   Wjets
++ defaultValues    =   0.165, 28.0
+
+# colors
++ colorNames  = Data, Top, Wjets
++ colorValues =    1,   2,  93
+
+# legend coordiates
++ legendCoordinates = 0.285, 0.55, 0.365, 0.88
+
+# output file name
++ output = output/simple
+
+# turn on data error bars
++ dataErrorBars = 1
+
+# dont plot data by default since we don't have any
++ dontPlotData = 1
+
+## # include
+## @ configCms/jes_simple_cms.mrf
+
+# JES
+- JES 0 1 -10.0 10.0 1
+-- _hT_4j :     Top :   1.0
+

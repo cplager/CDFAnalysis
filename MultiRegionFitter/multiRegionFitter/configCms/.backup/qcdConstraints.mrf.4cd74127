@@ -1,0 +1,16 @@
+# -*- conf -*-
+# QCD constraints
+- qcdConstr_1j 0 1 -10.0 10.0 1
+-- _met_1j :  QCD :   1.0    0.5
+
+- qcdConstr_2j 0 1 -10.0 10.0 1
+-- _met_2j :  QCD :   1.0    0.5
+
+- qcdConstr_3j 0 1 -10.0 10.0 1
+-- _met_3j :  QCD :   1.0    0.5
+
+- qcdConstr_4j 0 1 -10.0 10.0 1
+-- _met_4j :  QCD :   1.0    0.5
+
+- qcdConstr_5j 0 1 -10.0 10.0 1
+-- _met_5j :  QCD :   1.0    0.5

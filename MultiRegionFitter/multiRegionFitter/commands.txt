@@ -1,0 +1,12 @@
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/calo_31_default.root fitData=1 savePlots=1 output=output/calo_default_      
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/calo_31_default.root fitData=1 savePlots=1 output=output/calo_default_sys_  includeFiles=configCms/tag_jes_calo.mrf,configCms/tag_btag_calo.mrf
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/calo_31_metcut.root  fitData=1 savePlots=1 output=output/calo_metcut_       
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/calo_31_metcut.root  fitData=1 savePlots=1 output=output/calo_metcut_sys_   includeFiles=configCms/tag_jes_calo.mrf,configCms/tag_btag_calo.mrf
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/jpt_31_default.root  fitData=1 savePlots=1 output=output/jpt_default_       
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/jpt_31_default.root  fitData=1 savePlots=1 output=output/jpt_default_sys_   includeFiles=configCms/tag_jes_jpt.mrf,configCms/tag_btag_jpt.mrf
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/jpt_31_metcut.root   fitData=1 savePlots=1 output=output/jpt_metcut_        
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/jpt_31_metcut.root   fitData=1 savePlots=1 output=output/jpt_metcut_sys_    includeFiles=configCms/tag_jes_jpt.mrf,configCms/tag_btag_jpt.mrf
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/pf_31_default.root   fitData=1 savePlots=1 output=output/pf_default_        
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/pf_31_default.root   fitData=1 savePlots=1 output=output/pf_default_sys_    includeFiles=configCms/tag_jes_pf.mrf,configCms/tag_btag_pf.mrf
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/pf_31_metcut.root    fitData=1 savePlots=1 output=output/pf_metcut_         
+./multiRegionFitter.exe configCms/tag_310.mrf templateFile=templatesCms/pf_31_metcut.root    fitData=1 savePlots=1 output=output/pf_metcut_sys_     includeFiles=configCms/tag_jes_pf.mrf,configCms/tag_btag_pf.mrf 

@@ -1,0 +1,155 @@
+#! /usr/bin/env python
+
+import ROOT
+import optparse
+
+histList = [ ('combined_jes080_1200bins.root', '080'),
+             ('combined_jes090_1200bins.root', '090'),
+             ('combined_jes095_1200bins.root', '095'),
+             ('combined_jes100_1200bins.root', '100'),
+             ('combined_jes105_1200bins.root', '105'),
+             ('combined_jes110_1200bins.root', '110'),
+             ('combined_jes120_1200bins.root', '120')
+             ]
+
+dataFile         = 'combined_histos_v2_minJets1_jes100.root'
+                 
+default          = '100' # key of default size
+samples          = ['top_ht', 'wjets_ht']
+groups           = ['0j', '1j', '2j', '3j', '4j', '5j']
+nominalRange     = {'0j' : ( 5,  20.,  60.),
+                    '1j' : (10,  50., 300.),
+                    '2j' : (10,  80., 500.),
+                    '3j' : (10, 110., 600.),
+                    #'4j' : ( 5, 140., 600.),
+                    '4j' : (26, 150., 800.),
+                    '5j' : ( 5, 170., 600.)}
+clonedHistsDict  = {}
+nominalHistsDict = {}
+bins             = 1200
+fixNamesDict     = {'top_ht'   : 'Top_hT',
+                   'wjets_ht' : 'WJets_hT'}
+
+ROOT.TH1.AddDirectory (False)
+ROOT.gROOT.SetStyle("Plain")
+
+def compressHistogram (hist, tup):
+    '''Based on the tuple (bins, lower, upper) makes a new histogram
+    and compresses the old one (hist) into the new one.  This uses the
+    middle of the bin of the old histogram to place entries in the new
+    histogram.'''
+    name = hist.GetName() + "_compressed"
+    retval = ROOT.TH1F (name, name, tup[0], tup[1], tup[2])
+    newNumBins = tup[0]
+    numBins = hist.GetNbinsX() + 1 # + 1 for overflow
+    for bin in range (numBins + 1):
+        contents = hist.GetBinContent (bin)
+        position = hist.GetBinLowEdge (bin) + 0.5 * hist.GetBinWidth (bin)
+        retval.Fill (position, contents)
+    # move under and overflow of new histogram into body of histogram
+    retval.SetBinContent ( 1,
+                           retval.GetBinContent (0) +
+                           retval.GetBinContent (1) )
+    retval.SetBinContent ( 0, 0.)
+    retval.SetBinContent (newNumBins,
+                          retval.GetBinContent (newNumBins) +
+                          retval.GetBinContent (newNumBins + 1))
+    retval.SetBinContent ( newNumBins + 1, 0.)
+    
+    return retval
+
+if __name__ == "__main__":
+    # Setup options parser
+    parser = optparse.OptionParser \
+             ("usage: %prog [options] templates.root" \
+              "Prints out info on templates.")
+    parser.add_option ('--output', dest='output', type='string',
+                       default='combined',
+                       help="Prefix of output name")
+    parser.add_option ('--rebinFactor', dest = 'rebinFactor', type='int',
+                       default=1,
+                       help='Rebin factor for histograms');
+    options, args = parser.parse_args()
+    
+    if bins % options.rebinFactor:
+        raise RuntimeError, "%d is not divisible by rebin factor %d" % \
+              ( bins, options.rebinFactor)
+    bins /= options.rebinFactor
+    output = options.output + "_%dbins.root" % bins
+    
+    # load and clone all histograms
+    
+    for histTup in histList:
+        rootfile = ROOT.TFile.Open (histTup[0])
+        if not rootfile:
+            raise RuntimeError, "Can't open '%'." % histTup[0]    
+        for sample in samples:
+            for group in groups:
+                oldName = sample +'_' +  group
+                newName = fixNamesDict.get (sample, sample) + '_' + \
+                          group + '_' + histTup[1]
+                oldHist = rootfile.Get(oldName)
+                if not oldHist:
+                    raise RuntimeError, "Can't find '%s' in '%s'" % \
+                          (oldName, histTup[0])
+                hist = clonedHistsDict.setdefault (oldName, {})[histTup[1]] = \
+                       oldHist.Clone(newName)
+                # check to see if we have a nominal range for this one
+                rangeTup = nominalRange.get (group)
+                if not rangeTup:
+                    continue
+                # o.k. Let's get to work
+                nominalHistsDict.setdefault (oldName, {})[histTup[1]] = \
+                       compressHistogram (hist, rangeTup)
+        rootfile.Close()
+    
+    # Renormalize so that all histograms have the same integral since we
+    # are doing rate uncertainties elsewhere
+    for key, jesDict in clonedHistsDict.iteritems():
+        norm = jesDict[default].Integral()
+        nominalDict = nominalHistsDict.get (key)
+        for key, hist in jesDict.iteritems():
+            if key == default:
+                # don't renormalize default value
+                continue
+            scaleFactor = norm / hist.Integral()
+            hist.Scale( scaleFactor )
+            if nominalDict:
+                nominalDict[key].Scale( scaleFactor )
+            
+    # Load data histograms
+    dataList = []
+    rootfile = ROOT.TFile.Open (dataFile)
+    if not rootfile:
+        raise RuntimeError, "Can't open '%'." % dataFile
+    for group in groups:
+        name = 'Data_hT_' + group
+        tup = nominalRange.get(group)
+        if tup:
+            # But we've been told what the format should be
+            dataHist = ROOT.TH1F (name, name, tup[0], tup[1], tup[2]) 
+            dataList.append( dataHist )
+            dataHist.SetBinContent (1, 1) # fitter doesn't like empty data
+        else:
+            # And we have no idea how to make a new one
+            raise RuntimeError, "Can't find '%s' in '%s'" % \
+                  (name, dataFile)
+        dataList.append( hist.Clone() )
+    rootfile.Close()
+        
+    # Write out everything
+    rootfile = ROOT.TFile.Open (output, 'Recreate')
+    # write fine bin histograms
+    for name, jesDict in sorted( clonedHistsDict.iteritems() ):
+        for key, hist in sorted( jesDict.iteritems() ):
+            if options.rebinFactor > 1:
+                hist.Rebin (options.rebinFactor)
+            hist.Write()
+    # write nominal range histograms
+    for name, jesDict in sorted( nominalHistsDict.iteritems() ):
+        for key, hist in sorted( jesDict.iteritems() ):
+            hist.Write()    
+    # write data historgrams
+    for hist in dataList:
+        hist.Write()
+    rootfile.Close()

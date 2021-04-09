@@ -1,0 +1,2600 @@
+// -*- C++ -*-
+#include <ctime>
+#include <cstdlib>
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <map>
+
+#include "TFile.h"
+#include "TAuthenticate.h"
+#include "TSystem.h"
+
+#include "TClonesArray.h"
+#include "TTree.h"
+#include "TNtuple.h"
+
+#include "TLorentzVector.h"
+
+#include "HighLevelObjects/HighLevelObjects.hh"
+#include "JetUser/JetEnergyCorrections.hh"
+#include "RootFileCollection/TopTreeNamespace.h"
+#include "RootFileCollection/TreeFileInterface.h"
+#include "RootFileCollection/TopNtupleDecoder.h"
+#include "RootFileCollection/OptionUtils.h"
+#include "RootFileCollection/RunEventSet.h"
+#include "RootFileCollection/dout.h"
+
+//TopAna Tools
+#include "TopAnaTools/EvtSelTool.hh"
+#include "TopAnaTools/FitTool.hh"
+#include "TopAnaTools/FitObjects.hh"
+#include "TopAnaTools/AlpgenWeights.hh"
+#include "TopAnaTools/HeavyFlavorUtils.hh"
+#include "TopAnaTools/TopUtils.hh"
+#include "BTagObjects/jetMistagApr2008.hh"
+#include "JointPhysics/PDFReweightingCont.hh"
+#include "JointPhysics/PDFReweightingNamespace.hh"
+#include "KITFlavorSep/KITFlavorSepExpert.hh" //for the NN Tagger Expert
+#include "KITFlavorSep/CorrectionMistags.hh" //for the correction of mistagged events
+
+using namespace std;
+using namespace OptionUtils;
+using namespace TopTreeNamespace;
+
+using namespace TopUtils;
+using namespace HeavyFlavorUtils;
+using namespace PDFReweightingNamespace;
+// Polluting the gLobal namespace - gLobal variables
+// Note, name in parenthesis is command-line variable name.
+// e.g. 'which=12 usetracks=1' will set gWhich = 12 and gUseTracks = false
+
+// number of events (num/numwanted/howmany)
+int gNumWanted        = 0;
+// current section (section)
+int    gSection       = 0;
+// total number of sections (totalsection)
+int    gTotalSection  = 0;
+// input list of root files (list)
+string gListName;
+// input root file (file) - instead of list 
+string gFileName;
+// output root filename (output)
+string gOutputName;
+// sample name 
+string gSampleName;
+// Should we use TSam (sam)
+bool   gUseSam        = false;
+
+// Remove duplicates (removedup)
+bool gRemoveDuplicates = false;
+// Do PDF Stuff (dopdf)
+bool gDoPDF = false;
+// Run The Kinematic Fitter
+bool gFitter = false;
+// Sample Type:
+// data,qcd,top,atop,wlf,wbb,wcc,wc,zbb,zcc,zlf,stops,stopt,ww,wz,zz
+string gSampleType = "";
+// Use Jet Electrons (jetele)
+bool gJetEle = false;
+// Use fake leptons for the event selection (fakelep)
+bool gFakeLep = false;
+// Use a shifted JES (jes)
+double gJESShift = 0.0;
+// Change the jet energy threshold (jetEnergy)
+Double_t gJetEnergy = 20.0;
+// Input TopNt files are skimmed file and aleady contains EvtSelCuts and EvtSelResultLJ branches
+bool gUseSkimmedTopNt = false;
+
+//Use debug
+bool gMyDebug = false;
+
+// forward declarations
+void initializeOptionMap();
+
+// Ntuple stuff /////////
+const int maxVar = 500; //max number of variables in ntuple
+// the actual # of variables is dynamic
+TNtuple *nt;
+float var[maxVar];
+TString varnames;
+int nit; //ntuple iterator
+
+// max n jets to loop over
+const int maxNjets = 8;
+
+void SetupTCABranches(TreeFileInterface *tfi, bool useSkim);
+void initJobProgress(TreeFileInterface *tfi, int &nEvents, int &n100, int &n10);
+void reportJobProgress(const int nEvents, const int n100, const int n10, int &ev, int &cnt100, int &cnt10);
+string outputName();
+TString getMistagFile(TString type);
+const char *getKITFile();
+const char* getCorrMistagFile();
+TString getTrigFile();
+string getPdfFile();
+const char *getGoodRunDir();
+void initAlpgenWeighting();
+void setCuts(EvtSelCuts *cuts);
+bool isDuplicateEvent(RunEventSet *mySet, evt *event);
+int passedTrigger(unsigned int selectMask, EvtSelResultLJ *result);
+bool passedQCDveto(int Trigger,  EvtSelResultLJ *result); 
+double lepEff(const evt *event, int Trigger);
+double lepErr(const evt *event, int Trigger);
+double mTW(TLorentzVector leptonVect,  const EvtSelResultLJ *result);
+bool isGoodSiRun(int Trigger, EvtSelResultLJ *result);
+EvtSelResultLJ GetEventResult_LJ(TreeFileInterface *tfi, evt *event, privertex *pv, EvtSelTool *evtSeltool);
+void SetDecoder(TreeFileInterface *tfi, evt *event,  EvtSelTool *evtSeltool, KITFlavorSepExpert* kitflavorsepexpert, int &lastRun);
+void eventStamp(const evt *event);
+
+//ANN
+void fillANN(const TLorentzVector & lepton, const TLorentzVector *jet,  const EvtSelResultLJ *result );
+float Afunction(float INPUT);
+void nnFunction3JGen6(const double *pattern, double *output);
+void nnFunction4JGen6(const double *pattern, double *output);
+double getAplanarity(const TLorentzVector & metV, const TLorentzVector & lepton, const TLorentzVector *jet,  const int nJets5);
+double getEtaMax(const TLorentzVector *jet,  const int nJets5);
+void getSumEt(const TLorentzVector & metV, const TLorentzVector & lepton, const TLorentzVector *jet, 
+		const int nJets5, double & ht, double & sumJetEt345, double & sumPzSumEt );
+void getMinDijet(const TLorentzVector *jet,   const int nJets5,  double &  minDijetMass, double &  minDijetSep);
+
+void Fill(bool loop = false,  int Trigger = 0, double AlpgenW = 1., int HFremBit = 0, evt *event = 0, privertex *pv = 0, 
+	  summary *evt_summary =0, jetMistagApr2008 **mistag_matrix = 0,  
+	  KITFlavorSepExpert* kitflavorsepexpert = 0, CorrectionMistags* corr_misA = 0,
+	  TClonesArray *zvert = 0, TClonesArray *electrons = 0, TClonesArray *muons = 0, 
+	  TClonesArray *jets = 0, TClonesArray *obsps = 0, 
+	  EvtSelTool *evtSeltool = 0, EvtSelCuts *cuts = 0, EvtSelResultLJ *result = 0, TClonesArray *genps = 0);
+bool fillLepVar(bool loop, const evt *event, int Trigger, summary *evt_summary, 
+		const TClonesArray *electrons, const TClonesArray *muons, const TClonesArray *jets, const TClonesArray *zvert, 
+		const EvtSelResultLJ *result, const EvtSelTool *evtSeltool, const EvtSelCuts *cuts, TLorentzVector & lepton);
+void fillJetVar(bool loop, const evt *event, const int nvert, const privertex *pv, 
+		jetMistagApr2008 **mistag_matrix,  KITFlavorSepExpert* kitflavorsepexpert, CorrectionMistags* corr_misA, 
+		const TClonesArray *jets, TClonesArray *obsps,   const EvtSelResultLJ *result, const EvtSelCuts *cuts, 
+		TLorentzVector *jet4V );
+
+
+void fillMatchedJet(const EvtSelResultLJ *result,  const EvtSelCuts *cuts, const TClonesArray *jets, const TLorentzVector *hepgVector, TString jetStr);
+void fillJet(const EvtSelResultLJ *result, const TClonesArray *jets, jet *jt, TString jetStr, float deltaR, double L5corr, bool condition);
+
+void bookNtuple();
+void fillVar(TString name, float value, bool condition = true);
+void fillVar(TString name);
+
+double DeltaPhi(double phi1, double phi2);
+void nVertices(const TClonesArray *zvert, int & nvert, int &nZV12, int &nZV12_2trk);
+double getAlpgenWeight(TString filename);
+SampleType getSampleType();
+bool isHF(const SampleType sample);
+bool isAlpgen(const SampleType sample);
+bool acceptableHF(const SampleType sample, TClonesArray *genps, const TClonesArray *jets, const EvtSelCuts *cuts);
+bool acceptableHFTwo(const SampleType sample, TClonesArray *genps, const TClonesArray *jets, const EvtSelCuts *cuts);
+bool isTightJet(const jet *jt, const EvtSelCuts *cuts, double &L5corr);
+
+TreeFileInterface *tfi; 
+
+int main(int argc, char** argv)
+{
+   // Parse Command Line Arguments          
+   // Decide Which Files and How Many Events
+  initializeOptionMap();
+  parseArguments (argc, argv); // OptionUtils::
+
+  tfi = new TreeFileInterface("TopTree", !gUseSkimmedTopNt); // no need to decode skims;
+  
+  if ( gSampleName.length()){
+    gOutputName = gSampleName;    
+     if (gUseSkimmedTopNt)       
+       //     gListName = "../filelists/looseSkim/TopTree/" + gSampleName + ".topLJAcc.looseSkim.rootlist";
+       gListName = "filelists/" + gSampleName + ".skim.rootlist";
+    else        
+       gListName = "filelists/" + gSampleName + ".rootlist";
+  }
+   
+
+   // Setup output file
+  string outFileName = outputName();
+  TFile * outFilePtr = new TFile (outFileName.c_str(), "RECREATE"); //,"test file", 5); //compression level 5
+  if (! outFilePtr->IsOpen()) {
+    cerr << "Did not successfully open " << outFileName  << " for output.  Aborting." << endl;
+    assert(0);     
+  }
+
+
+   if ( gUseSam)
+   {
+#ifdef __NO_TSAM__
+      // Are we trying to access TSam when it is disabled?
+      cerr << "topSkim: Can not use TSam with __NO_TSAM__"   << endl;
+      assert(0);
+#endif
+      // tell the file colleciton to use Sam
+      tfi->setCollectionType( RootFileCollection::kSam );
+   } // if using sam 
+   else
+   {
+      // tell the file collection tot use filelists
+      tfi->setCollectionType( RootFileCollection::kFileList );
+      // Are we set?
+      if (!gListName.length() && !gFileName.length()){
+         // we have to have an input list and an output root file
+         cerr << "You must specify both an input list root file." << endl 
+	      << "Use 'list=bla.list' arguments."  << endl;
+         exit(0);
+      }
+
+      if (gListName.length())               tfi->addFilesFromList (gListName);
+      else if (gFileName.length())       tfi->addFile (gFileName);
+      else                                           assert(0);
+     
+      if (gSection && gTotalSection) 
+         tfi->setSegment (gSection, gTotalSection);
+      
+   } // if not using sam
+
+
+   // Set the number of wanted events if different than 0
+   if (gNumWanted)      tfi->setEventsWanted (gNumWanted);
+
+
+   // Setup TCA Branches //
+   SetupTCABranches(tfi,  gUseSkimmedTopNt );
+ 
+   // Mistag Matrix
+   if (gMyDebug) cout << "about to init mistag_matrix " << endl;
+   jetMistagApr2008 *mistag_matrix[3];
+   if (gMyDebug) cout << "init mistag_matrix " << endl;
+   mistag_matrix[0] = new jetMistagApr2008(getMistagFile("Tight"),"tagrates");
+   mistag_matrix[1] = new jetMistagApr2008(getMistagFile("Loose"),"tagrates");
+   mistag_matrix[2] = new jetMistagApr2008(getMistagFile("Ultratight"),"tagrates");
+
+//    jetMistagApr2008* mistag_matrix_tight = new jetMistagApr2008(getMistagFile("Tight"),"tagrates");
+//    jetMistagApr2008* mistag_matrix_loose = new jetMistagApr2008(getMistagFile("Loose"),"tagrates");
+//    jetMistagApr2008* mistag_matrix_utratight = new jetMistagApr2008(getMistagFile("Ultratight"),"tagrates");
+
+   //KIT Flavor Separator
+   KITFlavorSepExpert* kitflavorsepexpert = new KITFlavorSepExpert( getKITFile() );
+   CorrectionMistags* corr_misA = new CorrectionMistags( getCorrMistagFile() );
+
+
+   // Event Selection 
+   EvtSelCuts cuts;
+   setCuts(&cuts);
+   EvtSelTool evtSeltool( getGoodRunDir(), cuts, getTrigFile() );  //A helper class for Top Analyses
+
+   RunEventSet mySet; // keeping track of duplicate events
+
+   // Alpgen Weighting
+   initAlpgenWeighting();
+
+   // PDF stuff
+   if(gDoPDF) PDFReweightingCont::loadNtuplePdfMapFile( getPdfFile() );
+ 
+
+   // Init Ntuple
+   bookNtuple(); 
+//    initialize counters
+   int nEvents(-1), ev(0), cnt100(1), cnt10(1), n100(0), n10(0); 
+   int lastRun(-99999);
+
+   while (tfi->getNextEvent())
+     {
+  
+       // report  job progress
+       if(!ev) initJobProgress(tfi, nEvents, n100, n10);
+       reportJobProgress(nEvents, n100, n10, ev, cnt100, cnt10);
+       if (gMyDebug) cout << endl;
+       
+     //hook up objects we'll need
+     evt *evtPtr = (evt*) tfi->At (kEvtBranch, 0);
+     privertex *privPtr = (privertex *)tfi->At(kPrivertexBranch,0);
+     summary *smryPtr = (summary *)tfi->At(kSummaryBranch,0);
+
+
+     TClonesArray* obsps = 0;
+     if( gSampleType != "data" && gSampleType !="qcd" ) obsps = tfi->tcaPtr(kObspBranch);
+
+     //@@@@@@@@@@@@@@@@
+     //PDF WEIGHTING - LOADING FILE BEFORE CUTS
+     //@@@@@@@@@@@@@@@@
+     if(gDoPDF){
+       if (tfi->isNewFile()){
+	 bool loaded = PDFReweightingCont::loadAssociateMapRootFile ( (const char*) tfi->filename() );		     
+	 if (!loaded ){
+	   cerr << "Error: Could not find associated PDF file for "  << tfi->filename() << endl;
+	   return -1;
+	 }
+       }
+     }//gDoPDF
+
+     //setup decoder
+     SetDecoder(tfi, evtPtr,  &evtSeltool, kitflavorsepexpert, lastRun);
+
+     //get event result information
+     EvtSelResultLJ result = GetEventResult_LJ(tfi, evtPtr, privPtr, &evtSeltool);
+
+     // Event Selection 
+    unsigned int selectMask = 0x0;
+    selectMask |= TopAnaTools::SELECT_LJ_PRETAG & (~(TopAnaTools::SELECT_LJ_MET)); // No MET CUT!!
+
+     int Trigger = passedTrigger(selectMask, &result);
+     if (Trigger != 0 && Trigger != 2 && Trigger != 3) 
+       continue;  // CEM/CMUP/CMX only
+ 
+     //duplicate check
+     if (gRemoveDuplicates || gSampleType == "data"){
+       if ( isDuplicateEvent(&mySet, evtPtr))  continue;
+     }
+
+    // give the flavor separator everything it needs
+     kitflavorsepexpert->SetDataPointers(tfi->tcaPtr(kElectronBranch),  tfi->tcaPtr(kMuonBranch),
+					 tfi->tcaPtr(kTjassocBranch), tfi->tcaPtr(kSecvtxtrackBranch) );
+    
+     // thin out collections(mainly to remove fake elec and jet elec from samples)
+    if ( ! gUseSkimmedTopNt ) 
+        evtSeltool.thinCollections(tfi->tcaPtr(kElectronBranch), tfi->tcaPtr(kMuonBranch), 
+ 				tfi->tcaPtr(kJetBranch), evtPtr, tfi->tcaPtr(kZvtxsBranch));
+
+     // heavy flavor overlap removal
+    int HFremBit = 0;  // 0 -passes; 1 - jet-based; 2 - hepg-based; 3 - both
+
+    //std::cout << "About to check for HFOR" << std::endl;
+
+    // jet-based
+    //if (!  acceptableHFTwo( getSampleType(), tfi->tcaPtr(kHepgBranch), tfi->tcaPtr(kJetBranch), &cuts ))
+    //  continue;
+   //     HFremBit += 1;
+     
+     //  pt -based
+//    if ( isAlpgen ( getSampleType() )   &&  ! HeavyFlavorFilter(tfi->tcaPtr(kHepgBranch), getSampleType()) ) 
+// //        continue;
+//      HFremBit += 2;
+  
+   
+    TClonesArray *hepg = tfi->tcaPtr(kHepgBranch);
+    if (hepg == NULL) 
+      std::cout << "hepg is null" << std::endl;
+
+
+   //alpgen weighting
+   double AlpgenWeight;
+   if (!gUseSam)
+     AlpgenWeight = getAlpgenWeight(tfi->filename() );
+   else
+     AlpgenWeight = getAlpgenWeight(gSampleName );
+   
+   // fill the ntuple
+   Fill(true, Trigger, AlpgenWeight, HFremBit, evtPtr, privPtr, smryPtr, mistag_matrix,  kitflavorsepexpert, corr_misA, 
+	  tfi->tcaPtr(kZvtxsBranch), tfi->tcaPtr(kElectronBranch), tfi->tcaPtr(kMuonBranch), tfi->tcaPtr(kJetBranch), 
+	obsps, &evtSeltool, &cuts,&result, hepg);
+
+   } // while get next event
+
+
+   // write output
+   outFilePtr->cd();
+   nt->Write();
+   outFilePtr->Close();
+
+   cout << "Finished." << endl;
+   return 0;
+}
+
+void initializeOptionMap()
+{   
+   // Integers
+  addOptionKey("num",gNumWanted);
+  addOptionKey("numwanted",gNumWanted);
+  addOptionKey("howmany",gNumWanted);
+  addOptionKey("section",gSection);
+  addOptionKey("totalsection",gTotalSection);
+   // Strings
+  addOptionKey("list",gListName);
+  addOptionKey("file",gFileName);
+  addOptionKey("output",gOutputName);
+  addOptionKey("sample",gSampleName);
+   // Boolean variables
+  addOptionKey("sam",gUseSam);
+
+  addOptionKey("removedup",gRemoveDuplicates);
+  addOptionKey("sampletype",gSampleType);
+  addOptionKey("type",gSampleType);
+  addOptionKey("process",gSampleType);
+  addOptionKey("dopdf",gDoPDF);
+  addOptionKey("kinfit",gFitter);
+  addOptionKey("jetele",gJetEle);
+  addOptionKey("fakelep",gFakeLep);
+  addOptionKey("anti",gFakeLep);
+  addOptionKey("jes",gJESShift);
+  addOptionKey("jetEnergy",gJetEnergy);
+  addOptionKey("skim",gUseSkimmedTopNt); 
+  addOptionKey("useskim",gUseSkimmedTopNt); 
+  addOptionKey("debug",gMyDebug);
+}
+
+
+
+//////////////////////////////////////////////////
+//  NTUPLE 
+//////////////////////////////////////////////////
+
+
+// this is to book the user ntuple and save it periodically 
+void bookNtuple(){
+
+  cout << "Booking the ntuple ..." ;
+
+  Fill();
+  nt = new TNtuple("nt","nt",varnames);
+  nt -> SetAutoSave(10000000);  //AutoSave after every 10 Mbyte written to disk 
+  nt -> SetMaxTreeSize(900000000); //900Mb (will get file_1.root subscript)
+
+  cout << " Done!" << endl;
+}
+
+void Fill(bool loop, int Trigger, double AlpgenW, int HFremBit, evt *event, privertex *pv, summary *evt_summary, jetMistagApr2008 **mistag_matrix,  KITFlavorSepExpert* kitflavorsepexpert, CorrectionMistags* corr_misA, TClonesArray *zvert, TClonesArray *electrons, TClonesArray *muons, TClonesArray *jets, TClonesArray *obsps,EvtSelTool *evtSeltool, EvtSelCuts *cuts, EvtSelResultLJ *result, TClonesArray *genps){
+
+  if (gMyDebug)        cout << " fill the ntuple " << endl;
+
+  if (genps == NULL)
+    std::cout << "Uh oh, genps is null" << std::endl;
+
+  nit = 0; //ntuple iterator
+   
+  if (!loop){
+    // need to initialize dummy variable to make sure the pointers are valid
+    event = new evt();
+    pv = new privertex();
+    zvert = new TClonesArray("zvtxs");
+    electrons = new TClonesArray("electron");
+    muons = new TClonesArray("muon");
+    jets = new TClonesArray("jet");
+    obsps = new TClonesArray("obsp");
+    evtSeltool = new EvtSelTool();
+    cuts = new EvtSelCuts();
+    result = new EvtSelResultLJ("dummy","dummy");
+  }
+
+  int nvert=0, nZV12=0, nZV12_2trk=0;
+
+  if (loop){ // calculations
+    nVertices(zvert, nvert, nZV12, nZV12_2trk);
+  }
+
+  if (gMyDebug) {
+    cout << "Event " << event->eventNumber << ", Run " << event->runNumber << endl;
+    cout << "nJets = " << result->nTightJets << " nTag = " << result->nTightJetsPosTag << endl;
+  }
+
+  // fill variables
+    fillVar("evt.AlpgenW", AlpgenW);
+    //   fillVar("evt.HFremBit", HFremBit);
+    fillVar("evt.Run",event->runNumber);
+    fillVar("evt.Event",event->eventNumber);
+    fillVar("evt.isGoodSiRun", isGoodSiRun(Trigger, result ));
+    fillVar("evt.Trigger", Trigger);
+    fillVar("evt.passedQCDveto",passedQCDveto(Trigger, result));
+    fillVar("evt.nJets",result->nTightJets);
+    fillVar("evt.nLJets",result->nLooseJets);
+    fillVar("evt.nJetsPosTag",result->nTightJetsPosTag);
+    fillVar("evt.nJetsNegTag",result->nTightJetsNegTag);
+    fillVar("evt.Met",result ->corrMetMag);
+    fillVar("evt.MetPhi",result->corrMetPhi);
+    fillVar("evt.nZvtx",nZV12);
+    fillVar("evt.nZvtx2",nZV12_2trk);
+  
+    TLorentzVector lepton4V;
+    TLorentzVector jet4V[5]; //  used in neural network
+  
+    acceptableHFTwo( getSampleType(), genps, jets, cuts );
+
+    if (! fillLepVar(loop,event, Trigger, evt_summary, electrons,muons,jets, zvert, result, evtSeltool, cuts, lepton4V)
+	&& loop) return;
+    fillJetVar(loop,event, nvert, pv, mistag_matrix, kitflavorsepexpert, corr_misA, jets, obsps, result, cuts, jet4V);
+    
+    fillANN(lepton4V, jet4V, result);
+
+// # for the events where number tight jets >=4
+
+//   double input[18] = {0.,0.,0.,0.,0.,0.,
+//                       0.,0.,0.,0.,0.,0.,
+//                       0.,0.,0.,0.,0.,0.};
+//    double output3 = 0.0;
+//   double output4 = 0.0;
+
+//  input[0] = getAplanarity(met, lepton, corrJets);
+//   input[1] = getEtaMax(corrJets);
+//   input[2] = getHt(met, lepton, corrJets);
+//   input[3] = getMinDijetMass(corrJets);
+//   input[4] = getMinDijetSep(corrJets);
+//   input[5] = getSumEtJet(corrJets,2,3,4);
+//   input[6] = getSumPzSumEt(corrJets);
+ 
+//  # for the events where number tight jets >=4
+//  nnFunction4JGen6(input,&output4);
+// # when njet==3
+//   nnFunction3JGen6(input,&output3);
+
+// double output = 0.0;
+// if (nJet==3)
+// output = output3;
+// else
+// output = output4;
+
+
+
+    if (loop)
+      nt->Fill(var);
+    else{// shouldn't hurt if skipped
+      delete  event;
+      delete pv;
+      delete zvert;
+      delete electrons;
+      delete muons;
+      delete jets;
+      delete obsps;
+      delete evtSeltool;
+      delete cuts;
+      delete result;
+    }
+
+} //Fill
+
+
+
+void nVertices(const TClonesArray *zvert, int & nvert, int &nZV12, int &nZV12_2trk){
+
+
+    zvtxs *zv;
+    TIter nextZVert (zvert);
+    // Loop Over Zvtxs and count >= quality 12
+    while ( zv = (zvtxs *) nextZVert() ) {
+      nvert++;
+      if (zv->quality >= 12){ 	nZV12++;	  
+	if (zv->n_trk >=2)	  nZV12_2trk++;
+      }
+    }//while
+
+}
+
+
+bool fillLepVar(bool loop, const evt *event, int Trigger, summary *evt_summary, 
+		const TClonesArray *electrons, const TClonesArray *muons, const TClonesArray *jets, const TClonesArray *zvert, 
+		const EvtSelResultLJ *result, const EvtSelTool *evtSeltool, const EvtSelCuts *cuts, TLorentzVector & lepton) {
+
+  // NEED TO INCORPORATE JET ELECTRONS HERE
+
+  bool isEle = false, isMuo = false;
+  //  TLorentzVector lepton;
+  int lepType(-99), trkFiducial(-99), nSiHits(-99), nAxHits(-99), nStHits(-99), nAxSeg(-99), nStSeg(-99);
+  float Charge(-99.), BCCharge(-99.), trkChi2(-99), D0(-99.), Z0(-99.), Isol(-99.), Phi(-99.), DetEta(-99.);
+
+  int nCEMJetEle=0,nPHXJetEle=0,nCMUPJetEle=0,nCMXJetEle=0;
+  int nJetEle=0;
+  TClonesArray jetElectrons("jet");
+
+  //Standard LJ?
+  if (loop){
+    if(electrons->GetEntries()>0 && muons->GetEntries()>0){   
+      eventStamp(event);
+      cout<<"Electron And Muon In Event"<< endl;  
+      return false;
+    }
+    if(electrons->GetEntries()>1) {   
+      eventStamp(event);
+      cout<<"More then one electron"<< endl;  
+      return false; 
+    }
+    if(muons->GetEntries()>1) {   
+      eventStamp(event);
+      cout<<"More then one muon"<< endl;  
+      return false; 
+    }
+
+  //Jet Electrons
+
+  if((cuts->fakeCEMMask & TopAnaTools::JETELE_MASK) == TopAnaTools::JETELE_MASK){
+    nCEMJetEle  = evtSeltool->getJetElectronList(jets,JETELE_CEM,&jetElectrons);
+    nPHXJetEle  = evtSeltool->getJetElectronList(jets,JETELE_PHX,&jetElectrons);
+    nCMUPJetEle = evtSeltool->getJetElectronList(jets,JETELE_CMUP,&jetElectrons);
+    nCMXJetEle  = evtSeltool->getJetElectronList(jets,JETELE_CMX,&jetElectrons);
+    int jetmask = 0;
+    jetmask |= JETELE_CEM;
+    jetmask |= JETELE_PHX;
+    jetmask |= JETELE_CMUP;
+    jetmask |= JETELE_CMX;
+    jetElectrons.Clear();
+    nJetEle  = evtSeltool->getJetElectronList(jets,jetmask,&jetElectrons);
+    // cout << "fillLepVar: nJetEle = " << nJetEle << endl;
+  }
+
+    if(electrons->GetEntries()==0 && muons->GetEntries()==0 && nJetEle == 0) {   
+      eventStamp(event);
+      cout<<"No leptons in the event"<< endl;  
+      return false; 
+    }
+  }
+
+  if(electrons->GetEntries() > 0){
+    isEle = true;
+    electron *ele = (electron*) electrons->At(0);
+    lepton.SetPxPyPzE(ele->Px,ele->Py,ele->Pz,ele->En);
+    nSiHits = ele->TrkSiHits;
+    nAxHits = ele->TrkAxHits;
+    nStHits = ele->TrkStHits;
+    nAxSeg = ele->TrkAxSeg;
+    nStSeg = ele->TrkStSeg;
+    Charge = ele->Charge;
+    BCCharge = ele->BCCharge;
+    D0 = ele->TrkD0;
+    Z0 = ele->TrkZ0;
+    Isol = ele->Isol;
+    Phi = ele->Phi;
+  }
+  if(muons->GetEntries() > 0){
+    isMuo = true;
+    muon *muo = (muon*) muons->At(0);
+    lepton.SetPxPyPzE(muo->PxCorr,muo->PyCorr,muo->PzCorr,muo->PCorr);
+    lepType = muo->muontype;
+    trkFiducial = muo->TrkFiducial;
+    nSiHits = muo->TrkSiHits;
+    nAxHits = muo->TrkAxHits;
+   nStHits = muo->TrkStHits;
+    nAxSeg = muo->TrkAxSeg;
+    nStSeg = muo->TrkStSeg;
+    trkChi2 = muo->TrkRedChi2CT;
+    Charge = muo->Charge;
+    BCCharge = muo->BCCharge;
+   D0 = muo->D0;
+   Z0 = muo->Z0;
+   Isol = muo->Isol;
+   Phi = muo->Phi0;
+  }
+
+  if(nJetEle>0){
+    if(nCEMJetEle>0 || nPHXJetEle>0)  isEle=true;
+    if(nCMUPJetEle>0 || nCMXJetEle>0) isMuo=true;
+ //    if(nCEMJetEle>0) myleptonobject.fake[0] = true;
+//     if(nPHXJetEle>0) myleptonobject.fake[1] = true;
+//     if(nCMUPJetEle>0) myleptonobject.fake[2] = true;
+//     if(nCMXJetEle>0) myleptonobject.fake[3] = true;
+
+    jet *jetEle = (jet*) jetElectrons.At(0);
+    double px = jetEle->Et * TMath::Cos(jetEle->Phi);
+    double py = jetEle->Et * TMath::Sin(jetEle->Phi);
+    double pz = jetEle->Et * tanh(jetEle->Eta) / TMath::Sqrt( 1.0 - pow(tanh(jetEle->Eta), 2) );
+    lepton.SetPxPyPzE(px,py,pz,jetEle->En);
+    Phi = jetEle->Phi;
+    DetEta = jetEle->EtaDetector;
+    Charge = 0; // + 2 * random->Binomial(1,0.5);
+    Isol =0.05;
+
+    //  cout << "jetElectron Eta = " << DetEta << endl;
+  }
+
+  if (loop && !isEle && !isMuo){ cout << "not an ele or muo event " << endl;  return false;; }
+
+//   bool any2  = true; bool lead2 = true;
+//   if (Trigger > 3){
+//     any2 = evtSeltool->TriggerReqAny2Jets( event, jets,  zvert);
+//     lead2 = ( evtSeltool->TriggerReqTwo25GeVJets( event, jets, zvert) && 
+// 		   evtSeltool->TriggerReqCentralJet( event, jets, zvert ) && 
+// 		   evtSeltool->TriggerReqDR( event, jets, zvert ) );
+//   }
+//   fillVar("lep.any2",any2);
+//   fillVar("lep.lead2",lead2);
+
+  if (Trigger > 3){
+    bool any2 = evtSeltool->TriggerReqAny2Jets( event, jets,  zvert);
+    if (!any2) return false;
+  }
+
+  fillVar("lep.isEle",isEle);
+  fillVar("lep.isMuo",isMuo);
+  fillVar("lep.Type",lepType);
+  fillVar("lep.Eff",lepEff(event,Trigger));
+  fillVar("lep.Err",lepErr(event,Trigger));
+  fillVar("lep.Pt",lepton.Pt());
+  fillVar("lep.Eta",lepton.Eta());
+  fillVar("lep.DetEta",DetEta);
+  // fillVar("lep.Phi",lepton.Phi());
+  fillVar("lep.Phi",Phi);
+  //  fillVar("lep.deltaPhiMetw",DeltaPhi(lepton.Phi(),result->corrMetPhi-3.14));// this is off by Pi
+  fillVar("lep.deltaPhiMet",DeltaPhi(Phi,result->corrMetPhi));
+  fillVar("lep.mTW",mTW(lepton,result));
+  fillVar("lep.TrkFiducial",trkFiducial);
+  fillVar("lep.nSiHits",nSiHits);
+  fillVar("lep.nAxHits",nAxHits);
+  fillVar("lep.nStHits",nStHits);
+  fillVar("lep.nAxSeg",nAxSeg);
+  fillVar("lep.nStSeg",nStSeg);
+  fillVar("lep.TrkChi2",trkChi2);
+  fillVar("lep.Charge",Charge);
+  fillVar("lep.BCCharge",BCCharge);
+  fillVar("lep.D0",D0);
+  fillVar("lep.Z0",Z0);
+  fillVar("lep.Isol",Isol);
+  
+  return true;
+
+}//fillLepVar
+
+
+void fillJetVar(bool loop, const evt *event, const int nvert, const privertex *pv, jetMistagApr2008 **mistag_matrix,  KITFlavorSepExpert* kitflavorsepexpert, CorrectionMistags* corr_misA, const TClonesArray *jets, TClonesArray *obsps,   const EvtSelResultLJ *result, const EvtSelCuts *cuts, TLorentzVector *jet4V ){
+      
+  jet *jt;
+
+  double jbTagProb[5][3][maxNjets];// jet tag probability
+
+  for (int unc = 0; unc<5; unc++){
+    for (int t=0; t<3; t++){
+      for (int i=0; i<maxNjets; i++)
+	jbTagProb[unc][t][i] = 0.;
+    }
+  }
+
+  // keep track of b-tagged jets
+  int bt = 0; int bl = 0; int bu = 0;
+  jet bjet[3][2];
+  double bjet_L5corr[3][2] = {-999., -999.,-999., -999.,-999., -999.};
+  double bjet_bTagProb[3][2] =  {-999., -999.,-999., -999.,-999., -999.};
+  double bjet_bTagErr[3][2] = {-999., -999.,-999., -999.,-999., -999.};
+  int bjet_flavor[3][2] = {-999, -999,-999, -999,-999, -999};
+
+  double sumEt = 0.; // sumEt of all taggable jets for correction of NN output for mistags
+
+  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  // MISTAG MATRIX
+  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+//   if (event->runNumber == 144694 && event->eventNumber == 163){
+//     cout << "start event dump " << endl;
+//     gMyDebug = true;
+//   }
+
+  if (gMyDebug)   cout << "mistag matrix" << endl;
+  int j=0;
+
+  if (loop){// init mistags
+
+    TIter misJet(jets);
+    
+    while (jt = (jet*) misJet()){//cache mistag info
+      if( jt->Et >= 10. && fabs(jt->Eta) <= 2.4){ // when mistags are defined
+	if (gMyDebug) cout << "j = " << j << endl;
+	mistag_matrix[0]->cache(jt->secvTag, jt->secvNtrk,jt->Et,jt->Eta,nvert, pv->SecVtxVz, j);
+	mistag_matrix[1]->cache(jt->secvLooseTag, jt->secvNtrk,jt->Et,jt->Eta,nvert, pv->SecVtxVz, j);
+	mistag_matrix[2]->cache(jt->secvUltratightTag, jt->secvNtrk,jt->Et,jt->Eta,nvert, pv->SecVtxVz, j);
+	j++;
+	if (jt->secvNtrk>=2) 	  sumEt += jt->Et; // if taggable
+      }
+    }// end: cache mistag info
+
+    if (gMyDebug) cout << "done with cache " << endl;
+    for (int t=0; t<3;t++)   mistag_matrix[t]->applyMatrix();
+    mistag_matrix[0]->SetTagType("tight");
+    mistag_matrix[1]->SetTagType("loose");
+    mistag_matrix[2]->SetTagType("ultratight");
+  } // end: init mistags
+  
+  if (gMyDebug)    cout << "loop over jets " << endl;
+
+  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  // LOOP OVER JETS
+  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+  // initialize event info variables
+  int nLposTags = 0;
+  int nTposTags = 0;
+  int nUposTags = 0;
+
+  // tagged jet matches HF quark
+  int LmatchB = 0;
+  int LmatchC = 0;
+  int TmatchB = 0;
+  int TmatchC = 0;
+  int UmatchB = 0;
+  int UmatchC = 0;
+
+  int evMatchB = 0;
+  int evMatchC = 0;
+
+
+ //   cout << "##################################### " << endl;
+//    eventStamp(event);
+//   cout << "##################################### " << endl;
+
+  TIter nextJet(jets);    j=-1;
+  int tight_i = -1;
+  // The list of the jets in the Et-decreasing order
+  for (int i=0;i<maxNjets;i++){//keep the info about 8 tight leading jets only
+	
+    TString jetStr = "jet";
+    int jetindex = i+1;
+    jetStr += jetindex;
+
+    bool condition = (result->nTightJets > i); 
+    double L5corr = 0.0;
+    bool isTight = false;
+    bool deleteJet = false;
+
+    if (gMyDebug)    cout << "# of tight jets = " << result->nTightJets << "; i = " << i << endl;
+
+    
+    if (condition){ //there are remaining tight jets
+      do{ //keep looping until tight jet is found
+	jt = (jet*)nextJet();
+	if (gMyDebug) cout << " got a new jet: jt = " << jt;
+	if( jt->Et >= 10. && fabs(jt->Eta) <= 2.4)     j++; //keep track of mistag
+	isTight = isTightJet( jt, cuts, L5corr);
+	if (gMyDebug && isTight) cout << " is Tight Jet " << endl;
+	if (isTight) tight_i++;
+      } while (! isTight);
+    }
+    else{
+      jt = new jet();
+      jt->secvTag = 0; 
+      jt->secvLooseTag = 0; 
+      jt->secvUltratightTag = 0; 
+      deleteJet = true;
+    }
+
+
+    if (isTight && tight_i<5){ // save 4-vector
+      jet4V[tight_i].SetPxPyPzE(jt->Px,jt->Py,jt->Pz,jt->En);
+      jet4V[tight_i] *= L5corr;
+    }
+
+    if (gMyDebug)  cout << "tight_i = " << tight_i << "; jet4V[" << tight_i << "] = " << jet4V[tight_i].Pt() << endl;     
+    if (gMyDebug)   cout << "jet: (" << jt->Px << ", " << jt->Py << ", " << jt->Pz << ") ; L5corr = " << L5corr << endl; 
+    if (gMyDebug)   cout << "jet4V: (" << jet4V[tight_i].Px() << ", " << jet4V[tight_i].Py() << ", " << jet4V[tight_i].Pz() << ")  " << endl; 
+    if (gMyDebug)   cout << "b tag probability; i =  " << i << endl;
+    
+  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  //  B TAG PROBABILITY
+  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    int isTagged = jt->secvTag;
+    if (isTagged == 1) nTposTags++;
+    int isLooseTagged = jt->secvLooseTag;
+    if (isLooseTagged == 1) nLposTags++;
+    int isUltratightTagged = jt->secvUltratightTag;
+    if (isUltratightTagged == 1) nUposTags++;
+    bool isTaggable = (jt->secvNtrk >=2);
+
+
+
+    if (gMyDebug)   cout << "Tag: " <<  jt->secvTag << "; L Tag = " << jt->secvLooseTag << "; U Tag = " << jt->secvUltratightTag << endl;
+
+    bool matchBottom=false, matchCharm=false;
+    
+    double bTagProb[3], bTagErr[3];
+    for (int t=0; t<3;t++){
+      bTagProb[t] = 0.0;
+      bTagErr[t] = 0.0;
+    }
+      
+//     double bTagProb = 0.0, bTagErr = 0.0;
+//     double bLTagProb = 0.0, bLTagErr = 0.0;
+//     double bUTagProb = 0.0, bUTagErr = 0.0;
+
+    if (gMyDebug) cout << "do Obsp Matching " << endl;
+
+    if(event->isMonteCarlo){
+      HeavyFlavorUtils::jetObspMatching (obsps,jt,matchCharm,matchBottom);
+      
+      if (matchBottom || matchCharm){//heavy flavor
+	
+	if (isTagged == 1 || isLooseTagged ==1 || isUltratightTagged == 1){
+	  bTagErr[0] = 0.05;
+	  if (matchCharm && !matchBottom)   bTagErr[0] = 2*bTagErr[0];
+	  if (matchCharm && matchBottom)  matchCharm = false;
+	  for (int t=1; t<3;t++)	  bTagErr[t] = bTagErr[0];
+	}
+
+	if (matchBottom) evMatchB = 1;
+	if (matchCharm) evMatchC = 1;
+
+	if(isTagged == 1){ 
+	  bTagProb[0] = 0.95; 
+	  if (matchBottom) TmatchB = 1; 
+	  if (matchCharm) TmatchC = 1; 
+	}
+	if(isLooseTagged == 1){  
+	  bTagProb[1] = 0.95; 
+	  if (matchBottom) LmatchB = 1; 
+	  if (matchCharm) LmatchC = 1; 
+	}
+	if(isUltratightTagged == 1){ 
+	  bTagProb[2] = 0.88;
+	  if (matchBottom) UmatchB = 1;
+	  if (matchCharm) UmatchC = 1; 
+	}
+	//	cout <<  " bTagProb T = " <<  bTagProb[0] << endl;
+
+      } else { // light flavor
+	if (isTaggable && loop){
+	  for (int t=0; t<3;t++){
+	    bTagProb[t] = 1.01*mistag_matrix[t]->mistagRate(j);
+	    bTagErr[t] = 0.20 * bTagProb[t];//mistag_matrix[t]->mistagRateErrNoStat(j);
+	  }
+	}
+      }//end light flavor
+    }// is Monte Carlo
+    else{ // data
+      if(isTagged == 1)  bTagProb[0] = 1.0; 
+      if(isLooseTagged == 1)  bTagProb[1] = 1.0; 
+      if(isUltratightTagged == 1)  bTagProb[2] = 1.0; 
+    }
+
+   
+    if (gMyDebug) cout << "fill Jet Var " << endl;
+
+    fillVar(jetStr + ".EtRaw", jt->Et, condition);
+    fillVar(jetStr + ".Et", L5corr*jt->Et, condition); 
+    fillVar(jetStr + ".Eta", jt->Eta, condition);
+    fillVar(jetStr + ".EtaDet", jt->EtaDetector, condition);
+    fillVar(jetStr + ".Phi", jt->Phi, condition);
+    fillVar(jetStr + ".deltaPhiMet",DeltaPhi(jt->Phi,result->corrMetPhi),condition);
+    fillVar(jetStr + ".isTagged", isTagged, condition);
+    fillVar(jetStr + ".isLTagged",isLooseTagged, condition);
+    fillVar(jetStr + ".isUTagged",isUltratightTagged, condition);
+    fillVar(jetStr + ".isTaggable",isTaggable, condition);
+    fillVar(jetStr + ".bTagProb",bTagProb[0], condition);
+    fillVar(jetStr + ".bTagErr",bTagErr[0], condition);
+    fillVar(jetStr + ".bLTagProb",bTagProb[1], condition);
+    fillVar(jetStr + ".bLTagErr",bTagErr[1], condition);
+    fillVar(jetStr + ".bUTagProb",bTagProb[2], condition);
+    fillVar(jetStr + ".bUTagErr",bTagErr[2], condition);
+    fillVar(jetStr + ".matchBottom",matchBottom, condition && event->isMonteCarlo);
+    fillVar(jetStr + ".matchCharm",matchCharm, condition && event->isMonteCarlo);
+
+    if (gMyDebug) cout << "i = " << i << "; isTagged = " << isTagged << endl;
+  
+    // The following replaces three previous "if" statements, 
+    // although might be hard to understand
+    for (int t=0;t<3;t++){// save b-jet info for three different taggers before exiting the jet loop
+
+      if (isTight){
+	jbTagProb[0][t][tight_i] = bTagProb[t];
+	jbTagProb[1][t][tight_i] = bTagProb[t];
+	jbTagProb[2][t][tight_i] = bTagProb[t];
+	jbTagProb[3][t][tight_i] = bTagProb[t];
+	jbTagProb[4][t][tight_i] = bTagProb[t];
+	
+
+	if (bTagProb[t] > 0.6){ // hf-jet
+	  jbTagProb[1][t][tight_i] = bTagProb[t] + bTagErr[t];
+	  jbTagProb[2][t][tight_i] = bTagProb[t] - bTagErr[t];
+	} else {
+	  jbTagProb[3][t][tight_i] = bTagProb[t] + bTagErr[t];
+	  jbTagProb[4][t][tight_i] = bTagProb[t] - bTagErr[t];
+	}
+      }
+      
+      if ( !(t ==0 && isTagged ==1 && bt < 2)  &&
+	   !(t == 1 && isLooseTagged ==1 && bl < 2) &&
+	   !(t == 2 && isUltratightTagged ==1 && bu < 2))   continue; 
+
+      int ind = (t==0)?bt: ((t==1)? bl : bu);
+
+      bjet[t][ind] = *jt;
+      bjet_L5corr[t][ind] = L5corr;
+      bjet_bTagProb[t][ind] =  bTagProb[ind];
+      bjet_bTagErr[t][ind] = bTagErr[ind];
+
+      if (event->isMonteCarlo){
+	if (matchBottom) bjet_flavor[t][ind] = 5;
+	else if (matchCharm) bjet_flavor[t][ind] = 4;
+	else bjet_flavor[t][ind] = 1;
+      }
+
+      if (t==0) bt++;
+      else if (t==1) bl++;
+      else if (t==2) bu++;
+	   
+    }// save b-jet
+
+    if (deleteJet)     delete jt;
+
+    
+    //  cout <<   "BEFORE END OF THE LOOP:  jbTagProb[] = " << jbTagProb[0][tight_i] << endl;
+  }//jets
+
+
+   
+  //  cout <<   "AFTER LOOP:  jbTagProb[] = " << jbTagProb[0][0] << endl;
+	
+
+  if (gMyDebug) cout << "fill the info about 2 leading b-jets " << endl;
+
+  for (int t=0;t<3;t++){// three different taggers
+    for (int i=0;i<2;i++){//keep the info about 2 leading b-jets 
+	
+      //   cout << "t = " << t << "; i = " << i << endl;
+
+      TString jetStr = "bjet";
+      if (t==1) jetStr += "L";
+      else if (t==2) jetStr += "U";
+
+      int jetindex = i+1;
+      jetStr += jetindex;
+      bool condition;
+      if (t==0) condition = (bt > i);
+      else if (t==1)   condition = (bl > i);
+      else if (t==2)   condition = (bu > i);
+    
+      fillVar(jetStr + ".EtRaw", bjet[t][i].Et, condition);
+      fillVar(jetStr + ".Et", bjet_L5corr[t][i]*bjet[t][i].Et, condition); 
+      fillVar(jetStr + ".Eta", bjet[t][i].Eta, condition);
+      fillVar(jetStr + ".EtaDet", bjet[t][i].EtaDetector, condition);
+      fillVar(jetStr + ".Phi", bjet[t][i].Phi, condition);
+      fillVar(jetStr + ".deltaPhiMet",DeltaPhi(bjet[t][i].Phi,result->corrMetPhi-3.14),condition);
+      fillVar(jetStr + ".bTagProb",bjet_bTagProb[t][i], condition);
+      fillVar(jetStr + ".bTagErr",bjet_bTagErr[t][i], condition);
+      if (t == 1){
+	fillVar(jetStr + ".Mvtx", bjet[t][i].secvLooseMass, condition); 
+	fillVar(jetStr + ".PtVtx", bjet[t][i].secvLoosePt, condition); 
+	fillVar(jetStr + ".L2d", bjet[t][i].secvLooseL2d, condition); 
+	//	fillVar(jetStr + ".ctau", (bjet[t][i].secvLooseL2d * bjet[t][i].secvLooseMass) /  bjet[t][i].secvLoosePt, condition); 
+      } else if (t==2){
+	fillVar(jetStr + ".Mvtx", bjet[t][i].secvUltratightMass, condition);
+	fillVar(jetStr + ".PtVtx", bjet[t][i].secvUltratightPt, condition); 
+	fillVar(jetStr + ".L2d", bjet[t][i].secvUltratightL2d, condition); 
+	//	fillVar(jetStr + ".ctau", (bjet[t][i].secvUltratightL2d * bjet[t][i].secvUltratightMass) /  bjet[t][i].secvUltratightPt, condition); 
+      } else { // t== 0
+	fillVar(jetStr + ".Mvtx", bjet[t][i].secvMass, condition); 
+	fillVar(jetStr + ".PtVtx", bjet[t][i].secvPt, condition);  
+	fillVar(jetStr + ".L2d", bjet[t][i].secvL2d, condition); 
+      }
+      fillVar(jetStr + ".flavor", bjet_flavor[t][i], condition);
+      
+      //  if (t==0){ // save KIT
+	double KaNN = -999.;
+	double KaNNcorr = -999.;
+	float NNinput[54]; // inputs to KNN
+	for (int nni=0; nni<54; nni++)
+	  NNinput[nni] = -999;
+	
+	if (condition){
+	  //	  KaNN = kitflavorsepexpert->CallExpert( bjet_L5corr[t][i]*bjet[t][i].Et, &bjet[t][i], NNinput);
+	  KaNN = kitflavorsepexpert->CallExpert( bjet_L5corr[t][i]*bjet[t][i].Et, &bjet[t][i], t, NNinput);
+
+	  float secvPass =  (t == 1)?(bjet[t][i].secvLoosePass): ((t==2)?(bjet[t][i].secvUltratightPass):(bjet[t][i].secvPass) );
+	  float secvNtrk =  (t == 1)?(bjet[t][i].secvLooseNtrk): ((t==2)?(bjet[t][i].secvUltratightNtrk):(bjet[t][i].secvNtrk) );
+
+	  if (bjet_flavor[t][i] == 1) //light flavor
+	    //	    KaNNcorr = corr_misA->calcCorrectedOutput(KaNN, int(bjet[t][i].secvPass),  bjet_L5corr[t][i]*bjet[t][i].Et, bjet[t][i].secvNtrk, sumEt, bjet[t][i].Eta);
+	    KaNNcorr = corr_misA->calcCorrectedOutput(KaNN, (int)secvPass,  bjet_L5corr[t][i]*bjet[t][i].Et, secvNtrk, sumEt, bjet[t][i].Eta);
+	  else
+	    KaNNcorr = KaNN;
+	  
+	  if (KaNN < -900 || KaNNcorr < -900){
+	    eventStamp(event);
+	    cerr << "WARNING! bjet Et = " << bjet[t][i].Et << "; kANN = " << KaNN << "; kANNcorr = " << KaNNcorr << endl;
+	  }
+	}
+
+	fillVar(jetStr + ".KaNN", KaNN, condition);
+	fillVar(jetStr + ".KaNNcorr", KaNNcorr, condition);
+	fillVar(jetStr + ".KNN.NtrackSig3", NNinput[20], condition); // 116.1sgnf (CDF-8903)
+	fillVar(jetStr + ".KNN.signD0sig1", NNinput[39], condition); // 69.2 sgnf
+	fillVar(jetStr + ".KNN.signD02", NNinput[37], condition); // 46.3 sgnf
+	fillVar(jetStr + ".KNN.signD03", NNinput[38], condition); // 37.3 sgnf
+	fillVar(jetStr + ".KNN.Ntrk", NNinput[10], condition); // 20.6 sgnf
+	fillVar(jetStr + ".KNN.ctau", NNinput[1], condition); // 18.5 sgnf
+	
+	// }// KIT
+    }
+  }//b-jets
+
+
+  if (gMyDebug) cout << "done with the jet loop " << endl;
+
+  // figure out event tag probability
+  int maxJ = min(maxNjets,result->nTightJets);
+  // cout << "maxJ = " << maxJ << endl;
+  double evtProb0[5][3] = {1, 1, 1, 1, 1, 1, 1, 1, 1,1,1,1,1,1,1};
+  double evtProb1[5][3] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0};
+  double evtProb2[5][3] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0};
+  double evtProb12[5][3] = { 0, 0, 0, 0, 0, 0,0, 0, 0,0,0,0,0,0,0};
+
+  for (int t= 0; t<3; t++){
+    
+    for (int unc=0; unc<5; unc++){
+      for (int i=0; i<maxJ; i++) // 0-tag
+	evtProb0[unc][t] *= (1-jbTagProb[unc][t][i]);
+ 
+    evtProb12[unc][t] = 1 - evtProb0[unc][t]; // at least 1-tag
+    }
+
+    for (int unc=0; unc<5; unc++){
+      for (int i=0; i<maxJ; i++){ //= 1-tag
+	double tmpProb = jbTagProb[unc][t][i];
+	for (int j=0; j<maxNjets; j++){
+	  if (j == i) continue;
+	  tmpProb *= (1-jbTagProb[unc][t][j]);
+	}
+	evtProb1[unc][t] += tmpProb;
+      }
+      
+    evtProb2[unc][t] = 1 - evtProb0[unc][t] - evtProb1[unc][t]; //= 2-tags ( 2 and more)
+    if (evtProb2[unc][t] < 1e-7 ) evtProb2[unc][t] = 0.;
+    }
+  }// tagger
+
+  //  cout << endl;
+
+  // fill event info variables
+  fillVar("evt.nLposTags", nLposTags);
+  fillVar("evt.nTposTags", nTposTags);
+  fillVar("evt.nUposTags", nUposTags);
+  if (TmatchB && TmatchC) TmatchC = 0;
+  if (LmatchB && LmatchC) LmatchC = 0;
+  if (UmatchB && UmatchC) UmatchC = 0;
+  if (evMatchB && evMatchC) evMatchC = 0;
+  fillVar("evt.TmatchB", TmatchB);
+  fillVar("evt.TmatchC", TmatchC);
+  fillVar("evt.LmatchB", LmatchB);
+  fillVar("evt.LmatchC", LmatchC);
+  fillVar("evt.UmatchB", UmatchB);
+  fillVar("evt.UmatchC", UmatchC);
+  fillVar("evt.matchBottom", evMatchB);
+  fillVar("evt.matchCharm", evMatchC);
+
+  fillVar("evt.bProb0T", evtProb0[0][0]);
+  fillVar("evt.bProb0L", evtProb0[0][1]);
+  fillVar("evt.bProb0U", evtProb0[0][2]);
+  fillVar("evt.bProb1T", evtProb1[0][0]);
+  fillVar("evt.bProb1L", evtProb1[0][1]);
+  fillVar("evt.bProb1U", evtProb1[0][2]);
+  fillVar("evt.bProb2T", evtProb2[0][0]);
+  fillVar("evt.bProb2L", evtProb2[0][1]);
+  fillVar("evt.bProb2U", evtProb2[0][2]);
+  fillVar("evt.bProb12T", evtProb12[0][0]);
+  fillVar("evt.bProb12L", evtProb12[0][1]);
+  fillVar("evt.bProb12U", evtProb12[0][2]);
+
+  // bTagProb plus
+  fillVar("evt.bProb0Tpl", evtProb0[1][0]);
+  fillVar("evt.bProb0Lpl", evtProb0[1][1]);
+  fillVar("evt.bProb0Upl", evtProb0[1][2]);
+  fillVar("evt.bProb1Tpl", evtProb1[1][0]);
+  fillVar("evt.bProb1Lpl", evtProb1[1][1]);
+  fillVar("evt.bProb1Upl", evtProb1[1][2]);
+  fillVar("evt.bProb2Tpl", evtProb2[1][0]);
+  fillVar("evt.bProb2Lpl", evtProb2[1][1]);
+  fillVar("evt.bProb2Upl", evtProb2[1][2]);
+  fillVar("evt.bProb12Tpl", evtProb12[1][0]);
+  fillVar("evt.bProb12Lpl", evtProb12[1][1]);
+  fillVar("evt.bProb12Upl", evtProb12[1][2]);
+
+  //bTagProb minus
+  fillVar("evt.bProb0Tmn", evtProb0[2][0]);
+  fillVar("evt.bProb0Lmn", evtProb0[2][1]);
+  fillVar("evt.bProb0Umn", evtProb0[2][2]);
+  fillVar("evt.bProb1Tmn", evtProb1[2][0]);
+  fillVar("evt.bProb1Lmn", evtProb1[2][1]);
+  fillVar("evt.bProb1Umn", evtProb1[2][2]);
+  fillVar("evt.bProb2Tmn", evtProb2[2][0]);
+  fillVar("evt.bProb2Lmn", evtProb2[2][1]);
+  fillVar("evt.bProb2Umn", evtProb2[2][2]);
+  fillVar("evt.bProb12Tmn", evtProb12[2][0]);
+  fillVar("evt.bProb12Lmn", evtProb12[2][1]);
+  fillVar("evt.bProb12Umn", evtProb12[2][2]);
+
+  // misTagProb plus
+  fillVar("evt.misProb0Tpl", evtProb0[3][0]);
+  fillVar("evt.misProb0Lpl", evtProb0[3][1]);
+  fillVar("evt.misProb0Upl", evtProb0[3][2]);
+  fillVar("evt.misProb1Tpl", evtProb1[3][0]);
+  fillVar("evt.misProb1Lpl", evtProb1[3][1]);
+  fillVar("evt.misProb1Upl", evtProb1[3][2]);
+  fillVar("evt.misProb2Tpl", evtProb2[3][0]);
+  fillVar("evt.misProb2Lpl", evtProb2[3][1]);
+  fillVar("evt.misProb2Upl", evtProb2[3][2]);
+  fillVar("evt.misProb12Tpl", evtProb12[3][0]);
+  fillVar("evt.misProb12Lpl", evtProb12[3][1]);
+  fillVar("evt.misProb12Upl", evtProb12[3][2]);
+
+  //misTagProb minus
+  fillVar("evt.misProb0Tmn", evtProb0[4][0]);
+  fillVar("evt.misProb0Lmn", evtProb0[4][1]);
+  fillVar("evt.misProb0Umn", evtProb0[4][2]);
+  fillVar("evt.misProb1Tmn", evtProb1[4][0]);
+  fillVar("evt.misProb1Lmn", evtProb1[4][1]);
+  fillVar("evt.misProb1Umn", evtProb1[4][2]);
+  fillVar("evt.misProb2Tmn", evtProb2[4][0]);
+  fillVar("evt.misProb2Lmn", evtProb2[4][1]);
+  fillVar("evt.misProb2Umn", evtProb2[4][2]);
+  fillVar("evt.misProb12Tmn", evtProb12[4][0]);
+  fillVar("evt.misProb12Lmn", evtProb12[4][1]);
+  fillVar("evt.misProb12Umn", evtProb12[4][2]);
+
+
+
+  if (loop){
+    for(int t=0; t<3; t++)
+      mistag_matrix[t]->clear();
+  }
+  //  cout << endl << endl << endl << endl << endl << endl << endl << endl << endl;
+
+//   if (event->runNumber == 144694 && event->eventNumber == 163){
+//     cout << "done with event dump " << endl;
+//     gMyDebug = false;
+//   }
+
+}//fillJetVar
+
+void fillANN(const TLorentzVector & lepton, const TLorentzVector *jet,  const EvtSelResultLJ *result ){
+  
+   TLorentzVector metV;
+   metV.SetPtEtaPhiM(result->corrMetMag, 0.0, result->corrMetPhi, 0.0);
+ 
+  int nJets5 = TMath::Min(5,result->nTightJets);
+  if (gMyDebug)  cout << "fillANN: n Tight Jets = " << result->nTightJets << endl;
+  bool condition = (nJets5 <3)?false:true;
+  bool condition2j = (nJets5 <2)?false:true;
+
+  double dR12 = -999.;
+  double M12 = -999;
+  if (condition2j){ 
+    dR12 = jet[0].DeltaR(jet[1]);
+    M12 = (jet[0]+jet[1]).M();
+  }
+
+
+   double input[7] = {0, 0, 0, 0, 0, 0, 0}; // nn input
+   double ANN_3j = -999.;
+   double ANN_4j = -999.;
+
+   if (condition){ // do NN calculations
+
+     if (gMyDebug) cout << "running ANN, nJets5 = " << nJets5 << endl;
+
+     input[0] = getAplanarity(metV, lepton, jet, nJets5);
+     input[1] = getEtaMax(jet, nJets5); // of 3 highest Et jets
+     
+     getSumEt(metV, lepton, jet, nJets5, input[2], input[5], input[6]); 
+     getMinDijet(jet, nJets5, input[3], input[4]);
+
+     nnFunction3JGen6(input, &ANN_3j);
+     nnFunction4JGen6(input, &ANN_4j);
+
+   }
+
+   fillVar("evt.dR12",dR12, condition2j);
+   fillVar("evt.M12",M12, condition2j);
+   fillVar("ANN.Aplanarity", input[0], condition);
+   fillVar("ANN.EtaMax", input[1], condition);
+   fillVar("ANN.Ht", input[2], condition);
+   fillVar("ANN.MinDijetMass", input[3], condition);
+   fillVar("ANN.MinDijetSep", input[4], condition);
+   fillVar("ANN.SumEtJet", input[5], condition);
+   fillVar("ANN.SumPzSumEt", input[6], condition);
+
+   fillVar("ANN.3j", ANN_3j, condition);
+   fillVar("ANN.4j", ANN_4j, condition);
+   
+}//fillANN
+
+
+// void fillMatchJet( jet *jt){
+
+//@@@@@@@@@@@@@@@@@@@@@@@@
+// ADD FITTER AND HEPG MATCH HERE
+//@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+// }//fillMatchJet
+
+
+
+void fillHepgVar(const TClonesArray *genps, const EvtSelResultLJ *result, const EvtSelCuts *cuts, const TClonesArray *jets,
+		 TLorentzVector &blep, TLorentzVector &bhad, TLorentzVector &q, TLorentzVector &qbar){
+      
+  TLorentzVector b(-999.,-999.,-999., -999.);
+  TLorentzVector bbar(-999.,-999.,-999., -999.);
+//   TLorentzVector q(-999.,-999.,-999., -999.);
+//   TLorentzVector qbar(-999.,-999.,-999., -999.);
+  TLorentzVector lep(-999.,-999.,-999., -999.);
+  TLorentzVector neu(-999.,-999.,-999., -999.);
+  
+//   TLorentzVector blep(-999.,-999.,-999., -999.);
+//   TLorentzVector bhad(-999.,-999.,-999., -999.);
+
+  int bID = 0; 
+  int bbarID = 0; 
+  int qID = 0; 
+  int qbarID = 0; 
+  int lepID = 0; 
+  int neuID = 0;
+
+  int bhadID = 0;
+  int blepID = 0;
+
+  TIter nextHepg( genps );
+  hepg *hep;
+
+  while (hep = (hepg *)nextHepg()) {
+
+    // Limits this to just matrix element stuff
+   if(   hep->Stdhep != 3 && hep->Stdhep != 123 && hep->Stdhep != 124 ) continue;
+
+   if(!bID && (hep->ID==5 || hep->ID==3 || hep->ID==1) && (hep->IDparent==6 || hep->IDparent==8) ){
+      b.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+      bID=hep->ID;
+  }
+
+    if(!bbarID && (hep->ID==-5 || hep->ID==-3 || hep->ID==-1) && (hep->IDparent==-6 || hep->IDparent==-8) ){
+      bbar.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+      bbarID=hep->ID;
+  }
+
+    if(!qID &&  (fabs(hep->IDparent)==24  && hep->ID >= 1 && hep->ID <= 5 )){
+      q.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+      qID=hep->ID;
+  }
+
+    if(!qbarID && (  fabs(hep->IDparent)==24  && hep->ID >= -5 && hep->ID <= -1  )){
+      qbar.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+      qbarID=hep->ID;
+  }
+
+    if(!lepID &&  ((fabs(hep->ID) == 11 || fabs(hep->ID) == 13  || fabs(hep->ID) == 15)  && fabs(hep->IDparent)==24 )){
+      lep.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+      lepID=hep->ID;
+      
+      if (hep->IDparent == 24){
+	bhadID = bbarID; blepID = bID;  blep = b;    bhad = bbar;
+      } else if (hep->IDparent == - 24){
+	bhadID = bID; blepID = bbarID; blep = bbar;    bhad = b;
+      }
+
+  }
+
+    if(!neuID && ((fabs(hep->ID) == 12 ||  fabs(hep->ID) == 14  ||  fabs(hep->ID) == 16)  && fabs(hep->IDparent)==24 )){
+      neu.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+      neuID=hep->ID;
+  }
+
+   if ( hep->Stdhep == 1 && fabs(hep->ID)> 40) break;  //We've seen enough here!
+
+  }//hep loop
+
+  int evtID = 0;
+  if (bID != 0 && bbarID != 0 && qID != 0 && qbarID != 0 && lepID != 0 && neuID != 0) evtID =1;
+
+ //  if (evtID == 0){
+    
+//  TIter nextHepgCheck( genps );
+//  hepg *hepcheck;
+
+//   while (hepcheck = (hepg *)nextHepgCheck()) {
+//     std::cout<<" "<<hepcheck->ID<<" "<<hepcheck->IDparent<<" "<<hepcheck->Mo1<<" "<<hepcheck->Mo2<<" "<<hepcheck->Da1<<" "<<hepcheck->Da2<<" "<<hepcheck->Ind<<" "<<hepcheck->Stdhep<<" "<<hepcheck->Charge<<" "<<hepcheck->Px<<" "<<hepcheck->Py<<" "<<hepcheck->Pz<<" "<<hepcheck->E<<" "<<hepcheck->Mass<<std::endl;
+//     //   nhepgcheck++;
+//   }
+//   }
+//   cout << endl << endl << endl;
+  
+  fillVar("gen.isLJ",evtID);
+  fillVar("gen.b.Pt",b.Pt(), bID != 0);
+  fillVar("gen.b.Eta",b.Eta(), bID != 0);
+  fillVar("gen.b.Phi",b.Phi(), bID != 0);
+  fillVar("gen.bbar.Pt",bbar.Pt(), bbarID != 0);
+  fillVar("gen.bbar.Eta",bbar.Eta(), bbarID != 0);
+  fillVar("gen.bbar.Phi",bbar.Phi(), bbarID != 0);
+  fillVar("gen.blep.Pt",blep.Pt(), blepID != 0);
+  fillVar("gen.blep.Eta",blep.Eta(), blepID != 0);
+  fillVar("gen.blep.Phi",blep.Phi(), blepID != 0);
+  fillVar("gen.bhad.Pt",bhad.Pt(), bhadID != 0);
+  fillVar("gen.bhad.Eta",bhad.Eta(), bhadID != 0);
+  fillVar("gen.bhad.Phi",bhad.Phi(), bhadID != 0);
+  fillVar("gen.q.Pt",q.Pt(), qID != 0);
+  fillVar("gen.q.Eta",q.Eta(), qID != 0);
+  fillVar("gen.q.Phi",q.Phi(), qID != 0);
+  fillVar("gen.qbar.Pt",qbar.Pt(), qbarID != 0);
+  fillVar("gen.qbar.Eta",qbar.Eta(), qbarID != 0);
+  fillVar("gen.qbar.Phi",qbar.Phi(), qbarID != 0);
+  fillVar("gen.neu.Pt",neu.Pt(), neuID != 0);
+  fillVar("gen.neu.Eta",neu.Eta(), neuID != 0);
+  fillVar("gen.neu.Phi",neu.Phi(), neuID != 0);
+  fillVar("gen.lep.Pt",lep.Pt(), lepID != 0);
+  fillVar("gen.lep.Eta",lep.Eta(), lepID != 0);
+  fillVar("gen.lep.Phi",lep.Phi(), lepID != 0);
+
+  fillMatchedJet(result, cuts, jets, &blep, "jet.blep");
+  fillMatchedJet(result, cuts, jets, &bhad, "jet.bhad");
+  fillMatchedJet(result, cuts, jets, &q, "jet.q"); 
+  fillMatchedJet(result, cuts, jets,& qbar, "jet.qbar."); 
+
+}//fillHepgVar
+
+
+void fillMatchedJet(const EvtSelResultLJ *result,  const EvtSelCuts *cuts, const TClonesArray *jets, const TLorentzVector *hepgVector, TString jetStr){
+
+  TIter nextJet(jets);
+  jet *jt = (jet*) nextJet();
+  bool condition = false; 
+  double deltaR = -999.0;
+  double L5corr = 0.;
+  
+  do{ 
+
+    if ( hepgVector != 0  && hepgVector->Pt() != 0 && jt != 0 && isTightJet( jt, cuts, L5corr) ){
+
+	TLorentzVector jet4V(jt->Px, jt->Py, jt->Pz, jt->En);
+
+	deltaR = hepgVector->DeltaR(jet4V);
+	if (deltaR < 0.4){
+	  condition = true; 
+	  break;
+	}
+      }
+      
+  } while (jt = (jet*) nextJet() );
+
+  fillJet(result, jets , jt, jetStr, deltaR, L5corr, condition);
+
+}//fillJet
+
+
+void fillJet(const EvtSelResultLJ *result, const TClonesArray *jets, jet *jt, TString jetStr, float deltaR, double L5corr, bool condition){
+
+  // cout << "fillJet " << endl;
+
+  //  jet *dummy = new jet();
+//    (dummy->jet).SetPxPyPzE(1.,2.,3,2.);
+//    jet *jtt;
+
+//    if (jt == 0){
+//      jtt = dummy; 
+//     condition = false;
+//   }  else jtt = jt;
+
+  bool del = false;
+  if (jt == 0){ 
+    condition = false;
+    jt = new jet();
+    //   cout << "jt = " << jt << endl;
+    del = true;
+  }
+  // cout << "jt = " << jt << endl;
+    fillVar(jetStr + ".EtRaw", jt->Et, condition);
+    fillVar(jetStr + ".Et", L5corr*jt->Et, condition); 
+    fillVar(jetStr + ".Eta", jt->Eta, condition);
+    fillVar(jetStr + ".EtaDet", jt->EtaDetector, condition);
+    fillVar(jetStr + ".Phi", jt->Phi, condition);
+    fillVar(jetStr + ".deltaPhiMet",DeltaPhi(jt->Phi,result->corrMetPhi),condition);
+    fillVar(jetStr + ".deltaR",deltaR,condition);
+    //  cout << "done  " << endl;
+//   fillVar(jet+".Px",jtt->jet.Px(),condition);
+//   fillVar(jet+".Py",jtt->jet.Py(),condition);
+//   fillVar(jet+".Pz",jtt->jet.Pz(),condition);
+//   fillVar(jet+".Pt",jtt->jet.Pt(),condition);
+//   fillVar(jet+".E",jtt->jet.E(),condition);
+//   fillVar(jet+".Eta",jtt->jet.Eta(),condition);
+//   fillVar(jet+".RawEt",jtt->jet.E()*TMath::Sin(jtt->jet.Theta()),condition);
+//   fillVar(jet+".Phi",jtt->jet.Phi(),condition);
+//   fillVar(jet+".cf4",jtt->corrL4,condition);
+//   fillVar(jet+".cf5",jtt->corrL5,condition);
+//   fillVar(jet+".cf6",jtt->corrL6,condition);
+//   fillVar(jet+".cf7",jtt->corrL7,condition);
+//   fillVar(jet+".L5Et",jtt->corrL5*jtt->jet.E()*TMath::Sin(jtt->jet.Theta()),condition);
+//   fillVar(jet+".L7Et",jtt->corrL7*jtt->jet.E()*TMath::Sin(jtt->jet.Theta()),condition);
+//   fillVar(jet+".deltaR",deltaR,condition);
+//   fillVar(jet+".deltaPhiMet",DeltaPhi(jtt->jet.Phi(),result->corrMetPhi-3.14),condition);
+
+    if (del) delete jt;
+    
+}//fillJetObject
+
+
+
+//  void fillHepgVar(bool loop, const evt *event, const int nvert, const privertex *pv, jetMistagApr2008 *mistag_matrix, const TClonesArray *jets, TClonesArray *obsps,   TClonesArray *genps, const EvtSelResultLJ *result, const EvtSelCuts *cuts ){
+      
+
+//    TLorentzVector b; 
+//    TLorentzVector bbar; 
+//    TLorentzVector q;
+//    TLorentzVector qbar;
+
+//    int bID, bbarID, qID, qbarID;
+
+//    TIter nextHepg( genps );
+//    hepg *hep;
+
+//    while (hep = (hepg *)nextHepg()) {
+
+//      // Limits this to just matrix element stuff
+//     if(   hep->Stdhep != 3 && hep->Stdhep != 123 && hep->Stdhep != 124 ) continue;
+
+//      if((hep->ID==5 || hep->ID==3 || hep->ID==1) && hep->IDparent==6 ){
+//        b.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+//        bID=hep->ID;
+//    }
+
+//      if((hep->ID==-5 || hep->ID==-3 || hep->ID==-1) && hep->IDparent==-6 ){
+//        bbar.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+//        bbarID=hep->ID;
+//    }
+
+//      if(  fabs(hep->IDparent)==24  && hep->ID >= 1 && hep->ID <= 5 ){
+//        q.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+//        qID=hep->ID;
+//    }
+
+//      if(  fabs(hep->IDparent)==24  && hep->ID >= -5 && hep->ID <= -1  ){
+//        qbar.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+//        qbarID=hep->ID;
+//    }
+
+//  //     if( (fabs(hep->ID) == 11 || fabs(hep->ID) == 13  || fabs(hep->ID) == 15)  && fabs(hep->IDparent)==24 ){
+//  //       lep.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+//  //       lepID=hep->ID;
+//  //   }
+
+//  //     if( (hep->ID == 12 ||  hep->ID == 14  ||  hep->ID == 16)  && fabs(hep->IDparent)==24 ){
+//  //       neu.SetPxPyPzE(hep->Px,hep->Py,hep->Pz,hep->E);
+//  //       neuID=hep->ID;
+//  //   }
+
+//     if ( hep->Stdhep == 1 && fabs(hep->ID)> 40) break;  //We've seen enough here!
+
+//    }//hep loop
+
+
+
+//   fillVar("gen.isLJ",evtID);
+//   fillVar("gen.b.Pt",b.Pt(), bID != 0);
+//   fillVar("gen.b.Eta",b.Eta(), bID != 0);
+//   fillVar("gen.b.Phi",b.Phi(), bID != 0);
+//   fillVar("gen.bbar.Pt",bbar.Pt(), bbarID != 0);
+//   fillVar("gen.bbar.Eta",bbar.Eta(), bbarID != 0);
+//   fillVar("gen.bbar.Phi",bbar.Phi(), bbarID != 0);
+//   fillVar("gen.blep.Pt",blep.Pt(), blepID != 0);
+//   fillVar("gen.blep.Eta",blep.Eta(), blepID != 0);
+//   fillVar("gen.blep.Phi",blep.Phi(), blepID != 0);
+//   fillVar("gen.bhad.Pt",bhad.Pt(), bhadID != 0);
+//   fillVar("gen.bhad.Eta",bhad.Eta(), bhadID != 0);
+//   fillVar("gen.bhad.Phi",bhad.Phi(), bhadID != 0);
+//   fillVar("gen.q.Pt",q.Pt(), qID != 0);
+//   fillVar("gen.q.Eta",q.Eta(), qID != 0);
+//   fillVar("gen.q.Phi",q.Phi(), qID != 0);
+//   fillVar("gen.qbar.Pt",qbar.Pt(), qbarID != 0);
+//   fillVar("gen.qbar.Eta",qbar.Eta(), qbarID != 0);
+//   fillVar("gen.qbar.Phi",qbar.Phi(), qbarID != 0);
+//   fillVar("gen.neu.Pt",neu.Pt(), neuID != 0);
+//   fillVar("gen.neu.Eta",neu.Eta(), neuID != 0);
+//   fillVar("gen.neu.Phi",neu.Phi(), neuID != 0);
+//   fillVar("gen.lep.Pt",lep.Pt(), lepID != 0);
+//   fillVar("gen.lep.Eta",lep.Eta(), lepID != 0);
+//   fillVar("gen.lep.Phi",lep.Phi(), lepID != 0);
+
+//   fillMatchedJet(result, cuts, jets, &blep, "jet.blep");
+//   fillMatchedJet(result, cuts, jets, &bhad, "jet.bhad");
+//   fillMatchedJet(result, cuts, jets, &q, "jet.q"); 
+//   fillMatchedJet(result, cuts, jets,& qbar, "jet.qbar."); 
+
+//  }//fillHepgVar
+
+
+
+
+
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// I might need this for the future, if other than L5 corrections will be required
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+// void fillJetVar(bool loop, const evt *event, const int nvert, const int nZV12, const privertex *pv, jetMistagApr2008 *mistag_matrix, const TClonesArray *jets, TClonesArray *obsps,  const EvtSelResultLJ *result, const EvtSelCuts *cuts ){
+      
+//   jet *jt;
+  
+//   if (gMyDebug)
+//     cout << "jet corrections " << endl;
+
+//   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//   // JET CORRECTIONS
+//   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+//   // Must read in and decode z vertex block above
+//   int nvertices = (nZV12==0)?1:nZV12; 
+//   // 0 = 0.4, 1 = 0.7 and 2 = 1.0
+//   int coneSize = 0; 
+//   // Gen 5 version = 5 for MC and data
+//   int version =  5; 
+//   // Gen 5: imode = 0 for MC and 1 for data.
+//   int imode = event->isMonteCarlo ? 0 : 1;
+//   // 0 = correction, other values for systematic studies
+//   int syscode = 0; 
+//   int run = event->runNumber;    
+
+//  JetEnergyCorrections jec5("JetEnergyCorr","Jet Energy Corrections", 
+// 			   5, nvertices, coneSize, version, 
+// 			   syscode, run, imode);
+//  JetEnergyCorrections jec5sys("JetEnergyCorr","Jet Energy Corrections", 
+// 			   5, nvertices, coneSize, version, 
+// 			    syscode, run, imode);
+
+//   int sigud=0;
+//   if(cuts->jesShift > 0.0) sigud=+1;
+//   if(cuts->jesShift < 0.0) sigud=-1;  
+
+//   if(cuts->jesShift != 0.0){
+//     jec5sys.setTotalSysUncertainties(sigud);
+//     jec5sys.setRelCorSystematicsMinimal(true);
+//   }
+
+    
+//   if (gMyDebug)
+//     cout << "mistag matrix" << endl;
+
+//   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//   // MISTAG MATRIX
+//   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+//   int j=0;
+
+//   if (loop){
+
+//     TIter misJet(jets);
+    
+//     while (jt = (jet*) misJet()){
+//       if( jt->Et >= 10. && fabs(jt->Eta) <= 2.4){ // when mistags are defined
+// 	if (gMyDebug) cout << "j = " << j << endl;
+// 	mistag_matrix->cache(jt->secvTag, jt->secvNtrk,jt->Et,jt->Eta,nvert, pv->SecVtxVz, j);
+// 	j++;
+//       }
+//     }
+
+//     if (gMyDebug) cout << "done with cache " << endl;
+//     mistag_matrix->applyMatrix();
+//     mistag_matrix->SetTagType("tight");
+//   }
+  
+//   if (gMyDebug)
+//     cout << "loop over jets " << endl;
+
+//   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//   // LOOP OVER JETS
+//   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+//   TIter nextJet(jets);    j=-1;
+//   // The list of the jets in the Et-decreasing order
+//   for (int i=0;i<6;i++){//keep the info about 6 tight leading jets only
+	
+//     TString jetStr = "jet";
+//     int jetindex = i+1;
+//     jetStr += jetindex;
+
+//     bool condition = (result->nTightJets > i); 
+//     double corr, syscorr, shift;
+//     double L5corr = 0.0;
+//     bool isTight = false;
+
+//     if (gMyDebug)      cout << "# of tight jets = " << result->nTightJets << "; i = " << i << endl;
+
+//     if (condition){ //there are remaining tight jets
+//       do{ //keep looping until tight jet is found
+// 	jt = (jet*)nextJet();
+// 	if (gMyDebug) cout << " got a new jet: jt = " << jt;
+// 	if( jt->Et >= 10. && fabs(jt->Eta) <= 2.4)     j++;
+// 	corr = jec5.doEnergyCorrections( jt->Pt, jt->EmFraction, jt->EtaDetector);
+// 	syscorr = jec5sys.doEnergyCorrections( jt->Pt, jt->EmFraction, jt->EtaDetector);
+// 	shift = fabs(syscorr-corr);
+// 	L5corr = corr + cuts->jesShift*shift;
+// 	isTight = (L5corr*jt->Et > cuts->tightJetEt && fabs(jt->EtaDetector) < cuts->tightJetEta);
+// 	if (gMyDebug && isTight) cout << " is Tight Jet " << endl;
+//       } while (! isTight);
+//     }
+//     else    jt = new jet();
+
+//     if (gMyDebug)   cout << "jet: (" << jt->Px << ", " << jt->Py << ", " << jt->Pz << ") ; L5corr = " << L5corr << endl; 
+//     if (gMyDebug)   cout << "b tag probability; i =  " << i << endl;
+    
+//   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//   //  B TAG PROBABILITY
+//   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+//     bool isTagged = (jt->secvTag==1);
+//     bool isTaggable = (jt->secvNtrk >=2);
+
+//     bool matchBottom=false, matchCharm=false;
+//     double bTagProb = 0.0, bTagErr = 0.0;
+
+//     if (gMyDebug) cout << "do Obsp Matching " << endl;
+
+//     if(event->isMonteCarlo)
+//       HeavyFlavorUtils::jetObspMatching (obsps,jt,matchBottom,matchCharm);
+ 
+//     if (matchBottom || matchCharm){//heavy flavor
+
+//       bTagErr = 0.04;
+//       if (matchCharm && !matchBottom) bTagErr = 2*bTagErr;
+//       if(isTagged) bTagProb = 0.95;
+
+//     } else { // light flavor
+//       if (isTaggable && loop){
+// 	bTagProb = mistag_matrix->mistagRate(j);
+// 	bTagErr = mistag_matrix->mistagRateErrNoStat(j);
+//       }
+//     }//end light flavor
+
+    
+//     if (gMyDebug) cout << "fill Jet Var " << endl;
+
+//     fillVar(jetStr + ".EtRaw", jt->Et, condition);
+//     fillVar(jetStr + ".Et", L5corr*jt->Et, condition); 
+//     fillVar(jetStr + ".Eta", jt->Eta, condition);
+//     fillVar(jetStr + ".EtaDet", jt->EtaDetector, condition);
+//     fillVar(jetStr + ".Phi", jt->Phi, condition);
+//     fillVar(jetStr + ".deltaPhiMet",DeltaPhi(jt->Phi,result->corrMetPhi-3.14),condition);
+//     fillVar(jetStr + ".isTagged", isTagged, condition);
+//     fillVar(jetStr + ".isTaggable",isTaggable, condition);
+//     fillVar(jetStr + ".bTagProb",bTagProb, condition);
+//     fillVar(jetStr + ".bTagErr",bTagErr, condition);
+
+//   }//jets
+
+//   if (loop) mistag_matrix->clear();
+
+// }//fillJetVar
+
+
+void fillVar(TString name, float value, bool condition){
+  // fill variable 'name' with 'value' if 'condition' satisfies
+  // fill with -999. otherwise
+
+  if (nit > maxVar)
+    cerr << "ERROR: array varnames[] is out of bounds" << endl;
+
+  if (nit==0)    varnames = name;
+  else             varnames += ":" + name;
+
+  if (condition)    var[nit++] = value; 
+  else                 var[nit++] = -999.; 
+}
+
+
+void fillVar(TString name){
+  // fill variable 'name' with -999 
+  // in case there is no info to fill with 
+
+  if (nit > maxVar)
+    std::cout << "ERROR: array varnames[] is out of bounds" << std::endl;
+
+  if (nit==0)    varnames = name;
+  else             varnames += ":" + name;
+
+  var[nit++] = -999.; 
+}
+
+
+double DeltaPhi(double phi1, double phi2){
+  double delPhi(999.0);
+  delPhi = fabs( phi1 - phi2 );
+  if (delPhi >  TMath::Pi()) delPhi = 2.0*TMath::Pi() - delPhi;
+  return delPhi;
+}
+
+double getAlpgenWeight(TString filename){
+
+  if (gMyDebug)        cout << " alpgen weighting " << endl;
+
+  double AlpgenW = 1.;
+
+//   if(  gSampleType=="wlf" || gSampleType=="wbb" || gSampleType=="wcc" || gSampleType=="wc" || 
+//        gSampleType=="zlf" || gSampleType=="zbb" || gSampleType=="zcc" || gSampleType == "atop") {
+
+  if(  gSampleType !="data" && gSampleType !="qcd" )
+       AlpgenW = AlpgenWeights::weight( filename );
+       if (AlpgenW <= 0){
+	 cerr<<"Could not find a valid weight for file "<< filename <<". Aborting" << endl;
+	 assert(0);
+       }
+       //  }
+
+  if (gMyDebug)     cout << " alpgen weight =  " << AlpgenW << endl;
+
+  return AlpgenW;
+
+}//getAlpgenWeight
+
+SampleType getSampleType(){
+
+  SampleType sample = kNoAlpgen;
+  
+  if( gSampleType == "wlf" || gSampleType == "zlf" ) sample = kLightFlavorSample;
+  if( gSampleType == "wbb" || gSampleType == "zbb" ) sample = kBBBarSample;
+  if( gSampleType == "wcc" || gSampleType == "zcc" ) sample = kCCBarSample;
+  if( gSampleType == "wc"  ) sample = kWcSample;
+
+  return sample;
+  
+}
+
+bool isAlpgen(const SampleType sample){
+
+  return (  sample != kNoAlpgen );
+  
+}//isAlpgen
+
+bool isHF(const SampleType sample){
+
+  return (  sample==HeavyFlavorUtils::kBBBarSample 
+	    || sample==HeavyFlavorUtils::kCCBarSample 
+	    || sample==HeavyFlavorUtils::kWcSample  );
+  
+}//isHF
+
+bool acceptableHF(const SampleType sample, TClonesArray *genps, const TClonesArray *jets, const EvtSelCuts *cuts){
+
+  if (gMyDebug)        cout << " heavy flavor removal " << endl;
+  
+  if (sample == HeavyFlavorUtils::kNoAlpgen )    return true; 
+  
+    //------------------------------------------------------------------
+     // Jet-based (Harvard scheme) - default
+     //-----------------------------------------------------------------
+
+       std::vector<TVector3> momenta;
+       TVector3 mom;
+       jet* jt;
+       TIter nextJet(jets);
+
+       while (  jt=(jet*)nextJet() ) {   
+
+	 double L5corr = 0.0;
+	 if ( isTightJet( jt, cuts, L5corr )){
+		mom.SetXYZ( jt->Px, jt->Py, jt->Pz);
+		mom.SetMag( L5corr * mom.Mag() );
+		if (gMyDebug) cout << "jet: (" << jt->Px << ", " << jt->Py << ", " << jt->Pz << ") ; L5corr = " << L5corr << endl; 
+		momenta.push_back(mom);
+	 }
+       }
+	      
+
+       unsigned int hf_content=HeavyFlavorUtils::checkHeavyFlavor(genps, momenta);
+       int numRejected=0;
+       
+       bool res =  HeavyFlavorUtils::acceptableHeavyFlavorContent (hf_content, isHF(sample),numRejected);
+       //std::cout << "II numRejected = " << numRejected << std::endl;
+       return res;
+}
+      
+
+bool acceptableHFTwo(const SampleType sample, TClonesArray *genps, const TClonesArray *jets, const EvtSelCuts *cuts) {//,
+  //		  int& numRejected, int& numbbpscoll, int& numbbpssep, int& numbbmecoll, int& numbbmesep,
+  //	  int& numccpscoll, int& numccpssep, int& numccmecoll, int& numccmesep) {
+
+  bool res = false;
+  if (gMyDebug)        cout << " heavy flavor removal two " << endl;
+  
+  if (sample == HeavyFlavorUtils::kNoAlpgen )    return true; 
+  
+    //------------------------------------------------------------------
+  // Jet-based (Harvard scheme) - default
+  //-----------------------------------------------------------------
+  
+  std::vector<TVector3> momenta;
+  TVector3 mom;
+  jet* jt;
+  TIter nextJet(jets);
+  
+  while (  jt=(jet*)nextJet() ) {   
+    
+    double L5corr = 0.0;
+    if ( isTightJet( jt, cuts, L5corr )){
+      mom.SetXYZ( jt->Px, jt->Py, jt->Pz);
+      mom.SetMag( L5corr * mom.Mag() );
+      if (gMyDebug) cout << "jet: (" << jt->Px << ", " << jt->Py << ", " << jt->Pz << ") ; L5corr = " << L5corr << endl; 
+      momenta.push_back(mom);
+    }
+  }
+  
+  unsigned int hf_content = HeavyFlavorUtils::checkHeavyFlavor(genps, momenta);
+  std::cout << "hf_content = " << hf_content << std::endl;
+
+  int numRejected=0, numbbpscoll=0, numbbpssep=0, numccpscoll=0, numccpssep=0; 
+  int numbbmecoll=0, numbbmesep=0, numccmecoll=0, numccmesep=0;
+  
+  res = HeavyFlavorUtils::acceptableHeavyFlavorContent (hf_content, isHF(sample),numRejected,
+							numbbpscoll,numbbpssep,numbbmecoll,numbbmesep,
+							numccpscoll,numccpssep,numccmecoll,numccmesep);
+  
+  //result = HeavyFlavorUtils::acceptableHeavyFlavorContent (hf_content, isHF(sample),numRejected);
+
+  std::cout << "II numRejected = " << numRejected << std::endl;
+
+
+  fillVar("hfor.events",1);
+  fillVar("hfor.keep",res);
+  fillVar("hfor.rejected", numRejected);
+  fillVar("hfor.bbpscoll",numbbpscoll);
+  fillVar("hfor.bbpssep",numbbpssep);
+  fillVar("hfor.ccpscoll",numccpscoll);
+  fillVar("hfor.ccpssep",numccpssep);
+  fillVar("hfor.bbmecoll",numbbmecoll);
+  fillVar("hfor.bbmesep",numbbmesep);
+  fillVar("hfor.ccmecoll",numccmecoll);
+  fillVar("hfor.ccmesep",numccmesep);
+
+  /*
+  numRejected = tnumRejected;
+  numbbpscoll = tnumbbpscoll;
+  numbbpssep = tnumbbpssep;
+  numbbmecoll = tnumbbmecoll;
+  numbbmesep = tnumbbmesep;
+  numccpscoll = tnumccpscoll;
+  numccpssep = tnumccpssep;
+  numccmecoll = tnumccmecoll;
+  numccmesep = tnumccmesep;
+  */
+
+  return res;
+}
+
+ 
+bool isTightJet(const jet *jt, const EvtSelCuts *cuts, double &L5corr){
+
+  L5corr = jt->jetCorr[0] + jt->jetCorr[1]*cuts->jesShift;
+  
+  return ( L5corr*jt->Et > cuts->tightJetEt && fabs(jt->EtaDetector) < cuts->tightJetEta );
+  
+}//isTightJet
+
+
+bool isLooseJet(const jet *jt, const EvtSelCuts *cuts, double &L5corr){
+
+  L5corr = jt->jetCorr[0] + jt->jetCorr[1]*cuts->jesShift;
+  
+  return ( L5corr*jt->Et > cuts->looseJetEt && fabs(jt->EtaDetector) < cuts->looseJetEta );
+  
+}//isTightJet
+
+
+
+void SetupTCABranches(TreeFileInterface *tfi, bool useSkim){
+
+   //@@@@@@@@@@@@@@@@
+   // Setup TCA Branches //
+   //@@@@@@@@@@@@@@@@
+   // Tell 'tfi' which branches we want.
+   // 
+   // The constants are defined in 
+   // RootFileCollection/TopTreeNamespace.h
+   // If you do not have a 'using namespace TopTreeNamespace;'
+   // then you need to use 'TopTreeNamespace::kSummaryBranch'
+
+  // Use 'addClassBranch < TClassName >'  to add a class branch
+
+   // TClonesArrays
+   tfi->addTcaBranch( kSummaryBranch               );
+   tfi->addTcaBranch( kEvtBranch                   );
+   tfi->addTcaBranch( kHepgBranch                  );
+   tfi->addTcaBranch( kJetBranch                   );
+   tfi->addTcaBranch( kMetBranch,    kMetClassName );
+
+   tfi->addTcaBranch( kObspBranch                  );
+   tfi->addTcaBranch( kElectronBranch              );
+   tfi->addTcaBranch( kMuonBranch                  );
+   tfi->addTcaBranch( kPrivertexBranch             );
+   tfi->addTcaBranch( kZvtxsBranch                 );
+
+   tfi->addTcaBranch( kTjassocBranch );
+   tfi->addTcaBranch( kSecvtxtrackBranch );
+
+
+   if ( useSkim ) {
+     tfi->addTcaBranch( "EvtSelCuts"                 );
+     tfi->addTcaBranch( "EvtSelResultLJ"             );
+   }else
+     tfi->addTcaBranch( kTrigInfoBranch              );
+   
+
+}//SetupTCABranches
+
+
+void initJobProgress(TreeFileInterface *tfi, int &nEvents, int &n100, int &n10) {
+
+   // get a rough estimate of a total number of events
+       if (gNumWanted) nEvents = gNumWanted;
+       else{
+	 nEvents = tfi->numberOfEventsInCurrentFile() * tfi->numberOfFiles();
+	 if (gTotalSection) nEvents /= gTotalSection;
+       }
+       if (gMyDebug)      cout << "# of files = " << tfi->numberOfFiles() << endl;
+       n100 = nEvents/100;
+       n10 = nEvents/10;
+       cout << " Starting! nEvents is " << nEvents << endl << endl;
+ 
+}//END:
+
+
+void reportJobProgress(const int nEvents, const int n100, const int n10, int &ev, int &cnt100, int &cnt10) {
+
+     ev++;
+     // keep in touch with job progress
+     if ( ev > cnt100*n100 ){
+       if (nEvents > 1000000)   cout << " " << cnt100 << "%:  Processing event # " << ev << "  " << endl; 
+       else  cout << "." << flush;
+       cnt100++;
+    } 
+     if ( ev > cnt10*n10 ){
+       cout << " " << cnt10 << "0%:  Processing event # " << ev << "  " << endl; 
+       cnt10++;
+     }
+
+}//END: keep in touch with job progress
+
+string outputName(){
+
+   if(gOutputName == "") gOutputName = "forgotname";
+   if(gSection) gOutputName += Form ("_section%03d", gSection);
+   if (gNumWanted) gOutputName += Form ("_n%d", gNumWanted);
+   string outFileName = removeEnding(gOutputName, ".root");
+   outFileName += ".root";
+   return outFileName;
+
+}
+
+
+TString getMistagFile(TString type){
+
+  const char *mistagDir = gSystem->Getenv("MISTAG_DIR");
+   if (!mistagDir) mistagDir = "../BTagObjects/mistag_2200invpb";
+   TString mistag_file = mistagDir;
+   mistag_file += "/" + type + "SECVTXparam_2200invpb.root";
+
+   //  cout << "mistag_file = " << mistag_file << endl;
+
+   return mistag_file;
+
+}
+
+
+
+const char* getKITFile(){
+
+//   const char *kitDir = gSystem->Getenv("ANN_EXPERT_DIR");
+//   if (!kitDir) kitDir = "../KITFlavorSep/ANNexperts"; 
+//   TString kit_file = kitDir;
+//   kit_file += "/neurobayesBTag_gen6.nb";
+
+
+  const char *kit_file = gSystem->Getenv("ANN_EXPERT_DIR");
+  if (!kit_file) kit_file = "../KITFlavorSep/ANNexperts/neurobayesBTag_gen6.nb"; 
+
+   return kit_file;
+
+}
+
+const char* getCorrMistagFile(){
+
+  const char *cm_file = gSystem->Getenv("CM_EXPERT_DIR");
+  if (!cm_file) cm_file = "../KITFlavorSep/correctionFiles/correctionFunc_mistags.root"; 
+
+   return cm_file;
+
+}
+TString getTrigFile(){
+
+  //Find trigger info file
+   const char *miscDir = gSystem->Getenv("MISC_DIR");
+   if(!miscDir) miscDir = "../miscfiles";
+   TString trigFile = miscDir;
+   trigFile += "/trigger_info";
+
+   return trigFile;
+}
+
+
+string getPdfFile(){
+
+   const char *miscDir = gSystem->Getenv("MISC_DIR");
+   if(!miscDir) miscDir = "../miscfiles";
+   string pdffile = miscDir;
+   pdffile += "/pdfweights.list";
+
+   return pdffile;
+}
+
+const char *getGoodRunDir(){
+
+   const char *goodRunDir = gSystem->Getenv("GOOD_RUN_DIR");
+   if (!goodRunDir) goodRunDir = "../good_run_lists/current";
+   cout << "Using good run directory = " << goodRunDir << endl;
+
+   return goodRunDir;
+
+}//getRootDir
+
+void setCuts(EvtSelCuts *cuts){
+  //set it to true so that met is corrected for non-isolated
+  // it shouldn't screw up anything else I hope
+  cuts->useDil = false;
+
+   if (gJetEle) {
+     cuts->fakeLep = true;
+     cuts->fakeCEMMask  |= TopAnaTools::JETELE_MASK;
+     cuts->fakePHXMask  |= TopAnaTools::JETELE_MASK;
+     cuts->fakeCMUPMask |= TopAnaTools::JETELE_MASK;
+     cuts->fakeCMXMask  |= TopAnaTools::JETELE_MASK;
+   }
+   if (gFakeLep) {
+     cuts->fakeLep = true;
+     cuts->fakeCEMMask |= TopAnaTools::ANTIELE_MASK;
+   }
+   if (gJESShift) 
+     cuts->jesShift = gJESShift;
+
+   if (gJetEnergy == 25.0)
+     cuts->tightJetEt = 25.0;
+
+}//setCuts
+
+bool isDuplicateEvent(RunEventSet *mySet, evt *event){
+
+  bool isDuplicate = false;
+
+  if (gMyDebug)        cout << " duplicate check " << endl;
+
+  if (mySet->alreadySeen(event->runNumber,event->eventNumber)){
+      if (gMyDebug)
+      cerr << "WARNING, this is the second time you've seen Run = " << event->runNumber 
+	   << ", Event = " << event->eventNumber << endl
+	   << "We will skip this event." << endl;
+    isDuplicate = true;
+  }
+
+  return isDuplicate;
+
+
+}//isDuplicateEvent
+
+
+void SetDecoder(TreeFileInterface *tfi, evt *event,  EvtSelTool *evtSeltool, KITFlavorSepExpert* kitflavorsepexpert, int &lastRun){
+
+     //Set the decoder for this file
+    if (event->runNumber != lastRun || tfi->isNewFile()) {
+       lastRun = event->runNumber;
+       kitflavorsepexpert->setDecoder( tfi->getTopDecoder() );
+       if (! gUseSkimmedTopNt) evtSeltool->setDecoder( tfi->getTopDecoder() );
+  }
+
+}//SetDecoder
+
+EvtSelResultLJ GetEventResult_LJ(TreeFileInterface *tfi, evt *event, privertex *pv, EvtSelTool *evtSeltool){
+
+  summary *smryPtr = (summary *)tfi->At(kSummaryBranch,0);
+  missingEt *metPtr = (missingEt*) tfi->At (kMetBranch, 0);
+  trigInfo *trigPtr = (trigInfo *)tfi->At(kTrigInfoBranch,0);
+
+  if ( gUseSkimmedTopNt )  return  *( (EvtSelResultLJ *)tfi->At("EvtSelResultLJ",0) );
+ 
+  //run evtseltool
+  evtSeltool->fixMuons(event,smryPtr,tfi->tcaPtr(kMuonBranch));
+  return evtSeltool->selectLJ(event, smryPtr, pv, trigPtr,
+				tfi->tcaPtr(kElectronBranch), tfi->tcaPtr(kMuonBranch),
+				tfi->tcaPtr(kJetBranch), tfi->tcaPtr(kZvtxsBranch), metPtr);
+
+
+}//GetEventResult_LJ
+
+void initAlpgenWeighting(){
+
+   const char *miscDir = gSystem->Getenv("MISC_DIR");
+   if(!miscDir) miscDir = "../miscfiles";
+   TString alpxsec = miscDir;
+   alpxsec += "/alpgenweights.xsec";
+   TString alpcounts = miscDir;
+   alpcounts += "/alpgenweights.counts";
+   AlpgenWeights::loadFiles(alpxsec,alpcounts);
+   AlpgenWeights::setIntegratedLuminosity(1.0); //fb^-1
+
+}//initAlpgenWeighting
+
+
+ int passedTrigger(unsigned int selectMask, EvtSelResultLJ *result){
+
+  int Trigger = -1;  
+  for (unsigned int i = 0; i < TopAnaTools::NUM_LJ_SELECTION; i++){ 
+    if ((result->selectionBits[i] & selectMask) == selectMask)
+      Trigger = i;
+  }
+
+  return Trigger;
+  
+}//passedTrigger
+
+
+bool passedQCDveto(int Trigger, EvtSelResultLJ *result){
+
+    if((result->selectionBits[Trigger] & TopAnaTools::SELECT_LJ_NOT_QCD) 
+       == TopAnaTools::SELECT_LJ_NOT_QCD)
+      return true;
+    else return false;
+
+}//passedQCDveto
+
+bool isGoodSiRun(int Trigger, EvtSelResultLJ *result){
+
+    if((result->selectionBits[Trigger] & TopAnaTools::SELECT_LJ_SI_GOODRUN) 
+       == TopAnaTools::SELECT_LJ_SI_GOODRUN)
+      return true;
+    else return false;
+
+
+}//isGoodSiRun
+
+void eventStamp(const evt *event){
+  cout << "Run = " << event->runNumber << "; Event = " << event->eventNumber << "     " << flush;
+}
+
+
+double lepEff(const evt *event, int Trigger){
+  // results obtained using LeptonEff.C script
+
+  if (! event->isMonteCarlo)
+    return 1.;
+
+  if (event->runNumber < 190000){ // p0
+    if (Trigger == 0) return 0.9533;
+    else if (Trigger == 2) return 0.8438;
+    else if (Trigger == 3) return 0.9760;
+    else { cerr << "ERROR: Unrecognzed trigger: " << Trigger << endl;  return 0.; }
+  } else { //p1-17
+   if (Trigger == 0) return 0.9440;
+   else if (Trigger == 2) return 0.8129; 
+   else if (Trigger == 3) return 0.8534; 
+   else { cerr << "ERROR: Unrecognzed trigger: " << Trigger << endl;  return 0.; }
+  }
+//   } else { //p1-15
+//    if (Trigger == 0) return 0.9434;
+//    else if (Trigger == 2) return 0.8147; //0.8132;
+//    else if (Trigger == 3) return 0.8562; //0.8619;
+//    else { cerr << "ERROR: Unrecognzed trigger: " << Trigger << endl;  return 0.; }
+//   }
+
+}//lepEff
+
+
+double lepErr(const evt *event, int Trigger){
+  // results obtained using LeptonEff.C script
+
+  if (! event->isMonteCarlo)
+    return 0.;
+
+  if (event->runNumber < 190000){ // p0
+    if (Trigger == 0) return 0.0079;
+    else if (Trigger == 2) return 0.0064;
+    else if (Trigger == 3) return 0.0066;
+    else { cerr << "ERROR: Unrecognzed trigger: " << Trigger << endl;  return 0.; }
+  } else { //p1-17
+   if (Trigger == 0) return 0.0021;
+   else if (Trigger == 2) return 0.0030; 
+   else if (Trigger == 3) return 0.0041;
+   else { cerr << "ERROR: Unrecognzed trigger: " << Trigger << endl;  return 0.; }
+  }
+//   } else { //p1-15
+//    if (Trigger == 0) return 0.0023;
+//    else if (Trigger == 2) return 0.0031; //0.0032;
+//    else if (Trigger == 3) return 0.0043;
+//    else { cerr << "ERROR: Unrecognzed trigger: " << Trigger << endl;  return 0.; }
+//   }
+
+}//lepEff
+
+double mTW(TLorentzVector leptonVect,  const EvtSelResultLJ *result){
+
+  leptonVect.SetPz(0.); // transverse
+  TLorentzVector metVect;
+  metVect.SetPtEtaPhiM(result->corrMetMag, 0.0, result->corrMetPhi, 0.0);
+  return (metVect+leptonVect).M();
+
+}//mTW
+
+// This is a single top met significance
+// Will's met significance is defined differently!!!
+
+// double metSignificance(TreeFileInterface *tfi,  const evt *event, const TClonesArray *jets, const EvtSelResultLJ *result){
+  
+//   double deltaMet(0.);
+
+//   summary *smry = (summary *)tfi->At(kSummaryBranch,0);
+//   missingEt *metBlock = (missingEt*) tfi->At (kMetBranch, 0);
+  
+//   //Get vector of fully corrected MET
+//   TVector2 corrMetV;
+//   corrMetV.SetMagPhi( result ->corrMetMag,  result->corrMetPhi);
+
+//   //Get the vertex corrected MET
+//   TVector2 vtxMetV;
+//   vtxMetV.SetMagPhi(smry->fvtxMet, smry->fvtxMetPhi);
+  
+//   //Get the scalar EtSum
+//   double etSum = metBlock->EtSum;
+  
+//  TIter nextJet(jets); 
+//  jet *jt;
+//  while (jt = (jet*) nextJet()){
+//    double L5corr(0.);
+//    if (! isLooseJet(jt, cuts, L5corr)) continue;
+    
+//     TVector2 jetV;
+//     jetV.SetMagPhi(jt->Et, jt->Phi);      
+//     double deltaPhi = jetV.DeltaPhi(corrMetV);
+    
+//     //Add (JES**2)*(cosDeltaPhi**2)*Et 
+//     deltaMet += L5corr*L5corr*cos(deltaPhi)*cos(deltaPhi)*jt->Et;
+    
+//     //Correct VTX met for removal of this jet's energy
+//     vtxMetV += jetV;
+//     etSum -= jt->Et; //Subtract raw Et
+
+//  }// jet loop
+  
+//   //Add contribution from energy not in jets (i.e. vtxMetMag corrected for raw jet energies)
+//   double deltaPhi = vtxMetV.DeltaPhi(corrMetV);
+//   deltaMet += cos(deltaPhi)*cos(deltaPhi)*etSum;
+    
+//   return result->corrMetMag / sqrt(deltaMet);
+  
+// }//metSignificance
+
+float  Afunction(float INPUT){
+  return( 1.0 / ( 1.0 + exp(-2.0*INPUT) ) );
+}
+
+
+//*************************************************
+  // Kevin & Alison's ANN 
+//  //Function implementation:
+void nnFunction3JGen6(const double *pattern, double *output) {
+
+  // NN node numbers: Input, hidden, and output
+  const int MaxIndim = 7;
+  const int Hidden = 7;
+  const int Outdim = 1;
+  int ivalid = 0;
+  double I_SUM = 0.0;
+  double H_O_SUM[Outdim];
+
+  // Input scales
+  const double scale[] = {1.000000,10.000000,10000.000000,1000.000000,10.000000
+                          ,1000.000000,10.000000};
+
+  // veto input patterns (0 == DO NOT USE)
+  const int veto[] = {1,1,1,1,1,1,1};
+
+  // NN node weights and threshholds
+  const double I_H_Weight[] = {-0.187944,-0.010402,-1.305287,-8.746028,-0.010402
+                               ,2.616589,10.205505,-5.434153,-0.016333,3.665001
+                               ,7.903602,-0.016333,-1.413452,-4.207884,34.764782
+                               ,-0.004587,0.297822,-14.435767,-0.004587,-123.359917
+                               ,8.422615,43.878620,-0.007682,16.230358,-11.129137
+                               ,-0.007682,-17.522989,12.484668,0.042319,-0.016805
+                               ,9.182456,-10.830547,-0.016805,3.416155,0.083311
+                               ,34.661541,-0.004175,-0.026230,-21.780336,-0.004175
+                               ,-15.089952,22.253582,0.096014,-0.013109,3.421572
+                               ,3.378855,-0.013109,-0.117138,-9.685293};
+  const double  H_Thresh[] = {-5.068064,-1.343712,-4.804249,1.852488,-1.343710
+                              ,2.866667,-3.084110};
+  const double H_O_Weight[] = {0.382274,0.014974,-1.404645,-1.069473,0.014974
+                               ,-2.269772,0.785008};
+  const double O_Thresh[] = {0.664000};
+  
+  // Loop over output, hidden, and input nodes
+  // to produce the neural net output 
+  //============================================
+  for (int out = 0; out<Outdim; out++){
+
+    H_O_SUM[out] = 0.0;
+    output[out] = 0.0;
+  }
+  for (int h = 0; h<Hidden; h++){
+    I_SUM = 0.;
+    ivalid = 0;
+    for (int i = 0; i<MaxIndim; i++){
+      if(veto[i]){
+        I_SUM += I_H_Weight[Hidden*ivalid+h] * pattern[i]/scale[i];
+        ivalid++;
+      }
+    }
+    I_SUM += H_Thresh[h];
+    for (int out = 0; out<Outdim; out++) H_O_SUM[out] += H_O_Weight[Outdim*h+out]*Afunction(I_SUM);
+  }
+  for (int out = 0; out<Outdim; out++){
+
+    H_O_SUM[out] += O_Thresh[out];
+    output[out] = Afunction(H_O_SUM[out]);
+  }
+  return;
+}//nnFunction3JGen6
+
+
+void nnFunction4JGen6(const double *pattern, double *output) {
+
+  // NN node numbers: Input, hidden, and output
+  const int MaxIndim = 7;
+  const int Hidden = 7;
+  const int Outdim = 1;
+  int ivalid = 0;
+  double I_SUM = 0.0;
+  double H_O_SUM[Outdim];
+
+  // Input scales
+  const double scale[] = {1.000000,10.000000,10000.000000,1000.000000,10.000000
+                          ,1000.000000,10.000000};
+
+  // veto input patterns (0 == DO NOT USE)
+  const int veto[] = {1,1,1,1,1,1,1};
+
+  // NN node weights and threshholds
+  const double I_H_Weight[] = {10.335579,-0.009516,-0.129069,-16.258320,-5.541168
+                               ,2.078997,-0.009516,-8.378689,-0.010091,-0.026243
+                               ,4.168233,0.261273,-2.528856,-0.010091,-0.244718
+                               ,-0.003039,0.018362,0.271493,0.517023,-107.963531
+                               ,-0.003039,16.473520,-0.003591,-1.974335,-10.546713
+                               ,-5.801315,-16.123035,-0.003591,17.468586,-0.007869
+                               ,-0.065202,-19.241541,25.844614,0.091898,-0.007869
+                               ,14.068330,-0.006648,-7.862504,-19.964319,-3.180319
+                               ,-18.307465,-0.006648,-12.766591,-0.007510,-0.050663
+                               ,9.811443,0.217689,-1.183759,-0.007510};
+  const double  H_Thresh[] = {-3.156014,-1.906159,-0.869572,2.130276,-4.135810
+                              ,3.727024,-1.906161};
+  const double  H_O_Weight[] = {0.803417,0.001710,-0.306629,-0.989374,-1.251209
+                                ,-2.983112,0.001710};
+  const double  O_Thresh[] = {0.179479};
+
+  // Loop over output, hidden, and input nodes
+  // to produce the neural net output 
+  //============================================
+  for (int out = 0; out<Outdim; out++){
+    
+    H_O_SUM[out] = 0.0;
+    output[out] = 0.0;
+  }
+  for (int h = 0; h<Hidden; h++){
+    I_SUM = 0.;
+    ivalid = 0;
+    for (int i = 0; i<MaxIndim; i++){
+      if(veto[i]){
+        I_SUM += I_H_Weight[Hidden*ivalid+h] * pattern[i]/scale[i];
+        ivalid++;
+      }
+    }
+    I_SUM += H_Thresh[h];
+    for (int out = 0; out<Outdim; out++) H_O_SUM[out] += H_O_Weight[Outdim*h+out]*Afunction(I_SUM);
+  }
+  for (int out = 0; out<Outdim; out++){
+    
+    H_O_SUM[out] += O_Thresh[out];
+    output[out] = Afunction(H_O_SUM[out]);
+  }
+  return;
+}//nnFunction4JGen6
+
+double getAplanarity(const TLorentzVector & metV, const TLorentzVector & lepton, const TLorentzVector *jet, const int nJets5){
+
+  //
+  // Aplanarity and sphericity
+  //
+
+   double sum = lepton.P()*lepton.P() + metV.P()*metV.P();
+   for (int j=0;j<nJets5;j++)   sum+= jet[j].P()*jet[j].P();
+
+   TMatrix tensor(3,3);
+ 
+   // mxx
+   tensor(0,0) = metV.Px()*metV.Px() + lepton.Px()*lepton.Px();
+   for (int j=0;j<nJets5;j++)   tensor(0,0) += jet[j].Px()*jet[j].Px();
+   tensor(0,0) /= sum;
+
+   // myy
+   tensor(1,1) = metV.Py()*metV.Py() + lepton.Py()*lepton.Py();
+   for (int j=0;j<nJets5;j++)   tensor(1,1) += jet[j].Py()*jet[j].Py();
+   tensor(1,1) /= sum;
+
+   // mzz
+   tensor(2,2) = metV.Pz()*metV.Pz() + lepton.Pz()*lepton.Pz();
+   for (int j=0;j<nJets5;j++)   tensor(2,2) += jet[j].Pz()*jet[j].Pz();
+   tensor(2,2) /= sum;
+
+   //mxy
+   tensor(0,1) = metV.Px()*metV.Py() + lepton.Px()*lepton.Py();
+   for (int j=0;j<nJets5;j++)   tensor(0,1) += jet[j].Px()*jet[j].Py();
+   tensor(0,1) /= sum;
+   tensor(1,0) = tensor(0,1);
+
+   //mxz
+   tensor(0,2) = metV.Px()*metV.Pz() + lepton.Px()*lepton.Pz();
+   for (int j=0;j<nJets5;j++)   tensor(0,2) += jet[j].Px()*jet[j].Pz();
+   tensor(0,2) /= sum;
+   tensor(2,0) = tensor(0,2);
+
+   //myz
+   tensor(1,2) = metV.Py()*metV.Pz() + lepton.Py()*lepton.Pz();
+   for (int j=0;j<nJets5;j++)   tensor(1,2) += jet[j].Py()*jet[j].Pz();
+   tensor(1,2) /= sum;
+   tensor(2,1) = tensor(1,2);
+
+  TVector eigenval(3);
+  tensor.EigenVectors(eigenval);
+
+//   sphericity = 3.0*(eigenval(1)+eigenval(2))/2.0;
+//   aplanarity = 3.0*eigenval(2)/2.0;
+
+  std::vector <double> _eigenValues;
+  for(int i=0;i<3;i++)  _eigenValues.push_back(eigenval(i));
+  sort(_eigenValues.begin(),_eigenValues.end());
+
+  //  double sphericity = 3.0*(_eigenValues[1]+_eigenValues[0])/2.0;
+  double aplanarity = 3.0*_eigenValues[0]/2.0;
+
+  return aplanarity;
+
+}//getAplanarity
+
+
+double getEtaMax(const TLorentzVector *jet, const int nJets5){
+
+  //
+  // Eta Max - look only at 3 highest Et jets
+  //   
+  
+  double etaMax = 0.0;
+  int nJets3 = TMath::Min(3,nJets5);
+
+  for (int j=0; j<nJets3;j++){
+    if (gMyDebug) cout << "jet[ " << j << "].Pt() = " << jet[j].Pt() << endl;
+    //if (jet[j].Pt() == 0) cout << " WARNING! jet Pt = 0; nJets5 = " << nJets5 << endl; 
+    if ( jet[j].Eta() > etaMax )
+      etaMax = jet[j].Eta();
+  }
+
+  return etaMax;  
+
+}//getEtaMax
+
+
+void getSumEt(const TLorentzVector & metV, const TLorentzVector & lepton, const TLorentzVector *jet, 
+		const int nJets5, double & ht, double & sumJetEt345, double & sumPzSumEt ){
+   
+  sumJetEt345 = 0;
+  for (int j=2; j<nJets5;j++)  sumJetEt345 += jet[j].Pt();
+  
+  double sumJetEt = 0;
+  for (int j=0; j<nJets5;j++)  sumJetEt += jet[j].Pt();
+
+  ht = metV.Pt() + lepton.Pt() + sumJetEt;
+
+  double sumJetPz = 0;
+  for (int j=0; j<nJets5;j++)  sumJetPz += jet[j].Pz();
+  
+  sumPzSumEt = sumJetPz / sumJetEt; 
+  
+  return;
+
+}//getSumEt
+
+
+void getMinDijet(const TLorentzVector *jet,   const int nJets5,  double &  minDijetMass, double &  minDijetSep){
+
+  minDijetMass = 99999999.0;
+  minDijetSep = 99999999.0;
+
+  for (int i=0; i< nJets5-1 ; i++)
+    for (int j=i+1; j< nJets5; j++){
+
+      //Calculate dijet quantities
+      double dijetM = (jet[i] + jet[j]).M();
+      if (dijetM < minDijetMass) minDijetMass=dijetM;
+
+      double dR = jet[i].DeltaR( jet[j] );
+      if ( dR < minDijetSep) minDijetSep = dR;
+    }
+
+  return;  
+
+}//getMinDijet

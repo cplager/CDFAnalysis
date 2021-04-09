@@ -1,0 +1,15 @@
+After the output files of the CAF ntupling jobs are available, 
+copy them to ./files directory and 
+
+Edit RemoveDuplicates.C script to point to the location of the 
+libRootFileCollection.so library (built when building Analysis.exe).
+
+Use MergeMC.C to merge monte carlo samples
+into one file per physics process.
+
+Use Merge_Data.C to merge data files; after that one needs to 
+remove duplicate events using RemoveDuplicates.C script
+
+CountDuplicates.C is used for counting event after duplicate removal;
+Debug_Dupl.C is used to debug the duplicate removal algorithm
+

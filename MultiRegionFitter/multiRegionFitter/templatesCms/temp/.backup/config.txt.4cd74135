@@ -1,0 +1,24 @@
+# -*- conf -*-
+
+# filename
+pf_Unity_7.1pb_101013.root
+
+# case insensitive regex for histograms to keep
++ keep ^top
+
+# double-pipe separated substitutions ('old||new')
++ sub top||ttbar
+
+# set new normalization of given histogram (name must be exact match)
+#+ renorm ttbar_svm_5j_1t_b:10
+
+
+# scale histogram by factor (name must be exact match)
++ scale  ttbar_svm_5j_2t_bb:2
+
+
+# all adds are global and will be done after all files are loaded
+# 
+# newRegex:oldRegex1,oldRegex2
+# Note that one must use captures 
++ add \1_xxx:(.+)_b$^,(.+)_c$^,(.+)_q$^

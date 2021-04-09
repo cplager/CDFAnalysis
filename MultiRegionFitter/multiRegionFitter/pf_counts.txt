@@ -1,0 +1,180 @@
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.3         4.6         4.6        32.3        20.6 
+2 Jets 1 Tag         9.2         4.6         3.5         9.8         7.2 
+3 Jets 1 Tag        15.0         2.0         1.4         2.3         2.4 
+4 Jets 1 Tag        12.0         0.7         0.5         0.6         0.6 
+5 Jets 1 Tag         7.2         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        2.3         0.4         0.4         0.1         0.0 
+3 Jets 2 Tags        5.7         0.5         0.2         0.0         0.0 
+4 Jets 2 Tags        6.0         0.2         0.1         0.0         0.0 
+5 Jets 2 Tags        4.3         0.1         0.0         0.0         0.0 
+Total               64.1        13.4        10.7        45.3        31.1 
+
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_BTag076_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_BTag076_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.0         4.0         3.7        27.9        20.8 
+2 Jets 1 Tag         8.6         4.1         3.1         8.8         7.3 
+3 Jets 1 Tag        14.3         1.8         1.2         2.1         2.3 
+4 Jets 1 Tag        11.8         0.7         0.5         0.5         0.6 
+5 Jets 1 Tag         7.2         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        1.7         0.3         0.3         0.1         0.0 
+3 Jets 2 Tags        4.3         0.4         0.2         0.0         0.0 
+4 Jets 2 Tags        4.6         0.2         0.1         0.0         0.1 
+5 Jets 2 Tags        3.3         0.1         0.0         0.0         0.0 
+Total               57.8        11.8         9.1        39.6        31.2 
+
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_BTag082_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_BTag082_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.1         4.3         4.1        30.0        21.1 
+2 Jets 1 Tag         8.9         4.4         3.3         9.2         7.3 
+3 Jets 1 Tag        14.7         2.0         1.4         2.1         2.3 
+4 Jets 1 Tag        11.9         0.7         0.5         0.5         0.6 
+5 Jets 1 Tag         7.3         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        1.9         0.4         0.3         0.1         0.0 
+3 Jets 2 Tags        5.0         0.4         0.2         0.0         0.0 
+4 Jets 2 Tags        5.4         0.2         0.1         0.0         0.0 
+5 Jets 2 Tags        3.8         0.1         0.0         0.0         0.0 
+Total               61.1        12.7        10.1        42.2        31.5 
+
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_BTag094_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_BTag094_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.4         4.9         4.8        34.3        20.5 
+2 Jets 1 Tag         9.6         4.9         3.7        10.7         7.0 
+3 Jets 1 Tag        15.3         2.1         1.5         2.4         2.4 
+4 Jets 1 Tag        12.1         0.7         0.5         0.6         0.6 
+5 Jets 1 Tag         7.1         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        2.6         0.5         0.4         0.1         0.0 
+3 Jets 2 Tags        6.5         0.5         0.3         0.0         0.0 
+4 Jets 2 Tags        6.8         0.3         0.1         0.0         0.1 
+5 Jets 2 Tags        4.8         0.1         0.0         0.0         0.0 
+Total               67.2        14.3        11.4        48.3        30.8 
+
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_BTag100_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_BTag100_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.6         5.2         5.1        36.5        20.1 
+2 Jets 1 Tag         9.8         5.2         3.8        11.3         7.0 
+3 Jets 1 Tag        15.4         2.2         1.6         2.5         2.4 
+4 Jets 1 Tag        12.0         0.7         0.5         0.6         0.6 
+5 Jets 1 Tag         7.1         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        2.9         0.5         0.5         0.1         0.0 
+3 Jets 2 Tags        7.3         0.6         0.3         0.0         0.0 
+4 Jets 2 Tags        7.7         0.3         0.1         0.0         0.1 
+5 Jets 2 Tags        5.3         0.1         0.0         0.0         0.0 
+Total               70.1        15.1        12.0        51.3        30.4 
+
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_LFTag074_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_LFTag074_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.3         4.6         4.5        32.7        18.2 
+2 Jets 1 Tag         9.3         4.7         3.6         9.9         6.1 
+3 Jets 1 Tag        15.0         2.0         1.4         2.3         2.1 
+4 Jets 1 Tag        12.1         0.7         0.5         0.6         0.4 
+5 Jets 1 Tag         7.3         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        2.3         0.4         0.4         0.1         0.0 
+3 Jets 2 Tags        5.7         0.5         0.2         0.0         0.0 
+4 Jets 2 Tags        6.0         0.2         0.1         0.0         0.1 
+5 Jets 2 Tags        4.2         0.1         0.0         0.0         0.0 
+Total               64.1        13.4        10.8        45.8        27.0 
+
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_LFTag080_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_LFTag080_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.3         4.6         4.6        32.1        19.1 
+2 Jets 1 Tag         9.3         4.6         3.4        10.2         6.6 
+3 Jets 1 Tag        15.0         2.0         1.5         2.1         2.2 
+4 Jets 1 Tag        12.0         0.7         0.5         0.6         0.6 
+5 Jets 1 Tag         7.3         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        2.3         0.4         0.4         0.1         0.0 
+3 Jets 2 Tags        5.7         0.5         0.2         0.0         0.0 
+4 Jets 2 Tags        6.1         0.2         0.1         0.0         0.0 
+5 Jets 2 Tags        4.2         0.1         0.0         0.0         0.0 
+Total               64.2        13.4        10.8        45.4        28.8 
+
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_LFTag094_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_LFTag094_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.3         4.6         4.5        32.4        22.3 
+2 Jets 1 Tag         9.2         4.7         3.5        10.1         7.8 
+3 Jets 1 Tag        15.1         2.0         1.4         2.3         2.7 
+4 Jets 1 Tag        12.0         0.7         0.5         0.6         0.6 
+5 Jets 1 Tag         7.3         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        2.3         0.4         0.4         0.1         0.0 
+3 Jets 2 Tags        5.7         0.5         0.2         0.0         0.0 
+4 Jets 2 Tags        6.1         0.2         0.1         0.0         0.0 
+5 Jets 2 Tags        4.3         0.1         0.0         0.0         0.0 
+Total               64.3        13.5        10.6        45.7        33.7 
+
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_LFTag100_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_LFTag100_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.3         4.6         4.6        32.1        23.4 
+2 Jets 1 Tag         9.3         4.7         3.4        10.1         8.2 
+3 Jets 1 Tag        15.0         2.0         1.5         2.2         2.8 
+4 Jets 1 Tag        12.0         0.7         0.5         0.6         0.7 
+5 Jets 1 Tag         7.3         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        2.3         0.4         0.4         0.1         0.0 
+3 Jets 2 Tags        5.8         0.5         0.2         0.0         0.0 
+4 Jets 2 Tags        6.1         0.2         0.1         0.0         0.1 
+5 Jets 2 Tags        4.3         0.1         0.0         0.0         0.0 
+Total               64.3        13.5        10.8        45.3        35.4 
+
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_Unity_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_Unity_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.6         5.2         5.1        36.5        23.4 
+2 Jets 1 Tag         9.8         5.2         3.8        11.4         8.2 
+3 Jets 1 Tag        15.4         2.2         1.6         2.5         2.8 
+4 Jets 1 Tag        11.9         0.7         0.5         0.6         0.7 
+5 Jets 1 Tag         7.0         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        3.0         0.5         0.5         0.1         0.0 
+3 Jets 2 Tags        7.3         0.6         0.3         0.0         0.0 
+4 Jets 2 Tags        7.7         0.3         0.1         0.0         0.1 
+5 Jets 2 Tags        5.4         0.1         0.0         0.0         0.0 
+Total               70.2        15.1        12.0        51.4        35.4 
+
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_jes095_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_jes095_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.5         4.7         4.5        30.9        20.0 
+2 Jets 1 Tag         9.9         4.7         3.4         9.8         6.9 
+3 Jets 1 Tag        15.3         2.0         1.4         1.9         2.1 
+4 Jets 1 Tag        11.5         0.6         0.4         0.5         0.5 
+5 Jets 1 Tag         6.5         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        2.4         0.4         0.4         0.1         0.0 
+3 Jets 2 Tags        5.9         0.5         0.2         0.0         0.0 
+4 Jets 2 Tags        5.9         0.2         0.1         0.0         0.0 
+5 Jets 2 Tags        3.9         0.1         0.0         0.0         0.0 
+Total               63.7        13.3        10.5        43.4        29.7 
+
+unix> configTemplateInfo.py configCms/tag_71_qcdB.mrf --file templatesCms/pf_jes105_7.1pb_101012.root Top=0.1575 --samples=Top,SingleTop,Wbx,Wcx,Wqq
+info for templatesCms/pf_jes105_7.1pb_101012.root:
+Integrated Luminosity: 7.100000
+                     Top   SingleTop         Wbx         Wcx         Wqq 
+1 Jet  1 Tag         2.1         4.5         4.5        33.0        20.9 
+2 Jets 1 Tag         8.7         4.6         3.5        10.8         8.0 
+3 Jets 1 Tag        14.7         2.1         1.6         2.4         2.6 
+4 Jets 1 Tag        12.5         0.8         0.5         0.6         0.8 
+5 Jets 1 Tag         7.9         0.2         0.1         0.2         0.1 
+2 Jets 2 Tags        2.2         0.4         0.4         0.1         0.0 
+3 Jets 2 Tags        5.5         0.5         0.2         0.0         0.0 
+4 Jets 2 Tags        6.2         0.3         0.1         0.0         0.1 
+5 Jets 2 Tags        4.7         0.1         0.0         0.0         0.0 
+Total               64.5        13.5        11.1        47.1        32.6 
+

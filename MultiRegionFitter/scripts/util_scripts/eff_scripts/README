@@ -1,0 +1,7 @@
+This is a script that calculates an average lepton efficiency.
+The inputs are taken from Joint Physics spreadsheet.
+The output needs to be incorporated into Analysis.cc 
+double lepEff(const evt *event, int Trigger)
+and
+double lepErr(const evt *event, int Trigger)
+

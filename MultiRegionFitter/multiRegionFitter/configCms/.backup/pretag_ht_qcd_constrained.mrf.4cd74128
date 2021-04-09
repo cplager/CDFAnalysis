@@ -1,0 +1,24 @@
+# -*- conf -*-
+
++ fixParameters = QCD
+
+# QCD 
+- qcdConstr_1j 0 1 -10.0 10.0 1
+-- _ht_1j :  QCD :   1.0    0.5
+
+- qcdConstr_2j 0 1 -10.0 10.0 1
+-- _ht_2j :  QCD :   1.0    0.5
+
+- qcdConstr_3j 0 1 -10.0 10.0 1
+-- _ht_3j :  QCD :   1.0    0.5
+
+- qcdConstr_4j 0 1 -10.0 10.0 1
+-- _ht_4j :  QCD :   1.0    0.5
+
+- qcdConstr_5j 0 1 -10.0 10.0 1
+-- _ht_5j :  QCD :   1.0    0.5
+
+# How to throw PEs
++ peNames  = qcdConstr_1j, qcdConstr_2j, qcdConstr_3j, qcdConstr_4j, qcdConstr_5j 
++ peMeans  =        1.0,        1.0,        1.0,        1.0,        1.0 
++ peSigmas =        0.2,        0.2,        0.2,        0.2,        0.2 

@@ -1,0 +1,11 @@
+# -*- conf -*-
+
+file1
+
++ keep alpha beta gamma
++ keep delta
+
++ sub a|b c|d
+
++ rebin b:1,2,3
+

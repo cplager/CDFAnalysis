@@ -1,0 +1,47 @@
+# -*- conf -*-
+
+# templates to load
++ templateFile  = templatesCms/eta_jes10.root
+
+# names of templates
++ names = Data, top, wjets
+
+# names of the different groups
++ groupNames = _eta_1j, _eta_2j, _eta_3j, _eta_4j, _eta_5j
+
+
+# Display Names
++ groupStrings = 1_Jet, 2_Jets,  3_Jets, 4_Jets, 5_Jets
+
+# integrated luminosity
+# in fb-1
++ intLumi       = 0.01
+
+# binning of templates
++ binsPerGroup = 10, 10, 10, 5, 5
+
+# How to throw PEs
++ peNames  =   top,  wjets
++ peMeans  = 0.165,  28.0 
++ peSigmas = 0.020,  0.5 
+
+# defaults
++ defaultNames     =   top,   wjets
++ defaultValues    =   0.187, 24.0
+
+# colors
++ colorNames  = Data, top, wjets
++ colorValues =    1,   2,  93
+
+# legend coordiates
++ legendCoordinates = 0.285, 0.55, 0.365, 0.88
+
+# output file name
++ output = output/pretag_leptonEta_0.01
+
+# turn on data error bars
++ dataErrorBars = 1
+
+
+# include
+#@ configCms/HT_jes_polynoids.mrf

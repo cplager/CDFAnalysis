@@ -1,0 +1,59 @@
+# -*- conf -*-
+
+# templates to load
++ templateFile  = templatesCms/tag290_calo.root
+
+# names of templates
++ names = Data, Top, SingleTop, Wbx, Wcx, Wqq, QCD
+
+# names of the different groups
++ groupNames = _svm_1j_1t, _svm_2j_1t, _svm_3j_1t, _svm_4j_1t, _svm_5j_1t
++ groupNames =             _svm_2j_2t, _svm_3j_2t, _svm_4j_2t, _svm_5j_2t
+
+# Display Names
++ groupStrings = 1_Jet_1_Tag, 2_Jets_1_Tag,  3_Jets_1_Tag, 4_Jets_1_Tag, 5_Jets_1_Tag
++ groupStrings = 2_Jets_2_Tags,  3_Jets_2_Tags, 4_Jets_2_Tags, 5_Jets_2_Tags
+
+
+
+# integrated luminosity
+# in fb-1
++ intLumi       = 3.1
+
+# binning of templates
++ binsPerGroup = 10, 10, 10, 10, 10, 10, 10, 10, 10
+
+# How to throw PEs
++ peNames  =    Top,   SingleTop,   Wbx,   Wcx,   Wqq,    QCD
++ peMeans  = 0.1575,         1.0,   1.0,   1.0,   1.0,    1.0
++ peSigmas =  0.020,         0.1,   0.1,   0.1,   0.1,    0.2
+
+# defaults
++ defaultNames     =   Top,   WJets,   QCD
++ defaultValues    =   0.165,    1,      1.0
+
+# colors
++ colorNames  = Data, Top, SingleTop, Wbx, Wcx, Wqq, QCD
++ colorValues =    1, 633,       616, 413, 411, 407, 400
+
+# constraints
++ constraintNames  =     QCD,  Wbx#,  Wcx,  Wqq
++ constraintValues =     0.5,  4.0#,  2.0,  2.0
+
+# Ranges
++ rangeNames =   Wcx,     Wbx,   SingleTop,    Wqq
++ lowerRange =  -200.,   -100,        -40,    -20
++ upperRange =   200.,    100,         40,     20
++ stepRange  =  0.01,     0.1,       0.001,   0.01
+
+
+# legend coordiates
++ legendCoordinates = 0.285, 0.55, 0.365, 0.88
+
+# output file name
++ output = output/tag290_calo_svm
+
+# turn on data error bars
++ dataErrorBars = 1
+
+

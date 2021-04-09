@@ -1,0 +1,17 @@
+FitHF.C - script used to extract heavy flavor content using different taggers and different variables (not used)
+
+LSF_4HFfit.C - Extracts the SF for mistags (not used)
+
+qcdSF_4HFfit.C - Extracts the SF for qcd (use low met region). (not used)
+
+Plot_rate.C - Plots the Missing ET to give the normalization for the templates, using btag SF and mistag matrix. Outputs templates in split pieces (_b, _c, etc). Total templates (Top, Wcc, etc) are not correct, and are just placeholders (they are combined at a later step by combining the split pieces). This script is used for nominal, btag shifts, mistag shifts, and JES shifts
+
+Plot_rate_top.C - Plots the Missing ET to give the normalization for the templates, using btag SF and mistag matrix. Outputs templates in split pieces (_b, _c, etc). Total templates (Top, Wcc, etc) are not correct, and are just placeholders (they are combined at a later step by combining the split pieces). This script is used for ISR/FSR and Herwig shifts.
+
+Plot_rate_Q2.C - Plots the Missing ET to give the normalization for the templates, using btag SF and mistag matrix. Outputs templates in split pieces (_b, _c, etc). Total templates (Top, Wcc, etc) are not correct, and are just placeholders (they are combined at a later step by combining the split pieces). This script is used for Q^2 shifts.
+
+Plot_shape.C (FitHF_split_shape.C) - Plots the KIT FS to give the shape for the templates, using actual tags. Outputs templates in split pieces (_b, _c, etc). Total templates (Top, Wcc, etc) are not correct, and are just placeholders (they are combined at a later step by combining the split pieces). This script is used for nominal and KIT correction templates.
+
+Plot_shape_top.C (FitHF_shape_top.C) - Plots the KIT FS to give the shape for the templates, using actual tags. Outputs templates in split pieces (_b, _c, etc). Total templates (Top, Wcc, etc) are not correct, and are just placeholders (they are combined at a later step by combining the split pieces). This script is used for Herwig templates
+
+Plot_shape_jete.C (FitHF_shape_jete.C) - Plots the KIT FS to give the shape for the templates, using actual tags. Outputs templates in split pieces (_b, _c, etc). Total templates (Top, Wcc, etc) are not correct, and are just placeholders (they are combined at a later step by combining the split pieces). This script is used for the jet electron templates.

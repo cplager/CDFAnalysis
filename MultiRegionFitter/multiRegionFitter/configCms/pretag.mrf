@@ -1,0 +1,54 @@
+# -*- conf -*-
+
+# names of templates
++ names = Data, Top, SingleTop, WJets, QCD
+
+# names of the different groups
++ groupNames = _lepEta_1j,  _lepEta_2j,  _lepEta_3j
++ groupNames = _lepEta_4j,  _lepEta_5j
+
+# Display Names
++ groupStrings = 1_Jet_, 2_Jets,  3_Jets, 4_Jets, 5_Jets
+
+
+
+# integrated luminosity factor
++ intLumi       = 1
+
+# binning of templates
++ binsPerGroup = 11, 11, 11, 11, 11
+
+# How to throw PEs
++ peNames  =    Top,   SingleTop,   WJets,    QCD
++ peMeans  = 0.1575,         1.0,   1.0,    1.0
++ peSigmas =  0.020,         0.1,   0.1,    0.2
+
+# defaults
++ defaultNames     =   Top,   WJets,   QCD
++ defaultValues    =   0.165,    1,      1.0
+
+# colors
++ colorNames  = Data, Top, SingleTop, WJets, QCD
++ colorValues =    1, 633,       616, 407, 400
+
+## # constraints
+## + constraintNames  =     WJets
+## + constraintValues =     2.0
+
+# Ranges
++ rangeNames = SingleTop,    WJets
++ lowerRange =      -40,    -20
++ upperRange =       40,     20
++ stepRange  =     0.001,   0.01
+
+
+# legend coordiates
++ legendCoordinates = 0.285, 0.55, 0.365, 0.88
+
+# output file name
++ output = output/pretag_
+
+# turn on data error bars
++ dataErrorBars = 1
+
++ fixParameters=QCD

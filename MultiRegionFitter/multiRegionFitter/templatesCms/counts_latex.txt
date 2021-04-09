@@ -1,0 +1,621 @@
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file calo_31_default.root Top=0.1575 --latex
+info for calo_31_default.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      78.2   &       1.0   &       2.6   &       2.3   &      19.9   &      11.4   &      41.1   \\
+2 Jets 1 Tag   &      29.1   &       4.5   &       2.7   &       1.6   &       5.3   &       4.0   &      10.8   \\
+3 Jets 1 Tag   &      13.8   &       8.0   &       1.1   &       0.7   &       1.1   &       1.1   &       1.8   \\
+4 Jets 1 Tag   &       7.4   &       6.1   &       0.3   &       0.2   &       0.3   &       0.3   &       0.1   \\
+5 Jets 1 Tag   &       3.5   &       3.3   &       0.1   &       0.1   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       1.9   &       1.2   &       0.3   &       0.2   &       0.0   &       0.0   &       0.2   \\
+3 Jets 2 Tags  &       4.3   &       3.8   &       0.3   &       0.1   &       0.0   &       0.0   &       0.1   \\
+4 Jets 2 Tags  &       4.2   &       4.0   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.6   &       2.4   &       0.1   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     145.1   &      34.3   &       7.6   &       5.2   &      26.8   &      16.9   &      54.3  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file calo_31_default_JES09.root Top=0.1575 --latex
+info for calo_31_default_JES09.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      72.9   &       1.3   &       2.7   &       2.3   &      18.7   &      10.5   &      37.4   \\
+2 Jets 1 Tag   &      26.5   &       5.5   &       2.7   &       1.5   &       4.6   &       3.6   &       8.7   \\
+3 Jets 1 Tag   &      12.6   &       8.3   &       0.9   &       0.6   &       0.8   &       0.8   &       1.1   \\
+4 Jets 1 Tag   &       6.3   &       5.4   &       0.3   &       0.2   &       0.2   &       0.3   &       0.0   \\
+5 Jets 1 Tag   &       2.6   &       2.4   &       0.1   &       0.0   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       2.0   &       1.4   &       0.3   &       0.2   &       0.0   &       0.0   &       0.1   \\
+3 Jets 2 Tags  &       4.5   &       4.0   &       0.3   &       0.1   &       0.0   &       0.0   &       0.1   \\
+4 Jets 2 Tags  &       3.7   &       3.6   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.0   &       1.9   &       0.0   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     133.1   &      33.6   &       7.4   &       4.9   &      24.4   &      15.3   &      47.5  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file calo_31_default_JES11.root Top=0.1575 --latex
+info for calo_31_default_JES11.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      81.6   &       0.8   &       2.5   &       2.2   &      20.7   &      11.7   &      43.8   \\
+2 Jets 1 Tag   &      33.3   &       3.8   &       2.8   &       1.9   &       6.3   &       4.6   &      14.0   \\
+3 Jets 1 Tag   &      14.6   &       7.6   &       1.2   &       0.8   &       1.4   &       1.3   &       2.3   \\
+4 Jets 1 Tag   &       8.2   &       6.7   &       0.4   &       0.3   &       0.3   &       0.4   &       0.1   \\
+5 Jets 1 Tag   &       4.5   &       4.1   &       0.1   &       0.1   &       0.1   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       1.9   &       1.0   &       0.3   &       0.2   &       0.0   &       0.0   &       0.3   \\
+3 Jets 2 Tags  &       4.2   &       3.5   &       0.3   &       0.1   &       0.0   &       0.0   &       0.2   \\
+4 Jets 2 Tags  &       4.5   &       4.3   &       0.2   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       3.2   &       3.0   &       0.1   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     156.0   &      34.7   &       7.8   &       5.6   &      28.8   &      18.1   &      60.8  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file jpt_31_default.root Top=0.1575 --latex
+info for jpt_31_default.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      89.7   &       1.0   &       2.8   &       2.6   &      20.8   &      12.5   &      50.0   \\
+2 Jets 1 Tag   &      30.7   &       4.8   &       2.8   &       1.8   &       5.5   &       4.3   &      11.6   \\
+3 Jets 1 Tag   &      14.0   &       8.1   &       1.1   &       0.8   &       1.1   &       1.2   &       1.8   \\
+4 Jets 1 Tag   &       7.2   &       6.0   &       0.3   &       0.2   &       0.3   &       0.3   &       0.1   \\
+5 Jets 1 Tag   &       3.3   &       3.0   &       0.1   &       0.0   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       2.3   &       1.4   &       0.3   &       0.2   &       0.0   &       0.0   &       0.3   \\
+3 Jets 2 Tags  &       4.6   &       4.2   &       0.3   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       4.4   &       4.2   &       0.2   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.7   &       2.5   &       0.1   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     158.9   &      35.1   &       7.9   &       5.7   &      27.8   &      18.3   &      64.0  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file jpt_31_default_JES095.root Top=0.1575 --latex
+info for jpt_31_default_JES095.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      85.3   &       1.2   &       2.8   &       2.6   &      20.0   &      12.0   &      46.7   \\
+2 Jets 1 Tag   &      29.2   &       5.2   &       2.8   &       1.7   &       5.0   &       4.0   &      10.5   \\
+3 Jets 1 Tag   &      13.3   &       8.3   &       1.0   &       0.7   &       0.9   &       1.1   &       1.4   \\
+4 Jets 1 Tag   &       6.7   &       5.6   &       0.3   &       0.2   &       0.2   &       0.3   &       0.1   \\
+5 Jets 1 Tag   &       2.8   &       2.7   &       0.1   &       0.0   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       2.4   &       1.5   &       0.3   &       0.2   &       0.0   &       0.0   &       0.3   \\
+3 Jets 2 Tags  &       4.8   &       4.3   &       0.3   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       4.2   &       4.0   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.4   &       2.2   &       0.0   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     151.0   &      34.9   &       7.8   &       5.5   &      26.3   &      17.4   &      59.1  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file jpt_31_default_JES105.root Top=0.1575 --latex
+info for jpt_31_default_JES105.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      92.6   &       0.9   &       2.7   &       2.6   &      21.6   &      12.7   &      52.1   \\
+2 Jets 1 Tag   &      33.5   &       4.4   &       2.8   &       1.9   &       6.0   &       4.7   &      13.8   \\
+3 Jets 1 Tag   &      14.6   &       7.9   &       1.1   &       0.8   &       1.2   &       1.3   &       2.3   \\
+4 Jets 1 Tag   &       7.6   &       6.3   &       0.4   &       0.3   &       0.3   &       0.3   &       0.1   \\
+5 Jets 1 Tag   &       3.7   &       3.4   &       0.1   &       0.0   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       2.2   &       1.3   &       0.3   &       0.2   &       0.1   &       0.0   &       0.3   \\
+3 Jets 2 Tags  &       4.5   &       4.0   &       0.3   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       4.6   &       4.4   &       0.2   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       3.0   &       2.7   &       0.1   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     166.4   &      35.4   &       8.0   &       6.0   &      29.2   &      19.1   &      68.7  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file pf_31_default.root Top=0.1575 --latex
+info for pf_31_default.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      66.5   &       1.3   &       2.7   &       2.7   &      20.6   &      12.8   &      26.4   \\
+2 Jets 1 Tag   &      27.6   &       5.0   &       2.7   &       2.1   &       6.2   &       4.6   &       7.1   \\
+3 Jets 1 Tag   &      13.8   &       7.9   &       1.1   &       0.8   &       1.3   &       1.5   &       1.2   \\
+4 Jets 1 Tag   &       7.5   &       6.1   &       0.4   &       0.3   &       0.3   &       0.4   &       0.0   \\
+5 Jets 1 Tag   &       4.0   &       3.6   &       0.1   &       0.1   &       0.1   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       2.1   &       1.5   &       0.3   &       0.3   &       0.1   &       0.0   &       0.0   \\
+3 Jets 2 Tags  &       4.4   &       3.8   &       0.3   &       0.1   &       0.0   &       0.0   &       0.1   \\
+4 Jets 2 Tags  &       4.2   &       4.0   &       0.2   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.9   &       2.8   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+\hline
+Total          &     132.9   &      35.8   &       7.8   &       6.4   &      28.6   &      19.4   &      34.9  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file pf_31_default_JES095.root Top=0.1575 --latex
+info for pf_31_default_JES095.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      64.6   &       1.4   &       2.8   &       2.8   &      20.1   &      12.5   &      25.1   \\
+2 Jets 1 Tag   &      26.5   &       5.3   &       2.7   &       1.9   &       5.8   &       4.4   &       6.4   \\
+3 Jets 1 Tag   &      13.6   &       8.0   &       1.1   &       0.8   &       1.2   &       1.3   &       1.2   \\
+4 Jets 1 Tag   &       7.2   &       5.9   &       0.3   &       0.3   &       0.3   &       0.4   &       0.0   \\
+5 Jets 1 Tag   &       3.5   &       3.2   &       0.1   &       0.1   &       0.1   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       2.3   &       1.6   &       0.3   &       0.2   &       0.1   &       0.0   &       0.1   \\
+3 Jets 2 Tags  &       4.4   &       3.9   &       0.3   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       4.1   &       3.8   &       0.2   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.6   &       2.5   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+\hline
+Total          &     128.8   &      35.6   &       7.8   &       6.3   &      27.5   &      18.7   &      32.8  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file pf_31_default_JES105.root Top=0.1575 --latex
+info for pf_31_default_JES105.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      68.7   &       1.2   &       2.7   &       2.7   &      21.0   &      13.0   &      28.2   \\
+2 Jets 1 Tag   &      28.8   &       4.7   &       2.7   &       2.1   &       6.7   &       4.9   &       7.8   \\
+3 Jets 1 Tag   &      14.2   &       7.7   &       1.2   &       0.9   &       1.4   &       1.5   &       1.5   \\
+4 Jets 1 Tag   &       7.9   &       6.4   &       0.4   &       0.3   &       0.3   &       0.5   &       0.0   \\
+5 Jets 1 Tag   &       4.4   &       4.0   &       0.1   &       0.1   &       0.1   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       2.0   &       1.4   &       0.3   &       0.3   &       0.1   &       0.0   &       0.0   \\
+3 Jets 2 Tags  &       4.3   &       3.6   &       0.3   &       0.2   &       0.0   &       0.0   &       0.1   \\
+4 Jets 2 Tags  &       4.3   &       4.1   &       0.2   &       0.1   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       3.1   &       3.0   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+\hline
+Total          &     137.8   &      36.0   &       7.9   &       6.6   &      29.6   &      20.1   &      37.6  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file calo_31_metcut.root Top=0.1575 --latex
+info for calo_31_metcut.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      29.3   &       0.8   &       2.0   &       1.5   &      11.6   &       7.9   &       5.6   \\
+2 Jets 1 Tag   &      15.5   &       3.7   &       2.1   &       1.2   &       3.5   &       3.0   &       1.9   \\
+3 Jets 1 Tag   &      10.1   &       6.5   &       0.8   &       0.5   &       0.8   &       0.8   &       0.6   \\
+4 Jets 1 Tag   &       5.9   &       4.9   &       0.3   &       0.2   &       0.2   &       0.2   &       0.1   \\
+5 Jets 1 Tag   &       2.9   &       2.7   &       0.1   &       0.1   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       1.5   &       1.0   &       0.2   &       0.2   &       0.0   &       0.0   &       0.1   \\
+3 Jets 2 Tags  &       3.4   &       3.0   &       0.2   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       3.3   &       3.2   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.2   &       2.0   &       0.0   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &      74.1   &      27.9   &       5.9   &       3.7   &      16.2   &      12.0   &       8.5  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file calo_31_metcut_JES09.root Top=0.1575 --latex
+info for calo_31_metcut_JES09.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      28.8   &       1.1   &       2.1   &       1.5   &      10.9   &       7.3   &       6.0   \\
+2 Jets 1 Tag   &      15.1   &       4.5   &       2.1   &       1.1   &       3.1   &       2.8   &       1.6   \\
+3 Jets 1 Tag   &       9.7   &       6.7   &       0.7   &       0.5   &       0.6   &       0.6   &       0.5   \\
+4 Jets 1 Tag   &       5.0   &       4.3   &       0.2   &       0.2   &       0.1   &       0.2   &       0.0   \\
+5 Jets 1 Tag   &       2.2   &       2.0   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       1.6   &       1.1   &       0.2   &       0.1   &       0.0   &       0.0   &       0.1   \\
+3 Jets 2 Tags  &       3.5   &       3.2   &       0.2   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       3.0   &       2.8   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       1.7   &       1.5   &       0.0   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &      70.5   &      27.4   &       5.7   &       3.5   &      14.8   &      10.9   &       8.2  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file calo_31_metcut_JES11.root Top=0.1575 --latex
+info for calo_31_metcut_JES11.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      28.7   &       0.6   &       1.9   &       1.4   &      11.9   &       7.9   &       5.0   \\
+2 Jets 1 Tag   &      16.8   &       3.1   &       2.1   &       1.3   &       4.2   &       3.4   &       2.7   \\
+3 Jets 1 Tag   &      10.4   &       6.2   &       0.9   &       0.6   &       1.0   &       1.0   &       0.6   \\
+4 Jets 1 Tag   &       6.5   &       5.4   &       0.3   &       0.2   &       0.2   &       0.3   &       0.1   \\
+5 Jets 1 Tag   &       3.6   &       3.4   &       0.1   &       0.1   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       1.5   &       0.8   &       0.2   &       0.2   &       0.0   &       0.0   &       0.2   \\
+3 Jets 2 Tags  &       3.2   &       2.8   &       0.2   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       3.6   &       3.4   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.7   &       2.5   &       0.1   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &      77.0   &      28.3   &       6.0   &       4.0   &      17.4   &      12.7   &       8.7  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file jpt_31_metcut.root Top=0.1575 --latex
+info for jpt_31_metcut.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      38.3   &       0.9   &       2.4   &       2.2   &      16.8   &      10.5   &       5.4   \\
+2 Jets 1 Tag   &      19.1   &       4.3   &       2.5   &       1.6   &       4.8   &       3.6   &       2.4   \\
+3 Jets 1 Tag   &      11.4   &       7.3   &       0.9   &       0.7   &       1.0   &       1.0   &       0.6   \\
+4 Jets 1 Tag   &       6.3   &       5.3   &       0.3   &       0.2   &       0.2   &       0.2   &       0.0   \\
+5 Jets 1 Tag   &       2.9   &       2.7   &       0.1   &       0.0   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       1.9   &       1.2   &       0.3   &       0.2   &       0.0   &       0.0   &       0.1   \\
+3 Jets 2 Tags  &       4.1   &       3.7   &       0.3   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       3.9   &       3.7   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.4   &       2.2   &       0.0   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &      90.4   &      31.4   &       6.9   &       5.0   &      22.9   &      15.5   &       8.6  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file jpt_31_metcut_JES095.root Top=0.1575 --latex
+info for jpt_31_metcut_JES095.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      37.4   &       1.1   &       2.5   &       2.2   &      16.1   &      10.1   &       5.4   \\
+2 Jets 1 Tag   &      18.9   &       4.7   &       2.5   &       1.5   &       4.3   &       3.4   &       2.5   \\
+3 Jets 1 Tag   &      10.9   &       7.4   &       0.9   &       0.6   &       0.8   &       0.9   &       0.2   \\
+4 Jets 1 Tag   &       5.8   &       5.0   &       0.2   &       0.2   &       0.2   &       0.2   &       0.0   \\
+5 Jets 1 Tag   &       2.6   &       2.4   &       0.1   &       0.0   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       2.0   &       1.3   &       0.3   &       0.2   &       0.0   &       0.0   &       0.1   \\
+3 Jets 2 Tags  &       4.2   &       3.8   &       0.3   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       3.7   &       3.5   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.1   &       1.9   &       0.0   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &      87.5   &      31.2   &       6.9   &       4.8   &      21.6   &      14.6   &       8.4  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file jpt_31_metcut_JES105.root Top=0.1575 --latex
+info for jpt_31_metcut_JES105.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      39.0   &       0.8   &       2.4   &       2.2   &      17.4   &      10.7   &       5.4   \\
+2 Jets 1 Tag   &      19.6   &       4.0   &       2.5   &       1.7   &       5.1   &       4.0   &       2.4   \\
+3 Jets 1 Tag   &      11.7   &       7.1   &       1.0   &       0.7   &       1.1   &       1.1   &       0.7   \\
+4 Jets 1 Tag   &       6.6   &       5.6   &       0.3   &       0.2   &       0.3   &       0.3   &       0.0   \\
+5 Jets 1 Tag   &       3.3   &       3.1   &       0.1   &       0.0   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       1.8   &       1.1   &       0.3   &       0.2   &       0.1   &       0.0   &       0.1   \\
+3 Jets 2 Tags  &       4.0   &       3.6   &       0.3   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       4.1   &       3.9   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.7   &       2.5   &       0.1   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &      92.9   &      31.6   &       7.0   &       5.3   &      24.1   &      16.2   &       8.7  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file pf_31_metcut.root Top=0.1575 --latex
+info for pf_31_metcut.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      35.6   &       1.2   &       2.4   &       2.4   &      16.6   &      10.6   &       2.5   \\
+2 Jets 1 Tag   &      18.8   &       4.5   &       2.4   &       1.8   &       5.1   &       3.8   &       1.2   \\
+3 Jets 1 Tag   &      11.5   &       7.0   &       1.0   &       0.7   &       1.1   &       1.3   &       0.3   \\
+4 Jets 1 Tag   &       6.7   &       5.5   &       0.3   &       0.3   &       0.3   &       0.3   &       0.0   \\
+5 Jets 1 Tag   &       3.5   &       3.2   &       0.1   &       0.1   &       0.1   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       1.9   &       1.4   &       0.3   &       0.2   &       0.1   &       0.0   &       0.0   \\
+3 Jets 2 Tags  &       3.8   &       3.4   &       0.3   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       3.8   &       3.5   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.6   &       2.5   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+\hline
+Total          &      88.2   &      32.1   &       6.9   &       5.7   &      23.2   &      16.2   &       4.1  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file pf_31_metcut_JES095.root Top=0.1575 --latex
+info for pf_31_metcut_JES095.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      35.0   &       1.3   &       2.4   &       2.5   &      16.0   &      10.4   &       2.4   \\
+2 Jets 1 Tag   &      18.6   &       4.8   &       2.4   &       1.7   &       4.9   &       3.7   &       1.2   \\
+3 Jets 1 Tag   &      11.3   &       7.2   &       0.9   &       0.7   &       1.0   &       1.1   &       0.3   \\
+4 Jets 1 Tag   &       6.3   &       5.2   &       0.3   &       0.2   &       0.3   &       0.3   &       0.0   \\
+5 Jets 1 Tag   &       3.2   &       2.9   &       0.1   &       0.0   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       2.0   &       1.4   &       0.3   &       0.2   &       0.1   &       0.0   &       0.0   \\
+3 Jets 2 Tags  &       3.9   &       3.5   &       0.3   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       3.6   &       3.4   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.3   &       2.2   &       0.0   &       0.0   &       0.0   &       0.0   &       0.0   \\
+\hline
+Total          &      86.2   &      32.0   &       6.8   &       5.5   &      22.3   &      15.6   &       4.0  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file pf_31_metcut_JES105.root Top=0.1575 --latex
+info for pf_31_metcut_JES105.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      36.0   &       1.1   &       2.3   &       2.4   &      16.8   &      10.8   &       2.5   \\
+2 Jets 1 Tag   &      19.3   &       4.2   &       2.3   &       1.8   &       5.6   &       4.1   &       1.2   \\
+3 Jets 1 Tag   &      11.7   &       6.9   &       1.0   &       0.8   &       1.3   &       1.3   &       0.5   \\
+4 Jets 1 Tag   &       7.0   &       5.7   &       0.4   &       0.3   &       0.3   &       0.4   &       0.0   \\
+5 Jets 1 Tag   &       3.9   &       3.5   &       0.1   &       0.1   &       0.1   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       1.9   &       1.3   &       0.3   &       0.3   &       0.1   &       0.0   &       0.0   \\
+3 Jets 2 Tags  &       3.7   &       3.2   &       0.3   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       3.9   &       3.6   &       0.1   &       0.1   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.8   &       2.7   &       0.1   &       0.0   &       0.0   &       0.0   &       0.0   \\
+\hline
+Total          &      90.2   &      32.3   &       6.9   &       5.8   &      24.1   &      16.8   &       4.2  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file tag_31_calo_metcut_jes_def.root Top=0.1575 --latex
+info for tag_31_calo_metcut_jes_def.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      94.4   &       1.1   &       8.6   &       2.6   &      22.8   &      12.8   &      46.6   \\
+2 Jets 1 Tag   &      39.0   &       5.1   &       9.0   &       1.9   &       6.1   &       4.5   &      12.3   \\
+3 Jets 1 Tag   &      17.9   &       9.1   &       3.5   &       0.8   &       1.3   &       1.2   &       1.9   \\
+4 Jets 1 Tag   &       9.0   &       6.9   &       1.1   &       0.3   &       0.3   &       0.3   &       0.1   \\
+5 Jets 1 Tag   &       4.2   &       3.7   &       0.3   &       0.1   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       2.7   &       1.3   &       0.9   &       0.2   &       0.0   &       0.0   &       0.2   \\
+3 Jets 2 Tags  &       5.5   &       4.3   &       1.0   &       0.1   &       0.0   &       0.0   &       0.1   \\
+4 Jets 2 Tags  &       5.0   &       4.5   &       0.5   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       3.1   &       2.7   &       0.2   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     180.9   &      38.8   &      25.0   &       6.0   &      30.6   &      19.0   &      61.4  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file tag_31_calo_metcut_jes_dn.root Top=0.1575 --latex
+info for tag_31_calo_metcut_jes_dn.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      88.3   &       1.4   &       8.9   &       2.5   &      21.4   &      11.9   &      42.1   \\
+2 Jets 1 Tag   &      35.9   &       6.2   &       8.9   &       1.7   &       5.2   &       4.0   &       9.8   \\
+3 Jets 1 Tag   &      16.3   &       9.4   &       3.1   &       0.7   &       0.9   &       1.0   &       1.2   \\
+4 Jets 1 Tag   &       7.7   &       6.1   &       0.8   &       0.2   &       0.3   &       0.3   &       0.0   \\
+5 Jets 1 Tag   &       3.1   &       2.8   &       0.2   &       0.0   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       2.8   &       1.5   &       0.9   &       0.2   &       0.0   &       0.0   &       0.1   \\
+3 Jets 2 Tags  &       5.7   &       4.5   &       0.9   &       0.1   &       0.0   &       0.0   &       0.1   \\
+4 Jets 2 Tags  &       4.5   &       4.0   &       0.4   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.4   &       2.1   &       0.1   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     166.5   &      38.1   &      24.3   &       5.6   &      27.9   &      17.2   &      53.5  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file tag_31_calo_metcut_jes_up.root Top=0.1575 --latex
+info for tag_31_calo_metcut_jes_up.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      98.3   &       0.9   &       8.2   &       2.5   &      23.7   &      13.2   &      49.9   \\
+2 Jets 1 Tag   &      43.6   &       4.3   &       9.1   &       2.2   &       7.2   &       5.2   &      15.7   \\
+3 Jets 1 Tag   &      18.9   &       8.7   &       3.9   &       0.9   &       1.6   &       1.5   &       2.4   \\
+4 Jets 1 Tag   &      10.1   &       7.6   &       1.3   &       0.3   &       0.4   &       0.4   &       0.1   \\
+5 Jets 1 Tag   &       5.3   &       4.6   &       0.4   &       0.1   &       0.2   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       2.7   &       1.1   &       0.9   &       0.2   &       0.1   &       0.0   &       0.4   \\
+3 Jets 2 Tags  &       5.4   &       4.0   &       1.0   &       0.1   &       0.0   &       0.0   &       0.2   \\
+4 Jets 2 Tags  &       5.4   &       4.8   &       0.5   &       0.1   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       3.8   &       3.4   &       0.2   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     193.5   &      39.3   &      25.5   &       6.4   &      33.0   &      20.5   &      68.8  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file tag_31_jpt_metcut_jes_def.root Top=0.1575 --latex
+info for tag_31_jpt_metcut_jes_def.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &     108.1   &       1.2   &       9.1   &       2.9   &      23.9   &      14.1   &      57.0   \\
+2 Jets 1 Tag   &      40.9   &       5.4   &       9.3   &       2.1   &       6.3   &       4.8   &      13.2   \\
+3 Jets 1 Tag   &      18.2   &       9.2   &       3.6   &       0.9   &       1.3   &       1.3   &       1.9   \\
+4 Jets 1 Tag   &       8.8   &       6.8   &       1.0   &       0.3   &       0.3   &       0.4   &       0.1   \\
+5 Jets 1 Tag   &       3.9   &       3.4   &       0.3   &       0.0   &       0.1   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       3.2   &       1.5   &       1.0   &       0.3   &       0.1   &       0.0   &       0.4   \\
+3 Jets 2 Tags  &       5.9   &       4.7   &       1.1   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       5.3   &       4.7   &       0.5   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       3.1   &       2.8   &       0.2   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     197.5   &      39.7   &      25.9   &       6.6   &      31.9   &      20.7   &      72.7  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file tag_31_jpt_metcut_jes_dn.root Top=0.1575 --latex
+info for tag_31_jpt_metcut_jes_dn.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &     103.2   &       1.3   &       9.3   &       2.9   &      23.0   &      13.5   &      53.2   \\
+2 Jets 1 Tag   &      39.1   &       5.9   &       9.2   &       2.0   &       5.7   &       4.5   &      11.8   \\
+3 Jets 1 Tag   &      17.3   &       9.4   &       3.3   &       0.8   &       1.1   &       1.2   &       1.4   \\
+4 Jets 1 Tag   &       8.2   &       6.3   &       0.9   &       0.3   &       0.3   &       0.3   &       0.1   \\
+5 Jets 1 Tag   &       3.4   &       3.0   &       0.2   &       0.0   &       0.1   &       0.0   &       0.0   \\
+2 Jets 2 Tags  &       3.3   &       1.6   &       1.0   &       0.2   &       0.0   &       0.0   &       0.4   \\
+3 Jets 2 Tags  &       6.0   &       4.9   &       1.0   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       5.0   &       4.5   &       0.5   &       0.0   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       2.7   &       2.5   &       0.1   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     188.3   &      39.4   &      25.6   &       6.4   &      30.1   &      19.6   &      67.1  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file tag_31_jpt_metcut_jes_up.root Top=0.1575 --latex
+info for tag_31_jpt_metcut_jes_up.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &     111.3   &       1.0   &       8.9   &       2.9   &      24.7   &      14.3   &      59.4   \\
+2 Jets 1 Tag   &      44.1   &       5.0   &       9.3   &       2.2   &       6.8   &       5.3   &      15.6   \\
+3 Jets 1 Tag   &      19.0   &       9.0   &       3.7   &       0.9   &       1.4   &       1.5   &       2.4   \\
+4 Jets 1 Tag   &       9.4   &       7.1   &       1.2   &       0.3   &       0.3   &       0.4   &       0.1   \\
+5 Jets 1 Tag   &       4.4   &       3.9   &       0.3   &       0.0   &       0.1   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       3.1   &       1.4   &       1.0   &       0.3   &       0.1   &       0.0   &       0.4   \\
+3 Jets 2 Tags  &       5.8   &       4.5   &       1.1   &       0.1   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       5.6   &       4.9   &       0.5   &       0.1   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       3.5   &       3.1   &       0.2   &       0.0   &       0.0   &       0.0   &       0.1   \\
+\hline
+Total          &     206.1   &      40.0   &      26.2   &       6.9   &      33.5   &      21.5   &      78.0  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file tag_31_pf_metcut_jes_def.root Top=0.1575 --latex
+info for tag_31_pf_metcut_jes_def.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      81.4   &       1.4   &       8.9   &       3.1   &      23.5   &      14.5   &      29.9   \\
+2 Jets 1 Tag   &      36.9   &       5.6   &       8.8   &       2.4   &       7.1   &       5.1   &       8.0   \\
+3 Jets 1 Tag   &      18.1   &       8.9   &       3.7   &       1.0   &       1.5   &       1.7   &       1.3   \\
+4 Jets 1 Tag   &       9.3   &       6.9   &       1.2   &       0.3   &       0.4   &       0.4   &       0.0   \\
+5 Jets 1 Tag   &       4.7   &       4.1   &       0.4   &       0.1   &       0.1   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       3.0   &       1.7   &       0.9   &       0.3   &       0.1   &       0.0   &       0.0   \\
+3 Jets 2 Tags  &       5.6   &       4.3   &       1.1   &       0.2   &       0.0   &       0.0   &       0.1   \\
+4 Jets 2 Tags  &       5.1   &       4.5   &       0.5   &       0.1   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       3.4   &       3.1   &       0.2   &       0.0   &       0.0   &       0.0   &       0.0   \\
+\hline
+Total          &     167.5   &      40.5   &      25.7   &       7.4   &      32.7   &      21.9   &      39.4  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file tag_31_pf_metcut_jes_dn.root Top=0.1575 --latex
+info for tag_31_pf_metcut_jes_dn.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      79.5   &       1.6   &       9.1   &       3.2   &      22.9   &      14.2   &      28.5   \\
+2 Jets 1 Tag   &      35.5   &       6.0   &       8.8   &       2.2   &       6.7   &       4.9   &       6.9   \\
+3 Jets 1 Tag   &      17.7   &       9.1   &       3.5   &       0.9   &       1.4   &       1.5   &       1.3   \\
+4 Jets 1 Tag   &       8.8   &       6.6   &       1.1   &       0.3   &       0.4   &       0.4   &       0.0   \\
+5 Jets 1 Tag   &       4.2   &       3.7   &       0.3   &       0.1   &       0.1   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       3.2   &       1.8   &       0.9   &       0.3   &       0.1   &       0.0   &       0.1   \\
+3 Jets 2 Tags  &       5.6   &       4.4   &       1.0   &       0.2   &       0.0   &       0.0   &       0.0   \\
+4 Jets 2 Tags  &       4.9   &       4.3   &       0.5   &       0.1   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       3.0   &       2.8   &       0.2   &       0.0   &       0.0   &       0.0   &       0.0   \\
+\hline
+Total          &     162.5   &      40.3   &      25.5   &       7.2   &      31.5   &      21.2   &      36.8  \\
+\hline
+\end{tabular}
+
+
+unix> configTemplateInfo.py ../configCms/tag_310.mrf --totalMC --file tag_31_pf_metcut_jes_up.root Top=0.1575 --latex
+info for tag_31_pf_metcut_jes_up.root:
+Integrated Luminosity: 3.100000
+
+\begin{tabular}{| l | r | r | r | r | r | r | r |}
+\hline
+               &   Total MC  &        Top  &  SingleTop  &        Wbx  &        Wcx  &        Wqq  &        QCD  \\
+\hline
+1 Jet  1 Tag   &      83.7   &       1.3   &       8.7   &       3.1   &      23.9   &      14.8   &      31.9   \\
+2 Jets 1 Tag   &      38.3   &       5.3   &       8.7   &       2.4   &       7.6   &       5.5   &       8.7   \\
+3 Jets 1 Tag   &      18.6   &       8.7   &       3.9   &       1.0   &       1.6   &       1.7   &       1.6   \\
+4 Jets 1 Tag   &       9.9   &       7.2   &       1.3   &       0.4   &       0.4   &       0.5   &       0.0   \\
+5 Jets 1 Tag   &       5.2   &       4.5   &       0.4   &       0.1   &       0.1   &       0.1   &       0.0   \\
+2 Jets 2 Tags  &       2.9   &       1.6   &       0.9   &       0.3   &       0.1   &       0.0   &       0.0   \\
+3 Jets 2 Tags  &       5.5   &       4.1   &       1.1   &       0.2   &       0.0   &       0.0   &       0.1   \\
+4 Jets 2 Tags  &       5.3   &       4.6   &       0.6   &       0.1   &       0.0   &       0.0   &       0.0   \\
+5 Jets 2 Tags  &       3.7   &       3.4   &       0.2   &       0.0   &       0.0   &       0.0   &       0.0   \\
+\hline
+Total          &     173.0   &      40.7   &      25.9   &       7.6   &      33.9   &      22.7   &      42.3  \\
+\hline
+\end{tabular}
+
+
