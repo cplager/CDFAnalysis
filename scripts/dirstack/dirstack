@@ -1,0 +1,13 @@
+#!/usr/bin/env perl
+
+use lib '/home/cplager/scripts/dirstack';
+use DirStack;
+
+dir_listing();
+print "dir: $ARGV[0] : ", DirStack::nth_directory($ARGV[0]), "\n";;
+change_to_nth_directory ($ARGV[0]);
+
+#print current_directory(),"\n";
+
+print_dirstring();
+

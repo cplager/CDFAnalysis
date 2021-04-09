@@ -1,0 +1,22 @@
+alias cdd 'cdtitle `~cplager/scripts/dirstack/current_dirstack`'
+setenv TITLE   "`~cplager/scripts/dirstack/cd_title_string`"
+alias precmd 'echo -n "\033]0;${TITLE}\007"'
+alias cd 'setenv DIRSTACK `~cplager/scripts/dirstack/chdir_dirstack \!*`;cdd'
+alias up 'setenv DIRSTACK `~cplager/scripts/dirstack/up_dirstack \!*`;cdd'
+alias list '~cplager/scripts/dirstack/dirlist_dirstack'
+alias back 'setenv DIRSTACK `~cplager/scripts/dirstack/back_dirstack \!*`;cdd'
+alias cdgr 'setenv DIRSTACK `~cplager/scripts/dirstack/grep_dirstack \!*`;cdd'
+alias clds 'setenv DIRSTACK $PWD'
+
+
+alias cwdcmd "~cplager/bin/xtitle `~cplager/scripts/dirstack/cd_title_string `"
+
+alias cdtitle 'chdir \!*;setenv TITLE "`~cplager/scripts/dirstack/cd_title_string`"'
+setenv SHORTHOST `hostname | cut -d. -f1`
+if ( "${?VENDOR}" == 1) then
+	if ($VENDOR == "sun") then
+	    # do sun stuff here
+		setenv SHORTHOST $HOST
+		alias cdtitle 'chdir \!*;~cplager/xtitle.sun "`echo $SHORTHOST : $PWD`"'
+	endif
+endif

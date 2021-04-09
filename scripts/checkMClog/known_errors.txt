@@ -1,0 +1,66 @@
+#+ level=error
+
+%ERLOG-w CalData puff:
+
+%ERLOG-w Strip/Wire cluster determination by track method fails: 
+
+%ERLOG-w Strip or Wire cluster for local coordinate not found: 
+
+%ERLOG-e _loadMapCotd0: duplicate channel 
+
+%ERLOG-w Bad TOF PMT resolution: 
+
+%ERLOG-w DHInput:  # of processed files  50 fits requested limit  50 
+
+%ERLOG-e loadHitsFromCOTD: too many hits
+
+%ERLOG-w DHInput:  # of processed files
+
+%ERLOG-w RCP put failure: unable to store RCP for
+
+%ERLOG-e Bad argument to asin: /home/rs/champ/prod/TrackingHL/src/Cot_tZero.cc
+
+%ERLOG-w Track changed sign:
+
+%ERLOG-i DBSQL_O:
+
+::requires=marker1_1::
+%ERLOG-i DEBU::!!stupid,,,moronic!!::
+
+%ERLOG-i DBACC_G:	    
+
+%ERLOG-i DBACC_O:	    
+
+%ERLOG-i Bfield::setUniform: 
+
+%ERLOG-i DBCON_A:	    
+
+%ERLOG-i DBCON_J:	    
+
+%ERLOG-i DBCON_O:	    
+
+#+ require=marker1_1
+
+%ERLOG-i DEPRECATED:	    
+
+#+ require=
+
+%ERLOG-i SiPassiveMaterial::c:
+
+%ERLOG-i There are no more fi:
+
+::name=peter::
+%ERLOG-i generateBeginFileFra:
+bla
+
+%ERLOG-i generateBeginRunSect:
+
+#+ level=anti-error
+hello mother
+
+#+ level=marker
+
+::name=marker1::
+marker
+
+

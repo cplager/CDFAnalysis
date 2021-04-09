@@ -1,0 +1,36 @@
+#!/usr/local/bin/perl -w
+
+
+$inside = "";
+
+while (<>) {
+    chomp; # get rid of "\n"s at end of line
+    
+    if (/All included subprocesses/) {
+        # now have magic line
+        s/I//g; # get rid of all 'I's
+        s/\s+/ /g; # change all multiple spaces to a single space
+        s/^ //; # rid of leading space
+        s/ $//; # rid of trailing space
+        s/.+ //g; # rid of everything before the last space
+        print "$_\n";
+        next;    
+    }
+    if (/(\S+) production:/) {
+        $name = $1;
+        print "found $name\n";
+        $inside = "true";
+    }
+    next unless $inside;
+
+    if (/events processed\D+(\d+)\s*(\S+)/) {
+        print "Hey: $1 $2\n";
+    }
+
+    if (! /\S/) {
+        # we must at the end
+        print "last $last\n";
+        $inside = "";
+    }
+    $last = $_;    
+}

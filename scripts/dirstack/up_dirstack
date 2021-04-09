@@ -1,0 +1,8 @@
+#!/usr/bin/env perl 
+
+use lib '/cdf/home/cplager/scripts/dirstack';
+use DirStack;
+
+$arg = shift @ARGV || 1;
+chop_of_dir_parts($arg);
+print_dirstring();

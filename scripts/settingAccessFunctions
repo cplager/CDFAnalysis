@@ -1,0 +1,29 @@
+#!/usr/bin/perl -w
+
+sub firstUpper {
+    my $string = shift;
+    my $first = substr ($string, 0, 1);
+    my $upper = uc $first;
+    $string =~ s/^$first/$upper/;
+    return $string;
+}
+
+$access = "      //////////////////////\n      // Access Functions //\n      //////////////////////\n";
+$setting = "      ///////////////////////\n      // Setting Functions //\n      ///////////////////////\n";
+
+while (<>) {
+    chomp;
+    if (/(\w+)\s*m_(\w+)\s*;\s*/) {
+        $type = $1;
+        $name = $2;
+        $comment = $'; #';
+        $access .= "      $comment\n" if $comment;
+        $set = "set".firstUpper($name);
+        $access .= "      $type $name() const { return m_$name; }\n";
+        $setting .= "      void $set ($type $name) { m_$name = $name; }\n";
+    }
+}
+
+print "\n" x 3;
+print $access,"\n",$setting;
+print "\n" x 2;

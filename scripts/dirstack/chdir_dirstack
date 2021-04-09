@@ -1,0 +1,15 @@
+#!/usr/bin/env perl 
+
+use lib '/cdf/home/cplager/scripts/dirstack';
+use DirStack;
+
+$arg = shift @ARGV || $ENV{HOME};
+
+
+if ($arg eq "-") {
+    change_to_nth_directory(2);
+} elsif (defined $arg) {
+    add_directory($arg);
+}
+
+print_dirstring();

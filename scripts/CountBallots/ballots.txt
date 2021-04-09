@@ -1,0 +1,6 @@
+fred:1073060213:liss:kim:proudfoot
+barney:1073067281:proudfoot:kim:liss
+barney:1073067281:proudfoot:kim:liss
+homer:1073076704:kim:proudfoot:no preference
+Evelyn:1073076707:kim:proudfoot:no preference
+Evelyn:1073076707:kim:proudfoot:no preference

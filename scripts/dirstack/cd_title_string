@@ -1,0 +1,9 @@
+#!/usr/bin/env perl
+
+$short = $ENV{SHORTHOST};
+$pwd  = $ENV{PWD};
+
+$pwd =~ m|([^/]+)$|;
+$match = $1;
+
+print "$short : $match : $pwd";

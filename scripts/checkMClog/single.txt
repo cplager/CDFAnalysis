@@ -1,0 +1,27 @@
+#- error
+
+%ERLOG-i SiPassiveMaterial::c:
+
+%ERLOG-i generateBeginFileFra:
+bla
+%ERLOG-i DBSQL_O:
+
+
+%ERLOG-i DEPRECATED:	    
+
+marker
+
+%ERLOG-i DEBUG:		    
+
+
+
+%ERLOG-i DEBUGsdlkjwelkrj:		    
+
+%ERLOG-i DEBUG  stupid
+%ERLOG-i DEBUG  moronic
+
+ 
+
+
+%ERLOG-i DBACC_G:	    
+%ERLOG-i DBACC_G:	    

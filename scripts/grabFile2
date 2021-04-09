@@ -1,0 +1,28 @@
+#!/usr/local/bin/perl
+
+# You only need the next line on fcdflnx2 (or something like that
+#use lib "/local/ups/prd/perl/v5_005/lib/site_perl/5.005";
+use LWP;
+
+use strict;
+use warnings;
+
+# Start loop here
+my $url = "http://www-cdfonline.fnal.gov/~cdfdoc/cgi-bin/ConsumerGifs/killRunawayRoot.pl";
+print_file_from_link ($url);
+
+
+sub print_file_from_link {
+    my $url = shift;
+
+    my $agent    = LWP::UserAgent->new;
+    my $request  = HTTP::Request->new(GET => $url);
+    
+    my $response = $agent->request($request);
+    #$response->is_success or die "$url: ",$response->message,"\n";
+    #
+    #print $response->content;
+}
+
+
+

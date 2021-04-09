@@ -1,0 +1,7 @@
+#!/usr/bin/env perl
+
+use lib '/cdf/home/cplager/scripts/dirstack';
+use DirStack;
+
+print current_directory(),"\n";
+

@@ -1,0 +1,379 @@
+
+
+
+
+output: comb/Wbottom_j2.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/btop0w_Wbb_j2.txt LFfiles/btop1w_Wbb_j2.txt LFfiles/btop2w_Wbb_j2.txt LFfiles/btop5w_Wbb_j2.txt LFfiles/btop6w_Wbb_j2.txt LFfiles/btop7w_Wbb_j2.txt LFfiles/ctop0w_Wbb_j2.txt LFfiles/ctop1w_Wbb_j2.txt LFfiles/ctop2w_Wbb_j2.txt LFfiles/ctop5w_Wbb_j2.txt LFfiles/ctop6w_Wbb_j2.txt LFfiles/ctop7w_Wbb_j2.txt LFfiles/dtop0w_Wbb_j2.txt LFfiles/dtop1w_Wbb_j2.txt LFfiles/dtop2w_Wbb_j2.txt LFfiles/etopw1_Wbb_j2.txt LFfiles/etopw2_Wbb_j2.txt LFfiles/ptop1w_Wbb_j2.txt LFfiles/ptop2w_Wbb_j2.txt LFfiles/ptop3w_Wbb_j2.txt LFfiles/ptop4w_Wbb_j2.txt LFfiles/ptop6w_Wbb_j2.txt LFfiles/ptop7w_Wbb_j2.txt LFfiles/ptop8w_Wbb_j2.txt LFfiles/ptop9w_Wbb_j2.txt LFfiles/ptopw5_Wbb_j2.txt LFfiles/stopw0_Wbb_j2.txt LFfiles/stopw1_Wbb_j2.txt LFfiles/stopw2_Wbb_j2.txt LFfiles/stopw3_Wbb_j2.txt LFfiles/stopw5_Wbb_j2.txt LFfiles/stopw6_Wbb_j2.txt LFfiles/stopw7_Wbb_j2.txt LFfiles/stopw8_Wbb_j2.txt LFfiles/stopwb_Wbb_j2.txt LFfiles/stopwc_Wbb_j2.txt LFfiles/stopwd_Wbb_j2.txt LFfiles/utop2w_Wbb_j2.txt LFfiles/utop3w_Wbb_j2.txt LFfiles/utop4w_Wbb_j2.txt
+ME:     MEfiles/Wbottom_2jet.txt
+NN:     NNfiles/Wbb_j2t1.txt NNfiles/Wbb_j2t2.txt
+ME loaded:    130354
+NN loaded:    99582
+NN used:      92128 (92.5%)
+NN rematched: 3
+LF loaded:    102732
+LF used:      69002 (67.2%)
+LF rematched: 4
+Printed:      61730 (47.4%)
+
+real	1m36.552s
+user	1m35.500s
+sys	0m0.350s
+
+
+
+
+output: comb/Wbottom_j3.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/btop0w_Wbb_j3.txt LFfiles/btop1w_Wbb_j3.txt LFfiles/btop2w_Wbb_j3.txt LFfiles/btop5w_Wbb_j3.txt LFfiles/btop6w_Wbb_j3.txt LFfiles/btop7w_Wbb_j3.txt LFfiles/ctop1w_Wbb_j3.txt LFfiles/ctop2w_Wbb_j3.txt LFfiles/ctop5w_Wbb_j3.txt LFfiles/ctop6w_Wbb_j3.txt LFfiles/ctop7w_Wbb_j3.txt LFfiles/dtop0w_Wbb_j3.txt LFfiles/dtop1w_Wbb_j3.txt LFfiles/dtop2w_Wbb_j3.txt LFfiles/etopw1_Wbb_j3.txt LFfiles/etopw2_Wbb_j3.txt LFfiles/ptop2w_Wbb_j3.txt LFfiles/ptop3w_Wbb_j3.txt LFfiles/ptop4w_Wbb_j3.txt LFfiles/ptop7w_Wbb_j3.txt LFfiles/ptop8w_Wbb_j3.txt LFfiles/ptop9w_Wbb_j3.txt LFfiles/stopw1_Wbb_j3.txt LFfiles/stopw2_Wbb_j3.txt LFfiles/stopw3_Wbb_j3.txt LFfiles/stopw5_Wbb_j3.txt LFfiles/stopw6_Wbb_j3.txt LFfiles/stopw7_Wbb_j3.txt LFfiles/stopw8_Wbb_j3.txt LFfiles/stopwb_Wbb_j3.txt LFfiles/stopwc_Wbb_j3.txt LFfiles/stopwd_Wbb_j3.txt LFfiles/utop3w_Wbb_j3.txt LFfiles/utop4w_Wbb_j3.txt
+ME:     MEfiles/Wbottom_3jet.txt
+NN:     NNfiles/Wbb_j3t1.txt
+ME loaded:    90708
+NN loaded:    55678
+NN used:      52709 (94.7%)
+NN rematched: 2
+LF loaded:    68556
+LF used:      22548 (32.9%)
+LF rematched: 4
+Printed:      19571 (21.6%)
+
+real	0m50.499s
+user	0m49.700s
+sys	0m0.140s
+
+
+
+
+output: comb/Wcharm_j2.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/btop0w_Wcc_j2.txt LFfiles/btop1w_Wcc_j2.txt LFfiles/btop2w_Wcc_j2.txt LFfiles/btop6w_Wcc_j2.txt LFfiles/btop7w_Wcc_j2.txt LFfiles/ctop0w_Wcc_j2.txt LFfiles/ctop1w_Wcc_j2.txt LFfiles/ctop2w_Wcc_j2.txt LFfiles/ctop5w_Wcc_j2.txt LFfiles/ctop6w_Wcc_j2.txt LFfiles/ctop7w_Wcc_j2.txt LFfiles/dtop0w_Wcc_j2.txt LFfiles/dtop1w_Wcc_j2.txt LFfiles/dtop2w_Wcc_j2.txt LFfiles/etopw0_Wcc_j2.txt LFfiles/etopw1_Wcc_j2.txt LFfiles/etopw2_Wcc_j2.txt LFfiles/ptop1w_Wcc_j2.txt LFfiles/ptop2w_Wcc_j2.txt LFfiles/ptop3w_Wcc_j2.txt LFfiles/ptop4w_Wcc_j2.txt LFfiles/ptop6w_Wcc_j2.txt LFfiles/ptop7w_Wcc_j2.txt LFfiles/ptop8w_Wcc_j2.txt LFfiles/ptop9w_Wcc_j2.txt LFfiles/stopw0_Wcc_j2.txt LFfiles/stopw1_Wcc_j2.txt LFfiles/stopw2_Wcc_j2.txt LFfiles/stopw3_Wcc_j2.txt LFfiles/stopw5_Wcc_j2.txt LFfiles/stopw6_Wcc_j2.txt LFfiles/stopw7_Wcc_j2.txt LFfiles/stopw8_Wcc_j2.txt LFfiles/stopwa_Wcc_j2.txt LFfiles/stopwb_Wcc_j2.txt LFfiles/stopwc_Wcc_j2.txt LFfiles/stopwd_Wcc_j2.txt LFfiles/utop2w_Wcc_j2.txt LFfiles/utop3w_Wcc_j2.txt LFfiles/utop4w_Wcc_j2.txt
+ME:     MEfiles/Wcharm_2jet.txt
+NN:     NNfiles/Wc_j2t1.txt NNfiles/Wc_j2t2.txt NNfiles/Wcc_j2t1.txt NNfiles/Wcc_j2t2.txt
+ME loaded:    101142
+NN loaded:    84131
+NN used:      72147 (85.8%)
+NN rematched: 1
+LF loaded:    77766
+LF used:      52374 (67.3%)
+LF rematched: 8
+Printed:      47584 (47.0%)
+
+real	1m16.642s
+user	1m15.050s
+sys	0m0.270s
+
+
+
+
+output: comb/Wcharm_j3.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/btop1w_Wcc_j3.txt LFfiles/btop2w_Wcc_j3.txt LFfiles/btop6w_Wcc_j3.txt LFfiles/btop7w_Wcc_j3.txt LFfiles/ctop0w_Wcc_j3.txt LFfiles/ctop1w_Wcc_j3.txt LFfiles/ctop2w_Wcc_j3.txt LFfiles/ctop5w_Wcc_j3.txt LFfiles/ctop6w_Wcc_j3.txt LFfiles/ctop7w_Wcc_j3.txt LFfiles/dtop2w_Wcc_j3.txt LFfiles/etopw0_Wcc_j3.txt LFfiles/etopw1_Wcc_j3.txt LFfiles/etopw2_Wcc_j3.txt LFfiles/ptop2w_Wcc_j3.txt LFfiles/ptop3w_Wcc_j3.txt LFfiles/ptop4w_Wcc_j3.txt LFfiles/ptop7w_Wcc_j3.txt LFfiles/ptop8w_Wcc_j3.txt LFfiles/ptop9w_Wcc_j3.txt LFfiles/ptopw0_Wcc_j3.txt LFfiles/ptopw5_Wcc_j3.txt LFfiles/stopw0_Wcc_j3.txt LFfiles/stopw1_Wcc_j3.txt LFfiles/stopw2_Wcc_j3.txt LFfiles/stopw3_Wcc_j3.txt LFfiles/stopw5_Wcc_j3.txt LFfiles/stopw6_Wcc_j3.txt LFfiles/stopw7_Wcc_j3.txt LFfiles/stopw8_Wcc_j3.txt LFfiles/stopwa_Wcc_j3.txt LFfiles/stopwb_Wcc_j3.txt LFfiles/stopwc_Wcc_j3.txt LFfiles/stopwd_Wcc_j3.txt LFfiles/utop3w_Wcc_j3.txt LFfiles/utop4w_Wcc_j3.txt
+ME:     MEfiles/Wcharm_3jet.txt
+NN:     NNfiles/Wc_j3t1.txt NNfiles/Wcc_j3t1.txt
+ME loaded:    74702
+NN loaded:    68351
+NN used:      57813 (84.6%)
+NN rematched: 1
+LF loaded:    58737
+LF used:      21134 (36.0%)
+LF rematched: 0
+Printed:      19635 (26.3%)
+
+real	0m47.780s
+user	0m47.100s
+sys	0m0.260s
+
+
+
+
+output: comb/Wlight_j2.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/ptop1w_mistag_j2.txt LFfiles/ptop2w_mistag_j2.txt LFfiles/ptop3w_mistag_j2.txt LFfiles/ptop4w_mistag_j2.txt LFfiles/ptop6w_mistag_j2.txt LFfiles/ptop7w_mistag_j2.txt LFfiles/ptop8w_mistag_j2.txt LFfiles/ptop9w_mistag_j2.txt LFfiles/ptopw0_mistag_j2.txt LFfiles/ptopw5_mistag_j2.txt LFfiles/utop1w_mistag_j2.txt LFfiles/utop2w_mistag_j2.txt LFfiles/utop3w_mistag_j2.txt LFfiles/utop4w_mistag_j2.txt LFfiles/utopw0_mistag_j2.txt
+ME:     MEfiles/Wlight_2jet.txt
+NN:     NNfiles/Wlight_j2t1.txt NNfiles/Wlight_j2t2.txt
+ME loaded:    311782
+NN loaded:    498348
+NN used:      311727 (62.6%)
+NN rematched: 28
+LF loaded:    105984
+LF used:      20041 (18.9%)
+LF rematched: 14
+Printed:      20027 (6.4%)
+
+real	2m50.468s
+user	2m49.900s
+sys	0m0.480s
+
+
+
+
+output: comb/Wlight_j3.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/ptop1w_mistag_j3.txt LFfiles/ptop2w_mistag_j3.txt LFfiles/ptop3w_mistag_j3.txt LFfiles/ptop4w_mistag_j3.txt LFfiles/ptop6w_mistag_j3.txt LFfiles/ptop7w_mistag_j3.txt LFfiles/ptop8w_mistag_j3.txt LFfiles/ptop9w_mistag_j3.txt LFfiles/ptopw0_mistag_j3.txt LFfiles/ptopw5_mistag_j3.txt LFfiles/utop1w_mistag_j3.txt LFfiles/utop2w_mistag_j3.txt LFfiles/utop3w_mistag_j3.txt LFfiles/utop4w_mistag_j3.txt
+ME:     MEfiles/Wlight_3jet.txt
+NN:     NNfiles/Wlight_j3t1.txt
+ME loaded:    425049
+NN loaded:    244863
+NN used:      234297 (95.7%)
+NN rematched: 12
+LF loaded:    46364
+LF used:      42721 (92.1%)
+LF rematched: 4
+Printed:      27263 (6.4%)
+
+real	2m12.797s
+user	2m11.520s
+sys	0m0.790s
+
+
+
+
+output: comb/Zjets_j2.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/ztop2p_j2.txt LFfiles/ztop3p_j2.txt LFfiles/ztop4p_j2.txt LFfiles/ztop7p_j2.txt LFfiles/ztop8p_j2.txt LFfiles/ztop9p_j2.txt LFfiles/ztopb0_j2.txt LFfiles/ztopb1_j2.txt LFfiles/ztopb2_j2.txt LFfiles/ztopb5_j2.txt LFfiles/ztopb6_j2.txt LFfiles/ztopb7_j2.txt LFfiles/ztopbt_j2.txt LFfiles/ztopc0_j2.txt LFfiles/ztopc1_j2.txt LFfiles/ztopc2_j2.txt LFfiles/ztopc5_j2.txt LFfiles/ztopc6_j2.txt LFfiles/ztopc7_j2.txt LFfiles/ztopct_j2.txt LFfiles/ztopp0_j2.txt LFfiles/ztopp1_j2.txt LFfiles/ztopp5_j2.txt LFfiles/ztopp6_j2.txt LFfiles/ztopt2_j2.txt LFfiles/ztopt3_j2.txt LFfiles/ztopt4_j2.txt
+ME:     MEfiles/Zjets_2jet.txt
+NN:     NNfiles/ZHFjets_j2t1.txt NNfiles/ZHFjets_j2t2.txt
+ME loaded:    12407
+NN loaded:    25511
+NN used:      7932 (31.1%)
+NN rematched: 95
+LF loaded:    42693
+LF used:      7564 (17.7%)
+LF rematched: 41
+Printed:      5000 (40.3%)
+
+real	0m13.279s
+user	0m12.780s
+sys	0m0.060s
+
+
+
+
+output: comb/Zjets_j3.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/ztop2p_j3.txt LFfiles/ztop3p_j3.txt LFfiles/ztop4p_j3.txt LFfiles/ztop7p_j3.txt LFfiles/ztop8p_j3.txt LFfiles/ztop9p_j3.txt LFfiles/ztopb0_j3.txt LFfiles/ztopb1_j3.txt LFfiles/ztopb2_j3.txt LFfiles/ztopb5_j3.txt LFfiles/ztopb6_j3.txt LFfiles/ztopb7_j3.txt LFfiles/ztopbt_j3.txt LFfiles/ztopc0_j3.txt LFfiles/ztopc1_j3.txt LFfiles/ztopc2_j3.txt LFfiles/ztopc5_j3.txt LFfiles/ztopc6_j3.txt LFfiles/ztopc7_j3.txt LFfiles/ztopct_j3.txt LFfiles/ztopp0_j3.txt LFfiles/ztopp1_j3.txt LFfiles/ztopp5_j3.txt LFfiles/ztopp6_j3.txt LFfiles/ztopt2_j3.txt LFfiles/ztopt3_j3.txt LFfiles/ztopt4_j3.txt
+ME:     MEfiles/Zjets_3jet.txt
+NN:     NNfiles/ZHFjets_j3t1.txt
+ME loaded:    9955
+NN loaded:    11712
+NN used:      5543 (47.3%)
+NN rematched: 51
+LF loaded:    18069
+LF used:      3741 (20.7%)
+LF rematched: 41
+Printed:      2289 (23.0%)
+
+real	0m7.193s
+user	0m7.100s
+sys	0m0.010s
+
+
+
+
+output: comb/diboson_j2.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/itopww_j2.txt LFfiles/itopwz_j2.txt LFfiles/itopzz_j2.txt
+ME:     MEfiles/WW_2jet.txt MEfiles/WZ_2jet.txt MEfiles/ZZ_2jet.txt
+NN:     NNfiles/diboson_j2t1.txt NNfiles/diboson_j2t2.txt
+ME loaded:    8952
+NN loaded:    7515
+NN used:      7204 (95.9%)
+NN rematched: 0
+LF loaded:    8967
+LF used:      5639 (62.9%)
+LF rematched: 1
+Printed:      4454 (49.8%)
+
+real	0m7.259s
+user	0m7.170s
+sys	0m0.020s
+
+
+
+
+output: comb/diboson_j3.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/itopww_j3.txt LFfiles/itopwz_j3.txt LFfiles/itopzz_j3.txt
+ME:     MEfiles/WW_3jet.txt MEfiles/WZ_3jet.txt MEfiles/ZZ_3jet.txt
+NN:     NNfiles/diboson_j3t1.txt
+ME loaded:    2606
+NN loaded:    1893
+NN used:      1810 (95.6%)
+NN rematched: 0
+LF loaded:    2613
+LF used:      889 (34.0%)
+LF rematched: 0
+Printed:      707 (27.1%)
+
+real	0m1.766s
+user	0m1.720s
+sys	0m0.030s
+
+
+
+
+output: comb/ttbar_j2.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/ttop75_j2.txt
+ME:     MEfiles/ttlj_2jet.txt MEfiles/ttdil_2jet.txt
+NN:     NNfiles/ttbar_j2t1.txt NNfiles/ttbar_j2t2.txt
+ME loaded:    35665
+NN loaded:    44244
+NN used:      38312 (86.6%)
+NN rematched: 4929
+LF loaded:    40903
+LF used:      20786 (50.8%)
+LF rematched: 1
+Printed:      19445 (54.5%)
+
+real	0m32.492s
+user	0m32.350s
+sys	0m0.100s
+
+
+
+
+output: comb/ttbar_j3.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/ttop75_j3.txt
+ME:     MEfiles/ttlj_3jet.txt MEfiles/ttdil_3jet.txt
+NN:     NNfiles/ttbar_j3t1.txt
+ME loaded:    76245
+NN loaded:    79263
+NN used:      60874 (76.8%)
+NN rematched: 6683
+LF loaded:    95500
+LF used:      21941 (23.0%)
+LF rematched: 0
+Printed:      20372 (26.7%)
+
+real	0m54.170s
+user	0m53.740s
+sys	0m0.210s
+
+
+
+
+output: comb/schan_j2.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/stop00_j2.txt
+ME:     MEfiles/schan_2jet.txt
+NN:     NNfiles/schan_j2t1.txt NNfiles/schan_j2t2.txt
+ME loaded:    55058
+NN loaded:    56002
+NN used:      55058 (98.3%)
+NN rematched: 0
+LF loaded:    54785
+LF used:      21702 (39.6%)
+LF rematched: 146
+Printed:      21556 (39.2%)
+
+real	0m41.274s
+user	0m41.050s
+sys	0m0.080s
+
+
+
+
+output: comb/schan_j3.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/stop00_j3.txt
+ME:     MEfiles/schan_3jet.txt
+NN:     NNfiles/schan_j3t1.txt
+ME loaded:    17677
+NN loaded:    13426
+NN used:      13244 (98.6%)
+NN rematched: 0
+LF loaded:    16820
+LF used:      3489 (20.7%)
+LF rematched: 31
+Printed:      3458 (19.6%)
+
+real	0m10.327s
+user	0m10.180s
+sys	0m0.040s
+
+
+
+
+output: comb/tchan_j2.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/stopm0_j2.txt
+ME:     MEfiles/tchan_2jet.txt
+NN:     NNfiles/tchan_j2t1.txt NNfiles/tchan_j2t2.txt
+ME loaded:    41859
+NN loaded:    42819
+NN used:      41859 (97.8%)
+NN rematched: 0
+LF loaded:    33929
+LF used:      14177 (41.8%)
+LF rematched: 0
+Printed:      14177 (33.9%)
+
+real	0m29.440s
+user	0m29.300s
+sys	0m0.080s
+
+
+
+
+output: comb/tchan_j3.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/stopm0_j3.txt
+ME:     MEfiles/tchan_3jet.txt
+NN:     NNfiles/tchan_j3t1.txt
+ME loaded:    12094
+NN loaded:    10632
+NN used:      10420 (98.0%)
+NN rematched: 0
+LF loaded:    8653
+LF used:      3223 (37.2%)
+LF rematched: 0
+Printed:      3223 (26.6%)
+
+real	0m7.520s
+user	0m7.460s
+sys	0m0.020s
+
+
+
+
+output: comb/nonW_j2.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/nonw1sample_j2.txt
+ME:     MEfiles/nonW_2jet.txt
+NN:     NNfiles/nonW_j2t1.txt NNfiles/nonW_j2t2.txt
+ME loaded:    3339
+NN loaded:    3851
+NN used:      317 (8.2%)
+NN rematched: 83
+LF loaded:    748
+LF used:      238 (31.8%)
+LF rematched: 162
+Printed:      23 (0.7%)
+
+real	0m1.282s
+user	0m1.220s
+sys	0m0.020s
+
+
+
+
+output: comb/nonW_j3.txt
+equal:  abs(1_leppt-2_leppt)<0.02 && 1_njets==2_njets && 1_ntags==2_ntags
+LF:     LFfiles/nonw1sample_j3.txt
+ME:     MEfiles/nonW_3jet.txt
+NN:     NNfiles/nonW_j3t1.txt
+ME loaded:    1062
+NN loaded:    826
+NN used:      48 (5.8%)
+NN rematched: 13
+LF loaded:    192
+LF used:      76 (39.6%)
+LF rematched: 51
+Printed:      3 (0.3%)
+
+real	0m0.325s
+user	0m0.310s
+sys	0m0.010s
+773.150u 2.970s 13:01.26 99.3%	0+0k 0+0io 8770pf+0w

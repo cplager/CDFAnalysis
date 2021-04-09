@@ -1,0 +1,18 @@
+#!/usr/bin/env perl
+
+use lib '/cdf/home/cplager/scripts';
+use Date;
+use strict;
+
+die "Usage: $0 package date (time)\n" unless (@ARGV >= 2);
+
+my $pack = shift;
+my $dateString = shift;
+my $timeString = shift || "UT1600" ;
+
+my $date = Date->new($dateString);
+
+my $command = "cvs co -D ".($date->cvsDate)."$timeString $pack\n";
+$command .= "cd include\nln -s ../$pack/$pack $pack\n";
+print "$command\n";
+system $command;
