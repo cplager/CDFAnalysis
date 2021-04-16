@@ -16,12 +16,8 @@
 
 ## Introduction
 
-This library, <tt>KinematicFitter</tt> is an implementation of [Paul Avery](http://www.phys.ufl.edu/~avery/)'s [kinematic fitting algorithms](http://www.phys.ufl.edu/~avery/fitting.html). This implementation has been a collaboration between Marcel Stanitzki, Mark Neubauer, Antonio Boveia, Elliot Lipeles, and myself. You can check out the current version from cvs:
+This library, <tt>KinematicFitter</tt> is an implementation of [Paul Avery](http://www.phys.ufl.edu/~avery/)'s [kinematic fitting algorithms](http://www.phys.ufl.edu/~avery/fitting.html). This implementation has been a collaboration between Marcel Stanitzki, Mark Neubauer, Antonio Boveia, Elliot Lipeles, and myself. 
 
-<pre>unix> cvs -d :pserver:anonymous@cdfcvs.fnal.gov:/cdf/code/cdfcvs/run2 co KinematicFitter 
-</pre>
-
-You can also take a look at the files [on the web](KinematicFitter/). The [header](KinematicFitter/KinematicFitter/KinematicFitter.hh) and [source files](KinematicFitter/src/KinematicFitter.cc) are the most informative.
 
 <tt>KinematicFitter</tt> is an iterative χ² that _wiggles_ input <tt>TLorentzVector</tt>s within their errors to meet given constraints. This package does not depend on the <tt>cdfsoft</tt> environment, and should run (more or less) anywhere where <tt>Root</tt> is installed.
 
@@ -338,9 +334,6 @@ If you have decided to use the <tt>CDFSOFT</tt> environment, you should:
 
 2.  Check out the <tt>KinematicFitter</tt> package
 
-    <pre>unix> cvs -d :pserver:anonymous@cdfcvs.fnal.gov:/cdf/code/cdfcvs/run2 co KinematicFitter
-    	  </pre>
-
 3.  Add a softlink to the include directory
 
     <pre>unix> cd include; ln -s ../KinematicFitter/KinematicFitter
@@ -360,10 +353,8 @@ If you want to use a more generic environment, you need to make sure that you ha
     <pre>unix> mkdir parentDir/shlib; mkdir parentDir/include
     	  </pre>
 
-2.  Check the package out of CVS
+2.  Check the out package
 
-    <pre>unix> cd parentDir; cvs -d :pserver:anonymous@cdfcvs.fnal.gov:/cdf/code/cdfcvs/run2 co KinematicFitter
-    	  </pre>
 
 3.  Tell the include directory about <tt>KinematicFitter</tt>
 
